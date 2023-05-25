@@ -3,9 +3,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import collections as cl
+from utils import basic_dict
+
 
 
 class Raum: 
+
+
     def __init__(self, volume, surface, alpha_d, power, distance, use):
         self.input = {'Volume': volume, 'Surface': surface, 'Absorption coefficient': alpha_d,
                        'Source pwoer': power, 'Distance source <-> receiver': distance}
@@ -16,10 +20,12 @@ class Raum:
         self.distance = distance
         self.use = use
     
+
+    
     def eq_a(self):
         # surface als list mit m^2 der einzelnen Waende
         # alpha_d als dictionary mit Oktavbandfrequenzen als key und Liste der diffusen Absorptionsgrade pro Wand als value   
-        A = {'125 Hz':0 , '250 Hz':0 , '500 Hz':0 , '1 kHz':0, '2 kHz':0 , '4 kHz':0 }
+        A = basic_dict()
 
         for j in range(len(self.surface)):
             for i in A:
@@ -216,9 +222,5 @@ class Raum:
         ax.legend()
         plt.show()
         return 
-    
-Raum_1 = Raum(volume , surface, alpha_d, power, distance, use)
-
-Raum_1.plot_nachhallzeit()
 
 
