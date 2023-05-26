@@ -2,6 +2,7 @@ import streamlit as st
 import streamlit_tags as sttags
 from room_calc import Raum
 from utils import basic_dict
+import numpy as np 
 
 
 st.title('My streamlit app for Roomacoustics')
@@ -9,16 +10,24 @@ st.title('My streamlit app for Roomacoustics')
 st.text('First we need the general vertecies,\n the material of the walls and the volume of the the Room')
 vol = st.number_input('Volume')
 
-area = st.number_input('Anzahl der Wandflächen die Sie eingeben möchten')
-surfaces = [st.number_input(f"Enter number {i}") for i in range(int(area))]
+areas = st.number_input('Anzahl der Wandflächen die Sie eingeben möchten')
+area =  np.linspace(0,int(areas),int(areas)+1)
+with st.form(key = 'surface'):
+    cols = st.columns(len(area))
+    for i, col in enumerate(cols):
+        surfaces = col.number_input(f"Enter number {i}")
+        #surfaces = [st.number_input(f"Enter number {i}") for i in range(int(area))]
+    sub = st.form_submit_button('Submitt')
 st.write(surfaces)
 
 alpha_d = basic_dict()
 
-with st.form('alpha_d'):
-        for key in alpha_d:
-                alpha_d[key] = sttags.st_tags()
-        button = st.form_submit_button("Add")
+#st.write('alpha_d')
+
+with st.form(key = f' alpha_d: '):
+    for key in alpha_d:
+            alpha_d[key] = sttags.st_tags(label = f'Enter values for alpha_d for {key}', key=key)
+    submitted = st.form_submit_button('Submit')
 
 #alpha_d =  st.experimental_data_editor(dict)
 
