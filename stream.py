@@ -13,10 +13,10 @@ vol = st.number_input('Volume')
 areas = st.number_input('Anzahl der Wandflächen die Sie eingeben möchten')
 area =  np.linspace(0,int(areas),int(areas)+1)
 with st.form(key = 'surface'):
-    cols = st.columns(len(area))
-    for i, col in enumerate(cols):
-        surfaces = col.number_input(f"Enter number {i}")
-        #surfaces = [st.number_input(f"Enter number {i}") for i in range(int(area))]
+    #cols = st.columns(len(area))
+    #for i, col in enumerate(cols):
+        #surfaces = [col.number_input(f"Enter number {i}") for k in range(int(areas))]
+    surfaces = [st.number_input(f"Enter number {i}") for i in range(int(areas))]
     sub = st.form_submit_button('Submitt')
 st.write(surfaces)
 
@@ -28,6 +28,13 @@ with st.form(key = f' alpha_d: '):
     for key in alpha_d:
             alpha_d[key] = sttags.st_tags(label = f'Enter values for alpha_d for {key}', key=key)
     submitted = st.form_submit_button('Submit')
+st.write(alpha_d)
+
+for key, value in alpha_d.items():
+    alpha_d[key] = [float(v) for v in value]
+
+st.write(alpha_d)
+
 
 #alpha_d =  st.experimental_data_editor(dict)
 
@@ -43,13 +50,15 @@ dist = st.number_input('Abstand Quelle Empfänger')
 
 room = Raum(volume=vol, surface=surfaces, alpha_d=alpha_d, power=power, distance=dist, use='Musik')
 
-st.write(['Hallradius:' ,room.hallradius(),
+st.write([
         'Nachhallzeit:',room.nachhallzeit(), 'Sprachverständlichkeit:', room.sprachverstaendlichkeit()])
 
 
 
+#'Hallradius:' ,room.hallradius(),
 
-
+fig = room.plot_nachhallzeit()
+st.pyplot(fig)
 '''with st.beta_container():
     alpha_d = basic_dict()
     col1, col2 = st.beta_columns(2)

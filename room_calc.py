@@ -29,7 +29,7 @@ class Raum:
         for j in range(len(self.surface)):
             for i in A:
                 X = self.alpha_d[i]
-                A[i] = A[i] + self.surface[j] * X[j]
+                A[i] = self.surface[j] * X[j]
  
         return A
    
@@ -219,7 +219,7 @@ class Raum:
         ax.set_xlabel('Frequenz [Hz]')
         ax.set_ylabel('T / T_soll')
         ax.legend()
-        plt.show()
-        return 
+        #plt.show()
+        return fig
 
 
