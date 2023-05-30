@@ -3,7 +3,7 @@ from room_calc import Raum
 
 st.title('My streamlit app for Roomacoustics')
 
-st.text('First we need the general vertecies,\n the material of the walls and the volume of the the Room')
+st.text('Benötigt werden das Raumvolumen, die Anzahl der Wände sowie deren Fläche und Absorptionsgrad (im Moment noch der über alle Bänder gemittelte)')
 vol = st.number_input('Volume')
 
 area = st.number_input('Anzahl der Wandflächen die Sie eingeben möchten')
