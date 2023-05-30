@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import collections as cl
 
-
 class Raum: 
     def __init__(self, volume, surface, alpha_d, power, distance, use):
         self.input = {'Volume': volume, 'Surface': surface, 'Absorption coefficient': alpha_d,
