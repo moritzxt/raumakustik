@@ -1,13 +1,14 @@
+import numpy as np 
+
 import streamlit as st
 import streamlit_tags as sttags
 from room_calc import Raum
-from utils import basic_dict
-import numpy as np 
+from utils import basic_dict , read_db, basic_dict_2
 
 
 st.title('My streamlit app for Roomacoustics')
 
-st.text('Benötigt werden das Raumvolumen, die Anzahl der Wände sowie deren Fläche und Absorptionsgrad (im Moment noch der über alle Bänder gemittelte)')
+st.text('Benötigt werden das Raumvolumen, die Anzahl der Wände sowie deren Fläche \nund Absorptionsgrad (im Moment noch der über alle Bänder gemittelte)')
 vol = st.number_input('Volume')
 
 areas = st.number_input('Anzahl der Wandflächen die Sie eingeben möchten')
@@ -20,18 +21,34 @@ with st.form(key = 'surface'):
     sub = st.form_submit_button('Submitt')
 st.write(surfaces)
 
-alpha_d = basic_dict()
+alpha_d = basic_dict_2()
+
+material_dict = read_db()
+
+with st.form(key = 'material'):
+    #cols = st.columns(len(area))
+    #for i, col in enumerate(cols):
+        #surfaces = [col.number_input(f"Enter number {i}") for k in range(int(areas))]
+    materials = [st.selectbox(label= f'Bitte wählen Sie das Material der Wand {i} aus.',options=material_dict.keys())for i in range(int(areas))]
+    sub = st.form_submit_button('Submit')
+
+
+
 
 #st.write('alpha_d')
+for wand, key in enumerate(materials):
+    liste = material_dict[key]
+    for freq in alpha_d:
+        alpha_d[freq].append(float(liste[wand]))
 
-with st.form(key = f' alpha_d: '):
-    for key in alpha_d:
-            alpha_d[key] = sttags.st_tags(label = f'Enter values for alpha_d for {key}', key=key)
-    submitted = st.form_submit_button('Submit')
-st.write(alpha_d)
+# with st.form(key = f' alpha_d: '):
+#     for key in alpha_d:
+#             alpha_d[key] = sttags.st_tags(label = f'Enter values for alpha_d for {key}', key=key)
+#     submitted = st.form_submit_button('Submit')
+# st.write(alpha_d)
 
-for key, value in alpha_d.items():
-    alpha_d[key] = [float(v) for v in value]
+# for key, value in alpha_d.items():
+#     alpha_d[key] = [float(v) for v in value]
 
 st.write(alpha_d)
 
