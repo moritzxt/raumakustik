@@ -41,6 +41,26 @@ for wand, key in enumerate(materials):
     for freq in alpha_d:
         alpha_d[freq].append(float(liste[wand]))
 
+@st.cache_data()
+def persistdata():
+    return {}
+
+'''Abschnitt soll dazu dienen, die csv Datei upzudaten'''
+
+with st.container():
+    d = persistdata()
+    col1, col2 = st.columns(2)
+    with col1:
+        k = st.text_input("Key")
+    with col2:
+        v = st.text_input("Value")
+    button = st.button("Add")
+    if button:
+        if k and v:
+            d[k] = v
+    st.write(d)
+
+''' Ende'''
 # with st.form(key = f' alpha_d: '):
 #     for key in alpha_d:
 #             alpha_d[key] = sttags.st_tags(label = f'Enter values for alpha_d for {key}', key=key)
