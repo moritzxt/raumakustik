@@ -6,7 +6,7 @@ from utils import basic_dict
 class room: 
 
     def __init__(self, volume, surface, alpha, use):
-        self.input = {'Volume': volume, 'Surface': surface, 'Absorption coefficient': alpha_d}
+        self.input = {'Volume': volume, 'Surface': surface, 'Absorption coefficient': alpha}
         self.volume = volume
         self.surface = surface
         self.alpha = alpha
@@ -170,7 +170,7 @@ class room:
 
         fig = go.Figure()
 
-        trace1 = go.Bar(x = freq, y = list(reverberationTimeSeconds.values()))
+        trace1 = go.Bar(x = freq, y = list(reverberationTimeSeconds.values()), marker_color = 'blue')
         fig.add_trace(trace1)
 
         fig.update_layout(xaxis_title = 'Frequenz [Hz]', yaxis_title = 'Nachhallzeit [s]', width = 1000, height = 600)
@@ -194,7 +194,7 @@ class room:
         fig = go.Figure()
         trace1 = go.Scatter(x = freq, y = T_lowerlimit, marker_color = 'green', mode='lines')
         trace2 = go.Scatter(x = freq, y = T_upperlimit, marker_color = 'green', fill = 'tonexty', fillcolor='rgba(26, 199, 93, 0.1)', mode='lines')
-        trace3 = go.Bar(x = freq, y = T_Vergleich)
+        trace3 = go.Bar(x = freq, y = T_Vergleich, marker_color = 'blue')
         
         fig.update_xaxes(type='category')          
         fig.update_layout(xaxis_title = 'Frequenz [Hz]', yaxis_title = 'T / T_soll', width = 1000, height = 600)
