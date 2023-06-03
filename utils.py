@@ -17,4 +17,11 @@ def read_db():
             key = row[0]
             values = row[1:]
             dict_db2[key] = [float(v) for v in values]
+        file.close()
     return dict_db2
+
+def add_row(list):
+    with open('Datenbank_Absorptionsgrade.csv', mode='a', newline='\n') as file:
+        writer_object = csv.writer(file, delimiter=';')
+        writer_object.writerow(list)
+        file.close()
