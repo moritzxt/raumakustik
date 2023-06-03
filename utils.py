@@ -21,7 +21,7 @@ def read_db():
     return dict_db2
 
 def add_row(list):
-    with open('Datenbank_Absorptionsgrade.csv', mode='a') as file:
-        writer_object = csv.writer(file)
+    with open('Datenbank_Absorptionsgrade.csv', mode='a', newline='\n') as file:
+        writer_object = csv.writer(file, delimiter=';')
         writer_object.writerow(list)
         file.close()

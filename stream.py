@@ -3,7 +3,7 @@ import numpy as np
 import streamlit as st
 import streamlit_tags as sttags
 from room_calc import Raum
-from utils import basic_dict , read_db, basic_dict_2
+from utils import basic_dict , read_db, basic_dict_2, add_row
 
 
 st.title('My streamlit app for Roomacoustics')
@@ -41,24 +41,28 @@ for wand, key in enumerate(materials):
     for freq in alpha_d:
         alpha_d[freq].append(float(liste[wand]))
 
-@st.cache_data()
-def persistdata():
-    return {}
 
-'''Abschnitt soll dazu dienen, die csv Datei upzudaten'''
+# Updaten der Datenbank über ein dict
+'''Updaten der Datenbank mit Benutzerdefinierten Werten \n 
+Bitte Werte mit Komma voneinander trennen und einen Punkt \n
+ als Dezimaltrennzeichen verwenden'''
 
 with st.container():
-    d = persistdata()
     col1, col2 = st.columns(2)
     with col1:
-        k = st.text_input("Key")
+        key_add = st.text_input("Key")
     with col2:
-        v = st.text_input("Value")
+        value_add = st.text_input("Value")
     button = st.button("Add")
     if button:
-        if k and v:
-            d[k] = v
-    st.write(d)
+        if key_add and value_add:
+            material_dict[key_add] = [float(v) for v in str.split(value_add, sep = ',')]
+            list_add = [key_add]
+            for v in material_dict[key_add]:
+                list_add.append(v)
+            add_row(list_add)
+            
+
 
 ''' Ende'''
 # with st.form(key = f' alpha_d: '):
