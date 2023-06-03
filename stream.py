@@ -17,7 +17,7 @@ with st.form(key = 'surface'):
     #cols = st.columns(len(area))
     #for i, col in enumerate(cols):
         #surfaces = [col.number_input(f"Enter number {i}") for k in range(int(areas))]
-    surfaces = [st.number_input(f"Enter number {i}") for i in range(int(areas))]
+    surfaces = [st.number_input(f"Fläche der Wandfläche {i+1}") for i in range(int(areas))]
     sub = st.form_submit_button('Submitt')
 st.write(surfaces)
 
@@ -43,25 +43,7 @@ for wand, key in enumerate(materials):
 
 
 # Updaten der Datenbank über ein dict
-'''Updaten der Datenbank mit Benutzerdefinierten Werten \n 
-Bitte Werte mit Komma voneinander trennen und einen Punkt \n
- als Dezimaltrennzeichen verwenden'''
 
-with st.container():
-    col1, col2 = st.columns(2)
-    with col1:
-        key_add = st.text_input("Key")
-    with col2:
-        value_add = st.text_input("Value")
-    button = st.button("Add")
-    if button:
-        if key_add and value_add:
-            material_dict[key_add] = [float(v) for v in str.split(value_add, sep = ',')]
-            list_add = [key_add]
-            for v in material_dict[key_add]:
-                list_add.append(v)
-            add_row(list_add)
-            
 
 
 ''' Ende'''
