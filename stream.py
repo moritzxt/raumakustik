@@ -1,7 +1,7 @@
 import numpy as np 
 
 import streamlit as st
-import streamlit_tags as sttags
+#import streamlit_tags as sttags
 from room_calc import room
 from utils import basic_dict , read_db, basic_dict_2, add_row
 
@@ -78,16 +78,17 @@ st.write([
 #'Hallradius:' ,room.hallradius(),
 
 fig = raum.plotly_nachhallzeit()
-st.pyplot(fig)
-'''with st.beta_container():
-    alpha_d = basic_dict()
-    col1, col2 = st.beta_columns(2)
-    with col1:
-        k = st.text_input("Key")
-    with col2:
-        v = st.text_input("Value")
-    button = st.button("Add")
-    if button:
-        if k and v:
-            d[k] = v
-    st.write(d)'''
+st.plotly_chart(fig)
+
+# '''with st.beta_container():
+#     alpha_d = basic_dict()
+#     col1, col2 = st.beta_columns(2)
+#     with col1:
+#         k = st.text_input("Key")
+#     with col2:
+#         v = st.text_input("Value")
+#     button = st.button("Add")
+#     if button:
+#         if k and v:
+#             d[k] = v
+#     st.write(d)'''
