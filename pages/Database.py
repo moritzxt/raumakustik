@@ -3,18 +3,23 @@ import pandas as pd
 from utils import read_db, add_row
 
 dict_alpha = read_db()
-
 dataframe =  pd.read_csv('Datenbank_Absorptionsgrade.csv',sep = ';')
-
-st.dataframe(dataframe)
+st.set_page_config(page_title= 'Database', layout='wide')
+st.title('Materialdatenbank')
+st.divider()
+st.dataframe(dataframe, use_container_width= True)
 
 material_dict = read_db()
 
-'''Updaten der Datenbank mit Benutzerdefinierten Werten \n 
-Bitte Werte mit Komma voneinander trennen und einen Punkt \n
- als Dezimaltrennzeichen verwenden'''
+# '''Updaten der Datenbank mit Benutzerdefinierten Werten \n 
+# Bitte Werte mit Komma voneinander trennen und einen Punkt \n
+#  als Dezimaltrennzeichen verwenden'''
 
 with st.container():
+    st.caption('Updaten der Datenbank mit Benutzerdefinierten Werten. '
+            'Bitte Werte mit Komma von einander trennen und einen Punkt '
+            'als Dezimaltrennzeichen verwenden')
+    st.divider()
     col1, col2 = st.columns(2)
     with col1:
         key_add = st.text_input("Key")
@@ -31,4 +36,3 @@ with st.container():
             
 
 
-''' Ende'''

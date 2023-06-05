@@ -1,38 +1,49 @@
 import numpy as np 
 
 import streamlit as st
-import streamlit_tags as sttags
+#import streamlit_tags as sttags
 from room_calc import room
-from utils import basic_dict , read_db, basic_dict_2, add_row
+from utils import basic_dict , read_db, basic_dict_2, add_row, usecase
+
+st.set_page_config(page_title= 'Tool für Raumakustik', layout='wide',
+                    initial_sidebar_state='collapsed')
 
 
-st.title('My streamlit app for Roomacoustics')
+#with col1:
+with st.container():
+    st.title('WebApp for Roomacoustics')
+    st.divider()
+    st.header('Benötigt werden das Raumvolumen, die Anzahl'
+        ' der Wände, deren Fläche, sowie das Material der Wandoberfläche')
 
-st.text('Benötigt werden das Raumvolumen, die Anzahl der Wände sowie deren Fläche \nund Absorptionsgrad (im Moment noch der über alle Bänder gemittelte)')
-vol = st.number_input('Volume')
-
-areas = st.number_input('Anzahl der Wandflächen die Sie eingeben möchten', step=1)
+col1, col2, col3 = st.columns(3)
+with col1:
+    use = st.selectbox('Usecase nach DIN 18041', options=usecase.keys())
+    min_lim =  min(usecase[use])
+    max_lim =  max(usecase[use])
+with col2:
+    vol = st.number_input('Volumen in m³', min_value=min_lim,
+                        max_value=max_lim, value=min_lim)
+with col3:
+    areas = st.number_input('Anzahl der Wandflächen die Sie eingeben möchten'
+                            ,min_value=1, step=1)
 area =  np.linspace(0,int(areas),int(areas)+1)
-with st.form(key = 'surface'):
-    #cols = st.columns(len(area))
-    #for i, col in enumerate(cols):
-        #surfaces = [col.number_input(f"Enter number {i}") for k in range(int(areas))]
-    surfaces = [st.number_input(f"Fläche für Wandfläche {i+1}") for i in range(int(areas))]
-    sub = st.form_submit_button('Submitt')
-st.write(surfaces)
+with st.container():
+    col_1, col_2 = st.columns(2)
+    with col_1:
+        with st.form(key = 'surface'):
+            surfaces = [st.number_input(f"Fläche für Wandfläche {i+1}", value=1) for i in range(int(areas))]
+            sub = st.form_submit_button('Submit')
+        #st.write(surfaces)
 
-alpha_d = basic_dict_2()
+    alpha_d = basic_dict_2()
 
-material_dict = read_db()
-
-with st.form(key = 'material'):
-    #cols = st.columns(len(area))
-    #for i, col in enumerate(cols):
-        #surfaces = [col.number_input(f"Enter number {i}") for k in range(int(areas))]
-    materials = [st.selectbox(label= f'Bitte wählen Sie das Material der Wand {i} aus.',options=material_dict.keys())for i in range(int(areas))]
-    sub = st.form_submit_button('Submit')
-
-
+    material_dict = read_db()
+    with col_2:
+        with st.form(key = 'material'):
+            materials = [st.selectbox(label= f'Bitte wählen Sie das Material der Wand {i+1} aus.'
+                                      ,options=material_dict.keys())for i in range(int(areas))]
+            sub = st.form_submit_button('Submit')
 
 
 #st.write('alpha_d')
@@ -41,53 +52,18 @@ for wand, key in enumerate(materials):
     for freq in alpha_d:
         alpha_d[freq].append(float(liste[wand]))
 
-
-# Updaten der Datenbank über ein dict
-
-# with st.form(key = f' alpha_d: '):
-#     for key in alpha_d:
-#             alpha_d[key] = sttags.st_tags(label = f'Enter values for alpha_d for {key}', key=key)
-#     submitted = st.form_submit_button('Submit')
-# st.write(alpha_d)
-
-# for key, value in alpha_d.items():
-#     alpha_d[key] = [float(v) for v in value]
-
-st.write(alpha_d)
-
-
-#alpha_d =  st.experimental_data_editor(dict)
-
-#alpha_d = [st.slider(f'Absorptionsgrad Wand {i}', min_value=0, max_value=1) for i in range(int(area))]
-#st.write(alpha_d)
-
-power = st.number_input('Leistung der Quelle')
-dist = st.number_input('Abstand Quelle Empfänger')
-
-
-
-
-
+#Erstellen des Objektes Raum der Klasse room
 raum = room(volume=vol, surface=surfaces, alpha=alpha_d, use='Musik')
+#Plots erstellen
+st.divider()
+st.subheader('Ergebnisse')
+st.divider()
+tab1, tab2 = st.tabs(['Nachhallzei', 'Vergleich der Nachhallzeit'])
+with tab1:
+    fig1 = raum.plotly_nachhallzeit()
+    st.plotly_chart(fig1)
 
-st.write([
-        'Nachhallzeit:',raum.nachhallzeit(), 'Sprachverständlichkeit:', raum.sprachverstaendlichkeit()])
+with tab2:
+    fig2 = raum.plotly_nachhallzeit_vergleich()
 
-
-
-#'Hallradius:' ,room.hallradius(),
-
-fig = raum.plotly_nachhallzeit()
-st.pyplot(fig)
-'''with st.beta_container():
-    alpha_d = basic_dict()
-    col1, col2 = st.beta_columns(2)
-    with col1:
-        k = st.text_input("Key")
-    with col2:
-        v = st.text_input("Value")
-    button = st.button("Add")
-    if button:
-        if k and v:
-            d[k] = v
-    st.write(d)'''
+    st.plotly_chart(fig2)

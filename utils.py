@@ -25,3 +25,6 @@ def add_row(list):
         writer_object = csv.writer(file, delimiter=';')
         writer_object.writerow(list)
         file.close()
+
+usecase = {'Musik': [30, 1000], 'Sprache/Vortrag': [50, 5000], 'Sprache/Vortrag inklusiv': [30, 5000],
+           'Unterricht/Kommunikation': [30, 1000], 'Sport': [200, 10000]}
