@@ -10,7 +10,6 @@ st.dataframe(dataframe)
 
 material_dict = read_db()
 
-
 '''Updaten der Datenbank mit Benutzerdefinierten Werten \n 
 Bitte Werte mit Komma voneinander trennen und einen Punkt \n
  als Dezimaltrennzeichen verwenden'''
@@ -30,3 +29,6 @@ with st.container():
                 list_add.append(v)
             add_row(list_add)
             
+
+
+''' Ende'''
