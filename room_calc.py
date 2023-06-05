@@ -177,7 +177,6 @@ class room:
         fig.update_xaxes(type='category')
         fig.update_traces(width=.2)
 
-        fig.show()
         return fig
     
     def plotly_nachhallzeit_vergleich(self):
