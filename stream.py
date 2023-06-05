@@ -12,9 +12,9 @@ st.set_page_config(page_title= 'Tool für Raumakustik', layout='wide',
 #with col1:
 with st.container():
     st.title('WebApp for Roomacoustics')
+    st.divider()
     st.header('Benötigt werden das Raumvolumen, die Anzahl'
-        ' der Wände sowie deren Fläche \n'
-        'und Absorptionsgrad (im Moment noch der über alle Bänder gemittelte)')
+        ' der Wände, deren Fläche, sowie das Material der Wandoberfläche')
 
 col1, col2, col3 = st.columns(3)
 with col1:
@@ -55,7 +55,9 @@ for wand, key in enumerate(materials):
 #Erstellen des Objektes Raum der Klasse room
 raum = room(volume=vol, surface=surfaces, alpha=alpha_d, use='Musik')
 #Plots erstellen
-
+st.divider()
+st.subheader('Ergebnisse')
+st.divider()
 tab1, tab2 = st.tabs(['Nachhallzei', 'Vergleich der Nachhallzeit'])
 with tab1:
     fig1 = raum.plotly_nachhallzeit()
