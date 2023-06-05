@@ -41,10 +41,9 @@ with st.container():
     material_dict = read_db()
     with col_2:
         with st.form(key = 'material'):
-            materials = [st.selectbox(label= f'Bitte wählen Sie das Material der Wand {i} aus.',options=material_dict.keys())for i in range(int(areas))]
+            materials = [st.selectbox(label= f'Bitte wählen Sie das Material der Wand {i+1} aus.'
+                                      ,options=material_dict.keys())for i in range(int(areas))]
             sub = st.form_submit_button('Submit')
-
-
 
 
 #st.write('alpha_d')
@@ -53,42 +52,16 @@ for wand, key in enumerate(materials):
     for freq in alpha_d:
         alpha_d[freq].append(float(liste[wand]))
 
-
-# Updaten der Datenbank über ein dict
-
-# with st.form(key = f' alpha_d: '):
-#     for key in alpha_d:
-#             alpha_d[key] = sttags.st_tags(label = f'Enter values for alpha_d for {key}', key=key)
-#     submitted = st.form_submit_button('Submit')
-# st.write(alpha_d)
-
-# for key, value in alpha_d.items():
-#     alpha_d[key] = [float(v) for v in value]
-
-#st.write(alpha_d)
-
-
-#alpha_d =  st.experimental_data_editor(dict)
-
-#alpha_d = [st.slider(f'Absorptionsgrad Wand {i}', min_value=0, max_value=1) for i in range(int(area))]
-#st.write(alpha_d)
-
-
-
-
-
-
+#Erstellen des Objektes Raum der Klasse room
 raum = room(volume=vol, surface=surfaces, alpha=alpha_d, use='Musik')
+#Plots erstellen
 
-#st.write(['Nachhallzeit:',raum.nachhallzeit(), 'Sprachverständlichkeit:', raum.sprachverstaendlichkeit()])
+tab1, tab2 = st.tabs(['Nachhallzei', 'Vergleich der Nachhallzeit'])
+with tab1:
+    fig1 = raum.plotly_nachhallzeit()
+    st.plotly_chart(fig1)
 
+with tab2:
+    fig2 = raum.plotly_nachhallzeit_vergleich()
 
-
-#'Hallradius:' ,room.hallradius(),
-
-fig1 = raum.plotly_nachhallzeit()
-st.plotly_chart(fig1)
-
-fig2 = raum.plotly_nachhallzeit_vergleich()
-
-st.plotly_chart(fig2)
+    st.plotly_chart(fig2)
