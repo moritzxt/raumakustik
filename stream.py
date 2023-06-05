@@ -5,39 +5,44 @@ import streamlit as st
 from room_calc import room
 from utils import basic_dict , read_db, basic_dict_2, add_row, usecase
 
+st.set_page_config(page_title= 'Tool für Raumakustik', layout='wide',
+                    initial_sidebar_state='collapsed')
 
-st.title('WebApp for Roomacoustics')
 
-st.text('Benötigt werden das Raumvolumen, die Anzahl'
+#with col1:
+with st.container():
+    st.title('WebApp for Roomacoustics')
+    st.header('Benötigt werden das Raumvolumen, die Anzahl'
         ' der Wände sowie deren Fläche \n'
         'und Absorptionsgrad (im Moment noch der über alle Bänder gemittelte)')
 
-
-
-use = st.selectbox('Usecase nach DIN 18041', options=usecase.keys())
-min_lim =  min(usecase[use])
-max_lim =  max(usecase[use])
-
-vol = st.number_input('Volumen in m³', min_value=min_lim,
-                       max_value=max_lim, value=min_lim)
-
-areas = st.number_input('Anzahl der Wandflächen die Sie eingeben möchten',min_value=1, step=1)
+col1, col2, col3 = st.columns(3)
+with col1:
+    use = st.selectbox('Usecase nach DIN 18041', options=usecase.keys())
+    min_lim =  min(usecase[use])
+    max_lim =  max(usecase[use])
+with col2:
+    vol = st.number_input('Volumen in m³', min_value=min_lim,
+                        max_value=max_lim, value=min_lim)
+with col3:
+    areas = st.number_input('Anzahl der Wandflächen die Sie eingeben möchten'
+                            ,min_value=1, step=1)
 area =  np.linspace(0,int(areas),int(areas)+1)
-with st.form(key = 'surface'):
-    #cols = st.columns(len(area))
-    #for i, col in enumerate(cols):
-        #surfaces = [col.number_input(f"Enter number {i}") for k in range(int(areas))]
-    surfaces = [st.number_input(f"Fläche für Wandfläche {i+1}", value=1) for i in range(int(areas))]
-    sub = st.form_submit_button('Submit')
-#st.write(surfaces)
+with st.container():
+    col_1, col_2 = st.columns(2)
+    with col_1:
+        with st.form(key = 'surface'):
+            surfaces = [st.number_input(f"Fläche für Wandfläche {i+1}", value=1) for i in range(int(areas))]
+            sub = st.form_submit_button('Submit')
+        #st.write(surfaces)
 
-alpha_d = basic_dict_2()
+    alpha_d = basic_dict_2()
 
-material_dict = read_db()
-
-with st.form(key = 'material'):
-    materials = [st.selectbox(label= f'Bitte wählen Sie das Material der Wand {i} aus.',options=material_dict.keys())for i in range(int(areas))]
-    sub = st.form_submit_button('Submit')
+    material_dict = read_db()
+    with col_2:
+        with st.form(key = 'material'):
+            materials = [st.selectbox(label= f'Bitte wählen Sie das Material der Wand {i} aus.',options=material_dict.keys())for i in range(int(areas))]
+            sub = st.form_submit_button('Submit')
 
 
 
