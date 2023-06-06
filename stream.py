@@ -36,7 +36,7 @@ with st.container():
             sub = st.form_submit_button('Submit')
         #st.write(surfaces)
 
-    alpha_d = basic_dict_2()
+    alpha = basic_dict_2()
 
     material_dict = read_db()
     with col_2:
@@ -49,21 +49,21 @@ with st.container():
 
 for wand, key in enumerate(materials):
     liste = material_dict[key]
-    for freq in alpha_d:
-        alpha_d[freq].append(float(liste[wand]))
-st.write(alpha_d)
+    for freq in alpha:
+        alpha[freq].append(float(liste[wand]))
+st.write(alpha)
 #Erstellen des Objektes Raum der Klasse room
-raum = room(volume=vol, surface=surfaces, alpha=alpha_d, use='Musik')
+raum = room(volume=vol, surface=surfaces, alpha=alpha, use='Musik')
 #Plots erstellen
 st.divider()
 st.subheader('Ergebnisse')
 st.divider()
 tab1, tab2 = st.tabs(['Nachhallzeit', 'Vergleich der Nachhallzeit'])
 with tab1:
-    fig1 = raum.plotly_nachhallzeit()
+    fig1 = raum.plot_reverberationTime()
     st.plotly_chart(fig1)
 
 with tab2:
-    fig2 = raum.plotly_nachhallzeit_vergleich()
+    fig2 = raum.plot_reverberationTime_ratio()
 
     st.plotly_chart(fig2)
