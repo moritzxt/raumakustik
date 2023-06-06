@@ -21,6 +21,7 @@ def read_db():
     return dict_db2
 
 def add_row(list):
+    """Funktion um Daten der Datenbank hinzuzufügen"""
     with open('Datenbank_Absorptionsgrade.csv', mode='a', newline='\n') as file:
         writer_object = csv.writer(file, delimiter=';')
         writer_object.writerow(list)
