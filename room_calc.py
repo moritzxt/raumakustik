@@ -34,6 +34,7 @@ class room:
         equivalentSurface = self.equivalent_absorption_surface()
         for octavebands in equivalentSurface:
             reverberationTimeSeconds[octavebands] = (self.volume / equivalentSurface[octavebands]) * 0.161
+
         return reverberationTimeSeconds
 
     def reverberationRadius(self):
@@ -45,8 +46,8 @@ class room:
     def reverberationTime_ratio(self):
         '''Function to calculate the ratio of given reverberation time to wanted reverberation time. Wanted reverberation time is based on the rooms use case and its volume.'''
         reverberationTime_ratio = basic_dict()
-        T_upperlimit = {'125 Hz':1.45 , '250 Hz':1.2 , '500 Hz':1.2 , '1 kHz':1.2, '2 kHz':1.2 , '4 kHz':1.2 }
-        T_lowerlimit = {'125 Hz':0.65 , '250 Hz':0.8 , '500 Hz':0.8 , '1 kHz':0.8, '2 kHz':0.8 , '4 kHz':0.65 }
+        ReverberationTime_upperlimit = {'125 Hz':1.45 , '250 Hz':1.2 , '500 Hz':1.2 , '1 kHz':1.2, '2 kHz':1.2 , '4 kHz':1.2 }
+        ReverberationTime_lowerlimit = {'125 Hz':0.65 , '250 Hz':0.8 , '500 Hz':0.8 , '1 kHz':0.8, '2 kHz':0.8 , '4 kHz':0.65 }
 
         # Pruefung welchen use (welche Nutzungsart nach DIN 18041) vorliegt und Berechnung der Soll-Nachhallzeit abhaengig vom Raumvolumen
         if self.use == 'Musik':
@@ -70,14 +71,14 @@ class room:
                 else:
                     T_soll = 0.75 * math.log10(self.volume) - 1
 
-        # Berechnung des Quotienten RT/RT_soll und Pruefung, ob berechnete Nachhallzeit in den Fehlerschranken nach Abbildung 2 in DIN 18041 liegt
-        for octavbands in self.reverberationTime():
-            reverberationTime_ratio[octavbands] = self.reverberationTime()[octavbands] / T_soll
-            if reverberationTime_ratio[octavbands] > T_upperlimit[octavbands]:
-                print(f'Nachhallzeit in Oktavband mit Mittenfrequenz {octavbands} zu hoch')
-            elif reverberationTime_ratio[octavbands] < T_lowerlimit[octavbands]:
-                print(f'Nachhallzeit in Oktavband mit Mittenfrequenz {octavbands} zu niedrig')      
-        return reverberationTime_ratio
+        # Calculation of the ratio of calculated reverberation time to wanted reverberation time from DIN 18041 
+        for octaveBands in self.reverberationTime():
+            reverberationTime_ratio[octaveBands] = self.reverberationTime()[octaveBands] / T_soll
+            if reverberationTime_ratio[octaveBands] > ReverberationTime_upperlimit[octaveBands]:
+                print(f'Nachhallzeit in Oktavband mit Mittenfrequenz {octaveBands} zu hoch')
+            elif reverberationTime_ratio[octaveBands] < ReverberationTime_lowerlimit[octaveBands]:
+                print(f'Nachhallzeit in Oktavband mit Mittenfrequenz {octaveBands} zu niedrig')      
+        return reverberationTime_ratio, 
     
     def plot_reverberationTime(self):
         '''Function, which returns a plot of the reverberation time in octave bands.'''
@@ -100,14 +101,14 @@ class room:
         
         freq = [125,250,500,1000,2000,4000]
         
-        T_upperlimit = [1.45, 1.2, 1.2, 1.2, 1.2, 1.2]
-        T_lowerlimit = [0.65, 0.8, 0.8, 0.8, 0.8, 0.65]
+        ReverberationTime_upperlimit = [1.45, 1.2, 1.2, 1.2, 1.2, 1.2]
+        ReverberationTime_lowerlimit = [0.65, 0.8, 0.8, 0.8, 0.8, 0.65]
 
         reverberationTime_ratio = list(self.reverberationTime_ratio().values())
 
         fig = go.Figure()
-        trace1 = go.Scatter(x = freq, y = T_lowerlimit, marker_color = 'green', mode='lines')
-        trace2 = go.Scatter(x = freq, y = T_upperlimit, marker_color = 'green', fill = 'tonexty', fillcolor='rgba(26, 199, 93, 0.1)', mode='lines')
+        trace1 = go.Scatter(x = freq, y = ReverberationTime_lowerlimit, marker_color = 'green', mode='lines')
+        trace2 = go.Scatter(x = freq, y = ReverberationTime_upperlimit, marker_color = 'green', fill = 'tonexty', fillcolor='rgba(26, 199, 93, 0.1)', mode='lines')
         trace3 = go.Bar(x = freq, y = reverberationTime_ratio, marker_color = 'blue')
         
         fig.update_xaxes(type='category')          
