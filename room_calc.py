@@ -52,29 +52,29 @@ class room:
 
         # Pruefung welchen use (welche Nutzungsart nach DIN 18041) vorliegt und Berechnung der Soll-Nachhallzeit abhaengig vom Raumvolumen
         if self.use == 'Musik':
-            T_soll = 0.45 * math.log10(self.volume) + 0.07
+            reverberationTime_wanted = 0.45 * math.log10(self.volume) + 0.07
 
         elif self.use == 'Sprache/Vortrag':
-            T_soll = 0.37 * math.log10(self.volume) - 0.14
+            reverberationTime_wanted = 0.37 * math.log10(self.volume) - 0.14
 
         elif self.use == 'Sprache/Vortrag inklusiv':    
-            T_soll = 0.32 * math.log10(self.volume) - 0.17
+            reverberationTime_wanted = 0.32 * math.log10(self.volume) - 0.17
 
         elif self.use == 'Unterricht/Kommunikation':
-            T_soll = 0.32 * math.log10(self.volume) - 0.17
+            reverberationTime_wanted = 0.32 * math.log10(self.volume) - 0.17
 
         elif self.use == 'Unterricht/Kommunikation inklusiv':
-            T_soll = 0.26 * math.log10(self.volume) - 0.14
+            reverberationTime_wanted = 0.26 * math.log10(self.volume) - 0.14
 
         elif self.use == 'Sport':
                 if self.volume > 10000:        
-                    T_soll = 2
+                    reverberationTime_wanted = 2
                 else:
-                    T_soll = 0.75 * math.log10(self.volume) - 1
+                    reverberationTime_wanted = 0.75 * math.log10(self.volume) - 1
 
         # Calculation of the ratio of calculated reverberation time to wanted reverberation time from DIN 18041 
         for octaveBands in self.reverberationTime():
-            reverberationTime_ratio[octaveBands] = self.reverberationTime()[octaveBands] / T_soll
+            reverberationTime_ratio[octaveBands] = self.reverberationTime()[octaveBands] / reverberationTime_wanted
             if reverberationTime_ratio[octaveBands] > ReverberationTime_upperlimit[octaveBands]:
                 ErrorMessage = 'Nachhallzeit in Oktavband mit Mittenfrequenz {octaveBands} zu hoch'
             elif reverberationTime_ratio[octaveBands] < ReverberationTime_lowerlimit[octaveBands]:
