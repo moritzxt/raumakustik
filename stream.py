@@ -45,13 +45,11 @@ with st.container():
                                       ,options=material_dict.keys())for i in range(int(areas))]
             sub = st.form_submit_button('Submit')
 
+          
+for ind, octaveBands in enumerate(alpha):
+    for material in materials:
+        alpha[octaveBands].append(material_dict[material][ind])
 
-
-for wand, key in enumerate(materials):
-    liste = material_dict[key]
-    for freq in alpha:
-        alpha[freq].append(float(liste[wand]))
-st.write(alpha)
 #Erstellen des Objektes Raum der Klasse room
 raum = room(volume=vol, surface=surfaces, alpha=alpha, use='Musik')
 #Plots erstellen
