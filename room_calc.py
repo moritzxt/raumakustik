@@ -71,89 +71,25 @@ class room:
 
         # Pruefung welchen use (welche Nutzungsart nach DIN 18041) vorliegt und Berechnung der Soll-Nachhallzeit abhaengig vom Raumvolumen
         if self.use == 'Musik':
-            # Pruefung, ob das Volumen nach DIN 18041 fuer Nutzungsart zugelassen ist
-            # Falls es nicht passend ist wird T_Vergleich 0 gesetzt, damit im Folgenden auch die Funktion plot_nachhallzeit beendet werden kann ohne, dass es zu Fehlern kommt
-            # Ansonsten wird einfach die T_soll ausgerechnet 
-            while True:
-                if self.volume < 30:
-                    print(f'Volumen ist mit {self.volume} m^3 zu klein für die Berechnung nach DIN 18041 mit der Nutzungsart "Musik"')
-                    # T_Vergleich = {'125 Hz':0 , '250 Hz':0 , '500 Hz':0 , '1 kHz':0, '2 kHz':0 , '4 kHz':0 }
-                    return T_Vergleich
-                elif self.volume > 1000:        
-                    print(f'Volumen ist mit {self.volume} m^3 zu groß für die Berechnung nach DIN 18041 mit der Nutzungsart "Musik"')
-                    # T_Vergleich = {'125 Hz':0 , '250 Hz':0 , '500 Hz':0 , '1 kHz':0, '2 kHz':0 , '4 kHz':0 }
-                    return T_Vergleich
-                else:    
-                    T_soll = 0.45 * math.log10(self.volume) + 0.07
-                    break
-                
+            T_soll = 0.45 * math.log10(self.volume) + 0.07
 
         elif self.use == 'Sprache/Vortrag':
-            while True:
-                if self.volume < 50:
-                    print(f'Volumen ist mit {self.volume} m^3 zu klein für die Berechnung nach DIN 18041 mit der Nutzungsart "Sprache/Vortrag"')
-                    # T_Vergleich = {'125 Hz':0 , '250 Hz':0 , '500 Hz':0 , '1 kHz':0, '2 kHz':0 , '4 kHz':0 }
-                    return T_Vergleich
-                elif self.volume > 5000:        
-                    print(f'Volumen ist mit {self.volume} m^3 zu groß für die Berechnung nach DIN 18041 mit der Nutzungsart "Sprache/Vortrag"')
-                    # T_Vergleich = {'125 Hz':0 , '250 Hz':0 , '500 Hz':0 , '1 kHz':0, '2 kHz':0 , '4 kHz':0 }
-                    return T_Vergleich
-                else:    
-                    T_soll = 0.37 * math.log10(self.volume) - 0.14
-                    break
+            T_soll = 0.37 * math.log10(self.volume) - 0.14
 
-        elif self.use == 'Sprache/Vortrag inklusiv':
-            while True:
-                if self.volume < 30:
-                    print(f'Volumen ist mit {self.volume} m^3 zu klein für die Berechnung nach DIN 18041 mit der Nutzungsart "Sprache/Vortrag inklusiv"')
-                    # T_Vergleich = {'125 Hz':0 , '250 Hz':0 , '500 Hz':0 , '1 kHz':0, '2 kHz':0 , '4 kHz':0 }
-                    return T_Vergleich
-                elif self.volume > 5000:        
-                    print(f'Volumen ist mit {self.volume} m^3 zu groß für die Berechnung nach DIN 18041 mit der Nutzungsart "Sprache/Vortrag inklusiv"')
-                    # T_Vergleich = {'125 Hz':0 , '250 Hz':0 , '500 Hz':0 , '1 kHz':0, '2 kHz':0 , '4 kHz':0 }
-                    return T_Vergleich
-                else:    
-                    T_soll = 0.32 * math.log10(self.volume) - 0.17
-                    break
+        elif self.use == 'Sprache/Vortrag inklusiv':    
+            T_soll = 0.32 * math.log10(self.volume) - 0.17
 
         elif self.use == 'Unterricht/Kommunikation':
-            while True:
-                if self.volume < 30:
-                    print(f'Volumen ist mit {self.volume} m^3 zu klein für die Berechnung nach DIN 18041 mit der Nutzungsart "Unterricht/Kommunikation"')
-                    # T_Vergleich = {'125 Hz':0 , '250 Hz':0 , '500 Hz':0 , '1 kHz':0, '2 kHz':0 , '4 kHz':0 }
-                    return T_Vergleich
-                elif self.volume > 1000:        
-                    print(f'Volumen ist mit {self.volume} m^3 zu groß für die Berechnung nach DIN 18041 mit der Nutzungsart "Unterricht/Kommunikation"')
-                    # T_Vergleich = {'125 Hz':0 , '250 Hz':0 , '500 Hz':0 , '1 kHz':0, '2 kHz':0 , '4 kHz':0 }
-                    return T_Vergleich
-                else:
-                    T_soll = 0.32 * math.log10(self.volume) - 0.17
+            T_soll = 0.32 * math.log10(self.volume) - 0.17
 
         elif self.use == 'Unterricht/Kommunikation inklusiv':
-            while True:
-                if self.volume < 30:
-                    print(f'Volumen ist mit {self.volume} m^3 zu klein für die Berechnung nach DIN 18041 mit der Nutzungsart "Unterricht/Kommunikation inklusiv"')
-                    # T_Vergleich = {'125 Hz':0 , '250 Hz':0 , '500 Hz':0 , '1 kHz':0, '2 kHz':0 , '4 kHz':0 }
-                    return T_Vergleich
-                elif self.volume > 500:        
-                    print(f'Volumen ist mit {self.volume} m^3 zu groß für die Berechnung nach DIN 18041 mit der Nutzungsart "Unterricht/Kommunikation inklusiv"')
-                    # T_Vergleich = {'125 Hz':0 , '250 Hz':0 , '500 Hz':0 , '1 kHz':0, '2 kHz':0 , '4 kHz':0 }
-                    return T_Vergleich
-                else:
-                    T_soll = 0.26 * math.log10(self.volume) - 0.14
+            T_soll = 0.26 * math.log10(self.volume) - 0.14
 
         elif self.use == 'Sport':
-            while True:
-                if self.volume < 200:
-                    print(f'Volumen ist mit {self.volume} m^3 zu klein für die Berechnung nach DIN 18041 mit der Nutzungsart "Sport"')
-                    # T_Vergleich = {'125 Hz':0 , '250 Hz':0 , '500 Hz':0 , '1 kHz':0, '2 kHz':0 , '4 kHz':0 }
-                    return T_Vergleich
-                elif self.volume > 10000:        
+                if self.volume > 10000:        
                     T_soll = 2
-                    break
                 else:
                     T_soll = 0.75 * math.log10(self.volume) - 1
-                    break
 
         # Berechnung des Quotienten RT/RT_soll und Pruefung, ob berechnete Nachhallzeit in den Fehlerschranken nach Abbildung 2 in DIN 18041 liegt
         for octavbands in self.nachhallzeit():

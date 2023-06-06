@@ -46,19 +46,19 @@ with st.container():
             sub = st.form_submit_button('Submit')
 
 
-#st.write('alpha_d')
+
 for wand, key in enumerate(materials):
     liste = material_dict[key]
     for freq in alpha_d:
         alpha_d[freq].append(float(liste[wand]))
-
+st.write(alpha_d)
 #Erstellen des Objektes Raum der Klasse room
 raum = room(volume=vol, surface=surfaces, alpha=alpha_d, use='Musik')
 #Plots erstellen
 st.divider()
 st.subheader('Ergebnisse')
 st.divider()
-tab1, tab2 = st.tabs(['Nachhallzei', 'Vergleich der Nachhallzeit'])
+tab1, tab2 = st.tabs(['Nachhallzeit', 'Vergleich der Nachhallzeit'])
 with tab1:
     fig1 = raum.plotly_nachhallzeit()
     st.plotly_chart(fig1)
