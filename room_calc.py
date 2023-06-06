@@ -28,7 +28,7 @@ class room:
  
         return A
    
-    def nachhallzeit(self):
+    def reverberationTime(self):
         '''Function to calculate the reverberation time.'''
         reverberationTimeSeconds = basic_dict()
         equivalentSurface = self.equivalent_absorption_surface()
@@ -97,10 +97,6 @@ class room:
     
     def plotly_nachhallzeit_vergleich(self):
         '''Function, which returns a plot of the calculated reverberation time in comparison to the wanted reverberation time and the allowed deviations in octave bands.'''
-
-        T_Vergleich = np.array(list(self.sprachverstaendlichkeit().values()))
-        if np.average(T_Vergleich) == 0:
-            return 
         
         freq = [125,250,500,1000,2000,4000]
         
