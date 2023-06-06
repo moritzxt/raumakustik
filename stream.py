@@ -5,11 +5,13 @@ import streamlit as st
 from room_calc import room
 from utils import basic_dict , read_db, basic_dict_2, add_row, usecase
 
+
 st.set_page_config(page_title= 'Tool für Raumakustik', layout='wide',
                     initial_sidebar_state='collapsed')
 
+# """Eingabe der Parameter"""
 
-#with col1:
+
 with st.container():
     st.title('WebApp for Roomacoustics')
     st.divider()
@@ -32,7 +34,8 @@ with st.container():
     col_1, col_2 = st.columns(2)
     with col_1:
         with st.form(key = 'surface'):
-            surfaces = [st.number_input(f"Fläche für Wandfläche {i+1}", value=1) for i in range(int(areas))]
+            surfaces = [st.number_input(
+                f"Fläche für Wandfläche {i+1}", value=1) for i in range(int(areas))]
             sub = st.form_submit_button('Submit')
         #st.write(surfaces)
 
@@ -41,8 +44,9 @@ with st.container():
     material_dict = read_db()
     with col_2:
         with st.form(key = 'material'):
-            materials = [st.selectbox(label= f'Bitte wählen Sie das Material der Wand {i+1} aus.'
-                                      ,options=material_dict.keys())for i in range(int(areas))]
+            materials = [st.selectbox(
+                label= f'Bitte wählen Sie das Material der Wand {i+1} aus.'
+                ,options=material_dict.keys())for i in range(int(areas))]
             sub = st.form_submit_button('Submit')
 
 
@@ -54,7 +58,9 @@ for wand, key in enumerate(materials):
 
 #Erstellen des Objektes Raum der Klasse room
 raum = room(volume=vol, surface=surfaces, alpha=alpha_d, use='Musik')
+
 #Plots erstellen
+
 st.divider()
 st.subheader('Ergebnisse')
 st.divider()
