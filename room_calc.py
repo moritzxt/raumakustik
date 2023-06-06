@@ -4,8 +4,9 @@ import plotly.graph_objects as go
 from utils import basic_dict
 
 class room: 
-
+    '''Class inheriting all functions for calculations and making plots.'''
     def __init__(self, volume, surface, alpha, use):
+        '''Function to initialize the class "room"'''
         self.input = {'Volume': volume, 'Surface': surface, 'Absorption coefficient': alpha}
         self.volume = volume
         self.surface = surface
@@ -13,6 +14,7 @@ class room:
         self.use = use
         
     def equivalent_absorption_surface(self):
+        '''Function to calculate the equivalent absorption surface.'''
         # surface als list mit m^2 der einzelnen Waende
         # alpha_d als dictionary mit Oktavbandfrequenzen als key und Liste der diffusen Absorptionsgrade pro Wand als value   
         
@@ -27,44 +29,21 @@ class room:
         return A
    
     def nachhallzeit(self):
+        '''Function to calculate the reverberation time.'''
         reverberationTimeSeconds = basic_dict()
         equivalentSurface = self.equivalent_absorption_surface()
         for octavebands in equivalentSurface:
             reverberationTimeSeconds[octavebands] = (self.volume / equivalentSurface[octavebands]) * 0.161
         return reverberationTimeSeconds
-    
-    # def level_diffuse(self):
-    #     L_R = basic_dict()
-    #     equivalentSurface = self.equivalent_absorption_surface()
-    #     for octavebands in self.alpha_d:
-    #         L_R[octavebands] = 10 * math.log10(power / 10**(-12)) - 10 * math.log10(equivalentSurface[octavebands]) + 6
-    #     return L_R
-    
-    # def level_direct(self):
-    #     L_D = 10 * math.log10(self.power / 10**(-12)) - 10 * math.log10(4 * np.pi * self.distance**2)
-    #     return L_D
 
     def hallradius(self):
-        # distance = 10**(-10)
-        # L_R = self.level_diffuse()
-        # L_D = self.level_direct()
-
-        # L_Rm = 0 # Initalisierung fuer Mittelwert des reflektierten Schalldruckpegels ueber alle Oktavbaender
-        # # Mittelwertbildung des reflektierten Schalldruckpegels
-        # for i in L_R:
-        #     L_Rm = L_Rm + L_R[i] 
-        # L_Rm = L_Rm / len(L_R)
-        # # Sobald Mittelwert des reflektierten Schalldruckpegels
-        # # groesser als direkter Schalldruckpegel ist wird Hallradius ausgegeben
-        # while L_Rm < L_D:
-        #     self.distance = self.distance + 0.01
-        #     L_D = self.level_direct()            
-        # return self.distance 
+        '''Function to calculate the distance, where direct and reflected sound are equal.'''
         hallradius = np.sqrt(self.equivalent_absorption_surface() / 50)
 
         return hallradius
     
     def sprachverstaendlichkeit(self):
+        '''Function to calculate the ratio of given reverberation time to wanted reverberation time. Wanted reverberation time is based on the rooms use case and its volume.'''
         T_Vergleich = basic_dict()
         T_upperlimit = {'125 Hz':1.45 , '250 Hz':1.2 , '500 Hz':1.2 , '1 kHz':1.2, '2 kHz':1.2 , '4 kHz':1.2 }
         T_lowerlimit = {'125 Hz':0.65 , '250 Hz':0.8 , '500 Hz':0.8 , '1 kHz':0.8, '2 kHz':0.8 , '4 kHz':0.65 }
@@ -101,6 +80,7 @@ class room:
         return T_Vergleich
     
     def plotly_nachhallzeit(self):
+        '''Function, which returns a plot of the reverberation time in octave bands.'''
         freq = np.array([125,250,500,1000,2000,4000])
         reverberationTimeSeconds = self.nachhallzeit()
 
@@ -116,6 +96,7 @@ class room:
         return fig
     
     def plotly_nachhallzeit_vergleich(self):
+        '''Function, which returns a plot of the calculated reverberation time in comparison to the wanted reverberation time and the allowed deviations in octave bands.'''
 
         T_Vergleich = np.array(list(self.sprachverstaendlichkeit().values()))
         if np.average(T_Vergleich) == 0:
