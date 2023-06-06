@@ -30,26 +30,48 @@ with col3:
     areas = st.number_input('Anzahl der Wandflächen die Sie eingeben möchten'
                             ,min_value=1, step=1)
 area =  np.linspace(0,int(areas),int(areas)+1)
-with st.container():
-    col_1, col_2 = st.columns(2)
-    with col_1:
-        with st.form(key = 'surface'):
-            surfaces = [st.number_input(
-                f"Fläche für Wandfläche {i+1}", value=1) for i in range(int(areas))]
-            sub = st.form_submit_button('Submit')
-        #st.write(surfaces)
 
-    alpha = basic_dict_2()
+surfaces = []
+materials = []
+names = [f'Wandfläche {i+1}' for i in range(areas)]
+subAreas = 0
 
-    material_dict = read_db()
-    with col_2:
-        with st.form(key = 'material'):
-            materials = [st.selectbox(
-                label= f'Bitte wählen Sie das Material der Wand {i+1} aus.'
-                ,options=material_dict.keys())for i in range(int(areas))]
-            sub = st.form_submit_button('Submit')
+tabs = st.tabs(names)
 
-          
+for tab, name in zip(tabs, names):
+    with tab:
+        with st.container():
+            col_1, col_2, col_3 = st.columns(3)
+            with col_1:
+                #with st.form(key = f'MainSurface {name}'):
+                surfaces.append(st.number_input(
+                    f"Fläche für {name}", value=1))
+                if st.button('Add Subwandfläche', key = f'subArea {name}'):
+                    subAreas += 1
+
+                    #subAreas = st.number_input('Anzahl der Subwandflächen', min_value=0, step=1, value=0)
+                    #sub = st.form_submit_button('Submit')
+                #st.write(surfaces)
+
+            with col_2:
+                with st.form(key = f'subSurface {name}'):
+                    subsurfaces = [st.number_input(
+                    f"Fläche für Subwandfläche {i+1}", value=1) for i in range(int(subAreas))]
+                    sub = st.form_submit_button('Submit')
+            
+
+            material_dict = read_db()
+            with col_3:
+                with st.form(key = f'subMaterial {name}'):
+                    materials.append(st.selectbox(label =  f'Bitte wählen Sie das Material der {name} aus.'
+                        ,options=material_dict.keys()))
+                    subMaterials = [st.selectbox(
+                        label= f'Bitte wählen Sie das Material der Subwand {i+1} aus.'
+                        ,options=material_dict.keys())for i in range(int(subAreas))]
+                    sub = st.form_submit_button('Submit')
+
+alpha = basic_dict_2()
+
 for ind, octaveBands in enumerate(alpha):
     for material in materials:
         alpha[octaveBands].append(material_dict[material][ind])
