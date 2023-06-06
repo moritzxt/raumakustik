@@ -36,11 +36,11 @@ class room:
             reverberationTimeSeconds[octavebands] = (self.volume / equivalentSurface[octavebands]) * 0.161
         return reverberationTimeSeconds
 
-    def hallradius(self):
+    def reverberationRadius(self):
         '''Function to calculate the distance, where direct and reflected sound are equal.'''
-        hallradius = np.sqrt(self.equivalent_absorption_surface() / 50)
+        reverberationRadius = np.sqrt(self.equivalent_absorption_surface() / 50)
 
-        return hallradius
+        return reverberationRadius
     
     def reverberationTime_ratio(self):
         '''Function to calculate the ratio of given reverberation time to wanted reverberation time. Wanted reverberation time is based on the rooms use case and its volume.'''
@@ -103,7 +103,7 @@ class room:
         T_upperlimit = [1.45, 1.2, 1.2, 1.2, 1.2, 1.2]
         T_lowerlimit = [0.65, 0.8, 0.8, 0.8, 0.8, 0.65]
 
-        reverberationTime_ratio = list(self.sprachverstaendlichkeit().values())
+        reverberationTime_ratio = list(self.reverberationTime_ratio().values())
 
         fig = go.Figure()
         trace1 = go.Scatter(x = freq, y = T_lowerlimit, marker_color = 'green', mode='lines')
