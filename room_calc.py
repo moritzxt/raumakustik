@@ -12,6 +12,7 @@ class room:
         self.surface = surface
         self.alpha = alpha
         self.use = use
+        self.ErrorMessage = None
         
     def equivalent_absorption_surface(self):
         '''Function to calculate the equivalent absorption surface.'''
@@ -75,10 +76,10 @@ class room:
         for octaveBands in self.reverberationTime():
             reverberationTime_ratio[octaveBands] = self.reverberationTime()[octaveBands] / T_soll
             if reverberationTime_ratio[octaveBands] > ReverberationTime_upperlimit[octaveBands]:
-                print(f'Nachhallzeit in Oktavband mit Mittenfrequenz {octaveBands} zu hoch')
+                ErrorMessage = 'Nachhallzeit in Oktavband mit Mittenfrequenz {octaveBands} zu hoch'
             elif reverberationTime_ratio[octaveBands] < ReverberationTime_lowerlimit[octaveBands]:
-                print(f'Nachhallzeit in Oktavband mit Mittenfrequenz {octaveBands} zu niedrig')      
-        return reverberationTime_ratio, 
+                ErrorMessage = 'Nachhallzeit in Oktavband mit Mittenfrequenz {octaveBands} zu niedrig'      
+        return reverberationTime_ratio, ErrorMessage
     
     def plot_reverberationTime(self):
         '''Function, which returns a plot of the reverberation time in octave bands.'''
@@ -104,7 +105,7 @@ class room:
         ReverberationTime_upperlimit = [1.45, 1.2, 1.2, 1.2, 1.2, 1.2]
         ReverberationTime_lowerlimit = [0.65, 0.8, 0.8, 0.8, 0.8, 0.65]
 
-        reverberationTime_ratio = list(self.reverberationTime_ratio().values())
+        reverberationTime_ratio = list(self.reverberationTime_ratio()[0].values())
 
         fig = go.Figure()
         trace1 = go.Scatter(x = freq, y = ReverberationTime_lowerlimit, marker_color = 'green', mode='lines')
