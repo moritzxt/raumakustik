@@ -71,8 +71,8 @@ class room:
                     T_soll = 0.75 * math.log10(self.volume) - 1
 
         # Berechnung des Quotienten RT/RT_soll und Pruefung, ob berechnete Nachhallzeit in den Fehlerschranken nach Abbildung 2 in DIN 18041 liegt
-        for octavbands in self.nachhallzeit():
-            T_Vergleich[octavbands] = self.nachhallzeit()[octavbands] / T_soll
+        for octavbands in self.reverberationTime():
+            T_Vergleich[octavbands] = self.reverberationTime()[octavbands] / T_soll
             if T_Vergleich[octavbands] > T_upperlimit[octavbands]:
                 print(f'Nachhallzeit in Oktavband mit Mittenfrequenz {octavbands} zu hoch')
             elif T_Vergleich[octavbands] < T_lowerlimit[octavbands]:
@@ -82,7 +82,7 @@ class room:
     def plotly_nachhallzeit(self):
         '''Function, which returns a plot of the reverberation time in octave bands.'''
         freq = np.array([125,250,500,1000,2000,4000])
-        reverberationTimeSeconds = self.nachhallzeit()
+        reverberationTimeSeconds = self.reverberationTime()
 
         fig = go.Figure()
 
@@ -100,8 +100,10 @@ class room:
         
         freq = [125,250,500,1000,2000,4000]
         
-        T_upperlimit = np.array([1.45, 1.2, 1.2, 1.2, 1.2, 1.2])
-        T_lowerlimit = np.array([0.65, 0.8, 0.8, 0.8, 0.8, 0.65])
+        T_upperlimit = [1.45, 1.2, 1.2, 1.2, 1.2, 1.2]
+        T_lowerlimit = [0.65, 0.8, 0.8, 0.8, 0.8, 0.65]
+
+        T_Vergleich = list(self.sprachverstaendlichkeit().values())
 
         fig = go.Figure()
         trace1 = go.Scatter(x = freq, y = T_lowerlimit, marker_color = 'green', mode='lines')
