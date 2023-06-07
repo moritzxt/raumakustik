@@ -5,6 +5,7 @@ from utils import basic_dict
 
 class room: 
     '''Class inheriting all functions for calculations and making plots.'''
+
     def __init__(self, volume, surface, alpha, use):
         '''Function to initialize the class "room"'''
         self.input = {'Volume': volume, 'Surface': surface, 'Absorption coefficient': alpha}
@@ -16,10 +17,7 @@ class room:
         
     def equivalent_absorption_surface(self):
         '''Function to calculate the equivalent absorption surface.'''
-        # surface als list mit m^2 der einzelnen Waende
-        # alpha_d als dictionary mit Oktavbandfrequenzen als key und Liste der diffusen Absorptionsgrade pro Wand als value   
-        
-        # basic_dict() muss noch umgeschrieben werden {'125 Hz':0 , '250 Hz':0 , '500 Hz':0 , '1 kHz':0, '2 kHz':0 , '4 kHz':0 }
+
         A = basic_dict()
 
         for walls in range(len(self.surface)):
@@ -31,6 +29,7 @@ class room:
    
     def reverberationTime(self):
         '''Function to calculate the reverberation time.'''
+
         reverberationTimeSeconds = basic_dict()
         equivalentSurface = self.equivalent_absorption_surface()
         for octavebands in equivalentSurface:
@@ -38,19 +37,22 @@ class room:
 
         return reverberationTimeSeconds
 
-    def reverberationRadius(self):
-        '''Function to calculate the distance, where direct and reflected sound are equal.'''
-        reverberationRadius = np.sqrt(self.equivalent_absorption_surface() / 50)
+    def criticalDistance(self):
+        '''Function to calculate the critical distance, where the energy densities of the direct and reflected soundfield are equal. 
+        Calculation is made with an approximate formula based on statistical acoustics in a diffuse soundfield.'''
+        
+        criticalDistance = np.sqrt(self.equivalent_absorption_surface() / 50)
 
-        return reverberationRadius
+        return criticalDistance
     
     def reverberationTime_ratio(self):
         '''Function to calculate the ratio of given reverberation time to wanted reverberation time. Wanted reverberation time is based on the rooms use case and its volume.'''
+
         reverberationTime_ratio = basic_dict()
         ReverberationTime_upperlimit = {'125 Hz':1.45 , '250 Hz':1.2 , '500 Hz':1.2 , '1 kHz':1.2, '2 kHz':1.2 , '4 kHz':1.2 }
         ReverberationTime_lowerlimit = {'125 Hz':0.65 , '250 Hz':0.8 , '500 Hz':0.8 , '1 kHz':0.8, '2 kHz':0.8 , '4 kHz':0.65 }
 
-        # Pruefung welchen use (welche Nutzungsart nach DIN 18041) vorliegt und Berechnung der Soll-Nachhallzeit abhaengig vom Raumvolumen
+        # Calculation of the wanted reverberation time dependent on the use case given in DIN 18041 (and the volume in use case "Sport")
         if self.use == 'Musik':
             reverberationTime_wanted = 0.45 * math.log10(self.volume) + 0.07
 
@@ -78,11 +80,13 @@ class room:
             if reverberationTime_ratio[octaveBands] > ReverberationTime_upperlimit[octaveBands]:
                 ErrorMessage = 'Nachhallzeit in Oktavband mit Mittenfrequenz {octaveBands} zu hoch'
             elif reverberationTime_ratio[octaveBands] < ReverberationTime_lowerlimit[octaveBands]:
-                ErrorMessage = 'Nachhallzeit in Oktavband mit Mittenfrequenz {octaveBands} zu niedrig'      
+                ErrorMessage = 'Nachhallzeit in Oktavband mit Mittenfrequenz {octaveBands} zu niedrig'  
+                    
         return reverberationTime_ratio, ErrorMessage
     
     def plot_reverberationTime(self):
         '''Function, which returns a plot of the reverberation time in octave bands.'''
+
         freq = np.array([125,250,500,1000,2000,4000])
         reverberationTimeSeconds = self.reverberationTime()
 
