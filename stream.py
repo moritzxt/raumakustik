@@ -38,7 +38,7 @@ with st.container():
 
     alpha = basic_dict_2()
 
-    material_dict = read_db()
+    material_dict = read_db('Datenbank_Absorptionsgrade.csv')
     with col_2:
         with st.form(key = 'material'):
             materials = [st.selectbox(label= f'Bitte wählen Sie das Material der Wand {i+1} aus.'
