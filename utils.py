@@ -8,8 +8,8 @@ def basic_dict_2():
     dictionary = {'125 Hz':[] , '250 Hz':[] , '500 Hz':[] , '1 kHz':[], '2 kHz':[] , '4 kHz':[] }
     return dictionary
 
-def read_db(fileName):
-    with open(fileName, 'r', ) as file:
+def read_db():
+    with open('Datenbank_Absorptionsgrade.csv', 'r', ) as file:
         reader = csv.reader(file, delimiter=';')
         header = next(reader)
         dict_db2 = {}

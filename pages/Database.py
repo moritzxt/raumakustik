@@ -2,14 +2,14 @@ import streamlit as st
 import pandas as pd
 from utils import read_db, add_row
 
-dict_alpha = read_db('Datenbank_Absorptionsgrade.csv')
+dict_alpha = read_db()
 dataframe =  pd.read_csv('Datenbank_Absorptionsgrade.csv',sep = ';')
 st.set_page_config(page_title= 'Database', layout='wide')
 st.title('Materialdatenbank')
 st.divider()
 st.dataframe(dataframe, use_container_width= True)
 
-material_dict = read_db('Datenbank_Absorptionsgrade.csv')
+material_dict = read_db()
 
 # '''Updaten der Datenbank mit Benutzerdefinierten Werten \n 
 # Bitte Werte mit Komma voneinander trennen und einen Punkt \n
