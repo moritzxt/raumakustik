@@ -8,6 +8,8 @@ import os
 import json
 from streamlit.runtime.scriptrunner.script_run_context import add_script_run_ctx
 
+
+#setup of  page data:
 st.set_page_config(page_title= 'Tool für Raumakustik', layout='wide',
                     initial_sidebar_state='collapsed')
 
@@ -18,27 +20,32 @@ if not os.path.isfile(state):
     with open(state, 'w') as init:
         json.dump({}, init)
 
-#load the last session
+#load the last session into session json file
 if os.path.isfile('session_key.json'):
     with open('session_key.json', 'r') as file:
         last_session_keyy = json.load(file)
         last_session_key = last_session_keyy['key']
-        with open(last_session_key + '.json', 'r') as file:
-            last_session = json.load(file)
-            with open(state, 'w') as init:
-                json.dump(last_session, init)
+        if os.path.isfile(last_session_key + '.json'):
+            with open(last_session_key + '.json', 'r') as file:
+                last_session = json.load(file)
+                with open(state, 'w') as init:
+                    json.dump(last_session, init)
 
-#create a json file with session id
+#write current session id in session_key.json
 session = add_script_run_ctx().streamlit_script_run_ctx.session_id
 with open('session_key.json', 'w') as init:
     json.dump({'key': session}, init)
 
-
+#load data from current session
 with open(state) as jsonkey:
     json_data = json.load(jsonkey)
 
-if not (json_data == '{}'):
-    usecase_init = json_data['usecase']
+#read material data bank
+material_dict = read_db('Datenbank_Absorptionsgrade.csv')
+
+#read starting positions of input elements from last session... 
+if not (json_data == {}):
+    usecase_init = json_data['usecase']         #could be done more elegantly, might change if i ever bother
     if usecase_init == 'Musik':
         usecase_index = 0
     elif usecase_init == 'Sprache/Vortrag':
@@ -52,15 +59,22 @@ if not (json_data == '{}'):
 
     volume_init = json_data['volume']
     number_walls_init = json_data['number_walls']
-    length = 0
+    area_init = []
+    material_init = []
+    material_init_string = []
+    #fill area and material data for existing walls
+    for i in range(number_walls_init):
+        area_init.append(json_data['wall' + str(i+1)]['area'])
+        material_init_string.append(json_data['wall' + str(i+1)]['material'])
+        for j in range(len(list(material_dict))):
+            if list(material_dict)[j] == json_data['wall' + str(i+1)]['material']:   #what happens when key aint found?
+                material_init.append(j)
+    #then set data to defaults for 100 next indices, to allow adding more walls - so limiting the number of walls to 100 would be smart
     for i in range(100):
-        if 'wall' + str(i) in json_data:
-            length += 1
-    #area_init = np.zeros(length)
-    #material_init = np.zeros(length)
-    #for i in range(length):
-        #area_init[i] = json_data['wall' + str(i+1)]['area']
-        #material_init[i] = json_data['wall' + str(i+1)]['material']
+        area_init.append(1)
+        material_init_string.append(list(material_dict)[0])
+        material_init.append(0)
+#... if there isnt a last session, set starting positions to defaults
 else:
     usecase_init = 'Music'
     usecase_index = 0
@@ -69,83 +83,84 @@ else:
     area_init = {1}
     material_init = {'Walls,hard surfaces average (brick walls, plaster, hard floors, etc.)'}
 
-#if st.button('button'):
-#    counter += 1
 
-#with open(state,'w') as f:
-#    json.dump({'clicks': counter}, f)
-
+#definition of website data:
 #with col1:
 with st.container():
     st.title('WebApp for Roomacoustics')
     st.divider()
     st.header('Benötigt werden das Raumvolumen, die Anzahl'
         ' der Wände, deren Fläche, sowie das Material der Wandoberfläche')
+    #st.write(json_data['wall' + str(1)]['material'])       #for debugging purposes
+    #st.write(state)
 
 col1, col2, col3 = st.columns(3)
 with col1:
+    #selection of usecase
     use = st.selectbox('Usecase nach DIN 18041', options=usecase.keys(), index=usecase_index)
-    #save new key every time you change it
-    #if use:
-    #    current_usecase = use.key
-    #save current key in json
-    #for item in json_data:
-        #item['usecase'] = item['usecase'].replace()
+    #on change save current usecase into json
     json_data['usecase'] = use
     with open(state,'w') as jsonkey:
         json.dump(json_data, jsonkey)
 
+    #set boundaries of volume for usecase
     min_lim =  min(usecase[use])
     max_lim =  max(usecase[use])
+    #check if initial values are in limits and replace them if they are
+    if volume_init < min_lim:
+        volume_new_init = min_lim
+    elif volume_init > max_lim:
+        volume_new_init = max_lim
+    else:
+        volume_new_init = volume_init
+
 with col2:
+    #input of volume
     vol = st.number_input('Volumen in m³', min_value=min_lim,
-                        max_value=max_lim, value=volume_init)
+                        max_value=max_lim, value=volume_new_init)
     #save current key in json
     json_data['volume'] = vol
     with open(state,'w') as jsonkey:
         json.dump(json_data, jsonkey)
 
 with col3:
+    #input of amount of walls
     areas = st.number_input('Anzahl der Wandflächen die Sie eingeben möchten'
                             ,min_value=1, step=1, value=number_walls_init)
     #save current key in json
     json_data['number_walls'] = areas
     for i in range(areas):
-        json_data['wall' + str(i+1)] = {"area": 1, "material": "Walls,hard surfaces average (brick walls, plaster, hard floors, etc.)"} #needs to be implemented that wall gets removed when deleted and changed stuff actually stays changed
-    for j in range(100):                                                                                   #<-something like this? as answer to that ^
+        json_data['wall' + str(i+1)] = {"area": area_init[i], "material": material_init_string[i]}
+    #delete removed walls from file
+    for j in range(100):
         if j > areas and ('wall' + str(j)) in json_data:
             del json_data['wall' + str(j)]
     with open(state,'w') as jsonkey:
         json.dump(json_data, jsonkey)
-        #with open(state, "r") as jsonkey:
-            #json_data
-        #with open(state, "a") as jsonkey:
-            #json.dump({'wall' + str(i) + 'area': 1, 'wall' + str(i)+ 'material': 'Walls,hard surfaces average (brick walls, plaster, hard floors, etc.)'}, jsonkey)
+
 
 area =  np.linspace(0,int(areas),int(areas)+1)
 with st.container():
     col_1, col_2 = st.columns(2)
     with col_1:
         with st.form(key = 'surface'):
-            
-            surfaces = [st.number_input(f"Fläche für Wandfläche {i+1}", value=1) for i in range(int(areas))]
+            #input of wall area
+            surfaces = [st.number_input(f"Fläche für Wandfläche {i+1}", value=area_init[i]) for i in range(int(areas))]
             sub = st.form_submit_button('Submit')
             #save currenty wall area in json
             for i in range(int(areas)):
                 json_data['wall' + str(i+1)]['area'] = surfaces[i]
             with open(state,'w') as jsonkey:
                 json.dump(json_data, jsonkey)
-                
-        #st.write(surfaces)
     
 
     alpha = basic_dict_2()
 
-    material_dict = read_db('Datenbank_Absorptionsgrade.csv')
     with col_2:
         with st.form(key = 'material'):
+            #selection of wall material
             materials = [st.selectbox(label= f'Bitte wählen Sie das Material der Wand {i+1} aus.'
-                                      ,options=material_dict.keys())for i in range(int(areas))]
+                                      ,options=material_dict.keys(), index = material_init[i])for i in range(int(areas))]
             sub = st.form_submit_button('Submit')
             #save current wall material in json
             for i in range(int(areas)):
@@ -168,13 +183,15 @@ with st.container():
             st.session_state["save_as"] = not st.session_state["save_as"]
 
         key_file_name_save = " "
-        #name = ""
+
         if st.session_state["save_as"]:
+            #space to input file name
             save_as_file_name = st.text_input("file name", key=key_file_name_save)
             st.session_state["save_as_name"] = st.session_state[key_file_name_save]
             #saves the json file as the input file name
             if st.button("save"):
                 name = st.session_state[key_file_name_save]
+                st.write(save_as_file_name + ".json saved successfully" )               #should prolly only display if save was successful, should disappear after a while
                 with open(name + ".json", "w") as file:
                     with open(state, "r") as open_json:
                         file.write(open_json.read())
@@ -192,14 +209,16 @@ with st.container():
 
         key_file_name_open = ""
         if st.session_state["open_file"]:
-            save_as_file_name = st.text_input("file name", key=key_file_name_open)
+            #space to input file name
+            save_as_file_name = st.text_input("file name (if file doesn't load properly, try refreshing the page)", key=key_file_name_open) # the reason it doesnt load properly is when you have changed an input parameter during this session, it wont go back to default position, dont think there is an easy fix
             st.session_state["open_file_name"] = st.session_state[key_file_name_open]
-            #saves the json file as the input file name
+            #put the contents of the opened file in current session json and relaod page
             if st.button("open"):
                 name = st.session_state[key_file_name_open]
                 with open(name + ".json", "r") as file:                 #needs an exception if file does not exist
                     with open(state, "w") as open_json:
                         open_json.write(file.read())
+                st.experimental_rerun()
 
 
           
