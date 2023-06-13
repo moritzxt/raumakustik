@@ -31,53 +31,67 @@ with col3:
                             ,min_value=1, step=1)
 area =  np.linspace(0,int(areas),int(areas)+1)
 
-surfaces = []
-materials = []
-names = [f'Wandfläche {i+1}' for i in range(areas)]
+main_surfaces = []
+main_materials = []
+names = [f'Grundflaeche {i+1}' for i in range(areas)]
 subAreas = 0
-
+material_dict = read_db()
+sub_surfaces = {}
+sub_materials = {}
+for key in names:
+    sub_surfaces[key] = []
+    sub_materials[key] = []
 tabs = st.tabs(names)
 
 for tab, name in zip(tabs, names):
     with tab:
-        with st.container():
-            col_1, col_2, col_3 = st.columns(3)
+        #st.session_state['subAreas'] = 0
+        con_1 = st.container()
+        con_2 = st.container()
+        with con_1:
+            col_1, col_2 = st.columns(2)
             with col_1:
                 #with st.form(key = f'MainSurface {name}'):
-                surfaces.append(st.number_input(
+                main_surfaces.append(st.number_input(
                     f"Fläche für {name}", value=1))
-                if st.button('Add Subwandfläche', key = f'subArea {name}'):
-                    subAreas += 1
+
 
                     #subAreas = st.number_input('Anzahl der Subwandflächen', min_value=0, step=1, value=0)
                     #sub = st.form_submit_button('Submit')
                 #st.write(surfaces)
 
             with col_2:
-                with st.form(key = f'subSurface {name}'):
-                    subsurfaces = [st.number_input(
-                    f"Fläche für Subwandfläche {i+1}", value=1) for i in range(int(subAreas))]
-                    sub = st.form_submit_button('Submit')
-            
+                main_materials.append(st.selectbox(label =  f'Bitte wählen Sie das Material der {name} aus.'
+                    ,options=material_dict.keys()))
 
-            material_dict = read_db()
-            with col_3:
-                with st.form(key = f'subMaterial {name}'):
-                    materials.append(st.selectbox(label =  f'Bitte wählen Sie das Material der {name} aus.'
-                        ,options=material_dict.keys()))
-                    subMaterials = [st.selectbox(
-                        label= f'Bitte wählen Sie das Material der Subwand {i+1} aus.'
-                        ,options=material_dict.keys())for i in range(int(subAreas))]
-                    sub = st.form_submit_button('Submit')
+
+
+        with con_2:
+            col_1, col_2 = st.columns(2)
+            if 'subAreas' not in st.session_state:
+                st.session_state[f'subAreas{name}'] = 0
+            if st.button('Add Subwandfläche', key = f'Button subArea{subAreas} {name}'):
+                st.session_state[f'subAreas{name}'] += 1
+                subAreas = st.session_state[f'subAreas{name}']
+            for num in range(1, subAreas+1):
+                with col_1:
+                    
+                    sub_surfaces[name].append(st.number_input(f"Fläche für Subwandfläche {num +1 }",
+                                                            value=1, key = f'Fläche subArea{num} {name}'))
+
+                with col_2:
+                    sub_materials[name].append(st.selectbox(label =  f'Bitte wählen Sie das Material der Subfläche {num + 1} aus.'
+                        ,options=material_dict.keys(), key=f'Subfläche {num} von {name}'))
+
 
 alpha = basic_dict_2()
 
 for ind, octaveBands in enumerate(alpha):
-    for material in materials:
+    for material in main_materials:
         alpha[octaveBands].append(material_dict[material][ind])
 
 #Erstellen des Objektes Raum der Klasse room
-raum = room(volume=vol, surface=surfaces, alpha=alpha, use='Musik')
+raum = room(volume=vol, surface=main_surfaces, alpha=alpha, use='Musik')
 #Plots erstellen
 
 st.divider()
