@@ -68,7 +68,7 @@ for tab, name in zip(tabs, names):
 
         with con_2:
             col_1, col_2 = st.columns(2)
-            if 'subAreas' not in st.session_state:
+            if f'subAreas{name}' not in st.session_state:
                 st.session_state[f'subAreas{name}'] = 0
             if st.button('Add Subwandfläche', key = f'Button subArea{subAreas} {name}'):
                 st.session_state[f'subAreas{name}'] += 1
