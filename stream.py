@@ -80,8 +80,14 @@ else:
     usecase_index = 0
     volume_init = 30
     number_walls_init = 1
-    area_init = {1}
-    material_init = {'Walls,hard surfaces average (brick walls, plaster, hard floors, etc.)'}
+    area_init = []
+    material_init = []
+    material_init_string = []
+    #material_init_string = {'Walls,hard surfaces average (brick walls, plaster, hard floors, etc.)'}
+    for i in range(100):
+        area_init.append(1)
+        material_init_string.append(list(material_dict)[0])
+        material_init.append(0)
 
 
 #definition of website data:
