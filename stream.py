@@ -68,12 +68,19 @@ for tab, name in zip(tabs, names):
 
 
         with con_2:
-            col_1, col_2 = st.columns(2)
-            
+            col_1, col_2, col_3 = st.columns(3)
+
             if st.button('Add Subwandfläche', key = f'Button subArea{subAreas} {name}'):
                 st.session_state[f'subAreas{name}'] += 1
             subAreas = st.session_state[f'subAreas{name}']
-            for num in range(1, subAreas+1):
+
+            if st.button('Remove', key=f'remove Subfläche von {name}'):
+                if st.session_state[f'subAreas{name}'] > 0:
+                    st.session_state[f'subAreas{name}'] -= 1
+                    sub_materials[name].pop()
+                    sub_surfaces[name].pop()
+                    
+            for num in range(0, subAreas):
                 with col_1:
                     
                     sub_surfaces[name].append(st.number_input(f"Fläche für Subwandfläche {num +1 }",
@@ -82,6 +89,7 @@ for tab, name in zip(tabs, names):
                 with col_2:
                     sub_materials[name].append(st.selectbox(label =  f'Bitte wählen Sie das Material der Subfläche {num + 1} aus.'
                         ,options=material_dict.keys(), key=f'Subfläche {num} von {name}'))
+                
 
 
 alpha = basic_dict_2()
