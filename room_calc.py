@@ -6,12 +6,14 @@ from utils import basic_dict, read_db
 class room: 
     '''Class inheriting all functions for calculations and making plots.'''
 
-    def __init__(self, volume, surface, alpha, use):
+    def __init__(self, volume, surface, sub_surface, alpha, sub_alpha, use):
         '''Function to initialize the class "room"'''
         self.input = {'Volume': volume, 'Surface': surface, 'Absorption coefficient': alpha}
         self.volume = volume
         self.surface = surface
+        self.sub_surface = sub_surface
         self.alpha = alpha
+        self.sub_alpha = sub_alpha
         self.use = use
         self.ErrorMessage = None
 
@@ -30,12 +32,28 @@ class room:
 
         equivalentAbsorptionSurface = basic_dict()
 
-        for walls in range(len(self.surface)):
-            for octavebands in equivalentAbsorptionSurface:
-                alphaValuesList = self.alpha[octavebands]
-                equivalentAbsorptionSurface[octavebands] = equivalentAbsorptionSurface[octavebands] + self.surface[walls] * alphaValuesList[walls]
- 
+        wall_index = 0
+        # equivalent absorption surface for main walls 
+        for octaveBands in self.alpha:
+            alphaList = self.alpha[octaveBands]
+
+            for walls in self.surface:
+                equivalentAbsorptionSurface[octaveBands] = equivalentAbsorptionSurface[octaveBands] + (self.surface[walls] - sum(self.sub_surface[walls])) * alphaList[wall_index]
+                wall_index = wall_index + 1
+            wall_index = 0
+
+        # adding equivalent absorption surface for sub walls
+        for octaveBands in self.sub_alpha.keys():
+            sub_alphaDict = self.sub_alpha[octaveBands]
+            for sub_walls in self.sub_surface.keys():
+                sub_alphaList = sub_alphaDict[sub_walls]
+                sub_surfaceList = self.sub_surface[sub_walls]
+                    
+                for sub_wall_index in range(len(sub_surfaceList)):
+                    equivalentAbsorptionSurface[octaveBands] = equivalentAbsorptionSurface[octaveBands] + sub_surfaceList[sub_wall_index] * sub_alphaList[sub_wall_index]
+
         return equivalentAbsorptionSurface
+    
     
     def equivalentAbsorptionSurface_people(self, peopleDescription, numberOfPeople):
         '''
