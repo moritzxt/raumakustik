@@ -15,7 +15,7 @@ class room:
         self.alpha = alpha
         self.sub_alpha = sub_alpha
         self.use = use
-        self.ErrorMessage = None
+        self.ErrorMessage = []
 
     def criticalDistance(self):
         '''
@@ -120,9 +120,9 @@ class room:
         for octaveBands in self.reverberationTime():
             reverberationTime_ratio[octaveBands] = self.reverberationTime()[octaveBands] / reverberationTime_wanted
             if reverberationTime_ratio[octaveBands] > ReverberationTime_upperlimit[octaveBands]:
-                self.ErrorMessage = f'Nachhallzeit in Oktavband mit Mittenfrequenz {octaveBands} zu hoch'
+                self.ErrorMessage.append(f'Nachhallzeit in Oktavband mit Mittenfrequenz {octaveBands} zu hoch')
             elif reverberationTime_ratio[octaveBands] < ReverberationTime_lowerlimit[octaveBands]:
-                self.ErrorMessage = f'Nachhallzeit in Oktavband mit Mittenfrequenz {octaveBands} zu niedrig'  
+                self.ErrorMessage.append(f'Nachhallzeit in Oktavband mit Mittenfrequenz {octaveBands} zu niedrig') 
 
         return reverberationTime_ratio, self.ErrorMessage
     
