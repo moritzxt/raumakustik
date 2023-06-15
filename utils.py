@@ -8,6 +8,15 @@ def basic_dict_2():
     dictionary = {'125 Hz':[] , '250 Hz':[] , '500 Hz':[] , '1 kHz':[], '2 kHz':[] , '4 kHz':[] }
     return dictionary
 
+def sub_alpha_dict(key_list_surfaces):
+    sub_alpha = basic_dict()
+    for octaveBands in sub_alpha:
+        sub_alpha[octaveBands] = {}
+        for surface_key in key_list_surfaces:
+            sub_alpha[octaveBands][surface_key] = []
+
+    return sub_alpha
+
 def read_db():
     with open('Datenbank_Absorptionsgrade.csv', 'r', ) as file:
         reader = csv.reader(file, delimiter=';')

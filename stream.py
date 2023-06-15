@@ -3,8 +3,7 @@ import numpy as np
 import streamlit as st
 #import streamlit_tags as sttags
 from room_calc import room
-from utils import basic_dict , read_db, basic_dict_2, add_row, usecase
-
+from utils import basic_dict , read_db, basic_dict_2, add_row, usecase, sub_alpha_dict
 
 st.set_page_config(page_title= 'Tool für Raumakustik', layout='wide',
                     initial_sidebar_state='collapsed')
@@ -31,8 +30,8 @@ with col3:
                             ,min_value=1, step=1)
 area =  np.linspace(0,int(areas),int(areas)+1)
 
-main_surfaces = []
-main_materials = []
+main_surfaces = [] # Liste enthält alle Flächeninhalte der Hauptflächen, korrespondierend dazu die soll dict werden
+main_materials = [] # Materialien 
 names = [f'Grundflaeche {i+1}' for i in range(areas)]
 subAreas = 0
 material_dict = read_db()
@@ -79,6 +78,17 @@ for tab, name in zip(tabs, names):
                     st.session_state[f'subAreas{name}'] -= 1
                     sub_materials[name].pop()
                     sub_surfaces[name].pop()
+        
+            '''
+                Wand 1 -> surface[Wand 1] = [m²]
+                sub_surfaces[Wand 1] =  [sub11 m², sub12 m², sub13m² ...]
+                sub_surfaces[Wand 2] =  [sub21 m², sub22 m², sub23m² ...]
+                sub_materials[wand 1] = [subMat]
+
+                sub_alpha['125 Hz'][Wall 1] = [alpha_subwand1, alpha_subwand2 ...]
+                sub_alpha['2k Hz'][Wall 1] = [alpha_subwand1, alpha_subwand2 ...]
+
+                '''
                     
             for num in range(0, subAreas):
                 with col_1:
@@ -97,6 +107,12 @@ alpha = basic_dict_2()
 for ind, octaveBands in enumerate(alpha):
     for material in main_materials:
         alpha[octaveBands].append(material_dict[material][ind])
+
+sub_alpha = sub_alpha_dict()
+
+for 
+
+
 
 #Erstellen des Objektes Raum der Klasse room
 raum = room(volume=vol, surface=main_surfaces, alpha=alpha, use='Musik')
