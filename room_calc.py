@@ -1,88 +1,134 @@
 import math 
 import numpy as np
 import plotly.graph_objects as go
-from utils import basic_dict
+from utils import basic_dict, read_db
 
 class room: 
     '''Class inheriting all functions for calculations and making plots.'''
-    def __init__(self, volume, surface, alpha, use):
+
+    def __init__(self, volume, surface, sub_surface, alpha, sub_alpha, use):
         '''Function to initialize the class "room"'''
         self.input = {'Volume': volume, 'Surface': surface, 'Absorption coefficient': alpha}
         self.volume = volume
         self.surface = surface
+        self.sub_surface = sub_surface
         self.alpha = alpha
+        self.sub_alpha = sub_alpha
         self.use = use
-        self.ErrorMessage = None
-        
-    def equivalent_absorption_surface(self):
-        '''Function to calculate the equivalent absorption surface.'''
-        # surface als list mit m^2 der einzelnen Waende
-        # alpha_d als dictionary mit Oktavbandfrequenzen als key und Liste der diffusen Absorptionsgrade pro Wand als value   
-        
-        # basic_dict() muss noch umgeschrieben werden {'125 Hz':0 , '250 Hz':0 , '500 Hz':0 , '1 kHz':0, '2 kHz':0 , '4 kHz':0 }
-        A = basic_dict()
+        self.ErrorMessage = []
 
-        for walls in range(len(self.surface)):
-            for octavebands in A:
-                alphaValuesList = self.alpha[octavebands]
-                A[octavebands] = A[octavebands] + self.surface[walls] * alphaValuesList[walls]
- 
-        return A
-   
+    def criticalDistance(self):
+        '''
+        Function to calculate the critical distance, where the energy densities of the direct and reflected soundfield are equal. 
+        Calculation is made with an approximate formula based on statistical acoustics in a diffuse soundfield.
+        '''
+        
+        criticalDistance = np.sqrt(self.equivalentAbsorptionSurface() / 50)
+
+        return criticalDistance
+        
+    def equivalentAbsorptionSurface(self):
+        '''Function to calculate the equivalent absorption surface.'''
+
+        equivalentAbsorptionSurface = basic_dict()
+
+        wall_index = 0
+        # equivalent absorption surface for main walls 
+        for octaveBands in self.alpha:
+            alphaList = self.alpha[octaveBands]
+
+            for walls in self.surface:
+                equivalentAbsorptionSurface[octaveBands] = equivalentAbsorptionSurface[octaveBands] + (self.surface[walls] - sum(self.sub_surface[walls])) * alphaList[wall_index]
+                wall_index = wall_index + 1
+            wall_index = 0
+
+        # adding equivalent absorption surface for sub walls
+        for octaveBands in self.sub_alpha.keys():
+            sub_alphaDict = self.sub_alpha[octaveBands]
+            for sub_walls in self.sub_surface.keys():
+                sub_alphaList = sub_alphaDict[sub_walls]
+                sub_surfaceList = self.sub_surface[sub_walls]
+                    
+                for sub_wall_index in range(len(sub_surfaceList)):
+                    equivalentAbsorptionSurface[octaveBands] = equivalentAbsorptionSurface[octaveBands] + sub_surfaceList[sub_wall_index] * sub_alphaList[sub_wall_index]
+
+        return equivalentAbsorptionSurface
+    
+    
+    def equivalentAbsorptionSurface_people(self, peopleDescription, numberOfPeople):
+        '''
+        Function to add equivalent absorption surface based on the number of people in the room and their specification regarding age and position (e.g. standing, sitting).
+        Data retrieved from Table A.1 in DIN 18041
+        '''
+        equivalentAbsorptionSurface_total = basic_dict()
+        equivalentAbsorptionSurface_walls = self.equivalentAbsorptionSurface()
+
+        equivalentAbsorptionSurface_people = read_db('equivalentAbsorptionSurface_people_data.csv')
+
+        equivalentAbsorptionSurface_people_list =  equivalentAbsorptionSurface_people[peopleDescription]
+
+        index = 0
+
+        for octaveBands in equivalentAbsorptionSurface_walls:
+            
+            equivalentAbsorptionSurface_total[octaveBands] = equivalentAbsorptionSurface_walls[octaveBands] + numberOfPeople * equivalentAbsorptionSurface_people_list[index]
+            index += 1
+            print(index)
+
+        return equivalentAbsorptionSurface_total
+
     def reverberationTime(self):
         '''Function to calculate the reverberation time.'''
+
         reverberationTimeSeconds = basic_dict()
-        equivalentSurface = self.equivalent_absorption_surface()
+        equivalentSurface = self.equivalentAbsorptionSurface()
         for octavebands in equivalentSurface:
             reverberationTimeSeconds[octavebands] = (self.volume / equivalentSurface[octavebands]) * 0.161
 
         return reverberationTimeSeconds
-
-    def reverberationRadius(self):
-        '''Function to calculate the distance, where direct and reflected sound are equal.'''
-        reverberationRadius = np.sqrt(self.equivalent_absorption_surface() / 50)
-
-        return reverberationRadius
     
     def reverberationTime_ratio(self):
         '''Function to calculate the ratio of given reverberation time to wanted reverberation time. Wanted reverberation time is based on the rooms use case and its volume.'''
+
         reverberationTime_ratio = basic_dict()
         ReverberationTime_upperlimit = {'125 Hz':1.45 , '250 Hz':1.2 , '500 Hz':1.2 , '1 kHz':1.2, '2 kHz':1.2 , '4 kHz':1.2 }
         ReverberationTime_lowerlimit = {'125 Hz':0.65 , '250 Hz':0.8 , '500 Hz':0.8 , '1 kHz':0.8, '2 kHz':0.8 , '4 kHz':0.65 }
 
-        # Pruefung welchen use (welche Nutzungsart nach DIN 18041) vorliegt und Berechnung der Soll-Nachhallzeit abhaengig vom Raumvolumen
+        # Calculation of the wanted reverberation time dependent on the use case given in DIN 18041 (and the volume in use case "Sport")
         if self.use == 'Musik':
-            T_soll = 0.45 * math.log10(self.volume) + 0.07
+            reverberationTime_wanted = 0.45 * math.log10(self.volume) + 0.07
 
         elif self.use == 'Sprache/Vortrag':
-            T_soll = 0.37 * math.log10(self.volume) - 0.14
+            reverberationTime_wanted = 0.37 * math.log10(self.volume) - 0.14
 
         elif self.use == 'Sprache/Vortrag inklusiv':    
-            T_soll = 0.32 * math.log10(self.volume) - 0.17
+            reverberationTime_wanted = 0.32 * math.log10(self.volume) - 0.17
 
         elif self.use == 'Unterricht/Kommunikation':
-            T_soll = 0.32 * math.log10(self.volume) - 0.17
+            reverberationTime_wanted = 0.32 * math.log10(self.volume) - 0.17
 
         elif self.use == 'Unterricht/Kommunikation inklusiv':
-            T_soll = 0.26 * math.log10(self.volume) - 0.14
+            reverberationTime_wanted = 0.26 * math.log10(self.volume) - 0.14
 
         elif self.use == 'Sport':
                 if self.volume > 10000:        
-                    T_soll = 2
+                    reverberationTime_wanted = 2
                 else:
-                    T_soll = 0.75 * math.log10(self.volume) - 1
+                    reverberationTime_wanted = 0.75 * math.log10(self.volume) - 1
 
         # Calculation of the ratio of calculated reverberation time to wanted reverberation time from DIN 18041 
         for octaveBands in self.reverberationTime():
-            reverberationTime_ratio[octaveBands] = self.reverberationTime()[octaveBands] / T_soll
+            reverberationTime_ratio[octaveBands] = self.reverberationTime()[octaveBands] / reverberationTime_wanted
             if reverberationTime_ratio[octaveBands] > ReverberationTime_upperlimit[octaveBands]:
-                ErrorMessage = 'Nachhallzeit in Oktavband mit Mittenfrequenz {octaveBands} zu hoch'
+                self.ErrorMessage.append(f'Nachhallzeit in Oktavband mit Mittenfrequenz {octaveBands} zu hoch')
             elif reverberationTime_ratio[octaveBands] < ReverberationTime_lowerlimit[octaveBands]:
-                ErrorMessage = 'Nachhallzeit in Oktavband mit Mittenfrequenz {octaveBands} zu niedrig'      
-        return reverberationTime_ratio, ErrorMessage
+                self.ErrorMessage.append(f'Nachhallzeit in Oktavband mit Mittenfrequenz {octaveBands} zu niedrig') 
+
+        return reverberationTime_ratio, self.ErrorMessage
     
     def plot_reverberationTime(self):
         '''Function, which returns a plot of the reverberation time in octave bands.'''
+
         freq = np.array([125,250,500,1000,2000,4000])
         reverberationTimeSeconds = self.reverberationTime()
 
