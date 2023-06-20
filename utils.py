@@ -19,7 +19,7 @@ def sub_alpha_dict(key_list_surfaces):
     return sub_alpha
 
 def read_db():
-    with open('Datenbank_Absorptionsgrade.csv', 'r', ) as file:
+    with open('Datenbank_DIN18041.csv', 'r', ) as file:
         reader = csv.reader(file, delimiter=';')
         header = next(reader)
         dict_db2 = {}
@@ -32,7 +32,7 @@ def read_db():
 
 def add_row(list):
     """Funktion um Daten der Datenbank hinzuzufügen"""
-    with open('Datenbank_Absorptionsgrade.csv', mode='a', newline='\n') as file:
+    with open('Datenbank_DIN18041.csv', mode='a', newline='\n') as file:
         writer_object = csv.writer(file, delimiter=';')
         writer_object.writerow(list)
         file.close()

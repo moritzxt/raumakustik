@@ -1,5 +1,5 @@
 Material;125 Hz;250 Hz;500 Hz;1 kHz;2 kHz;4 kHz;8 kHz
-Mauerziegelwand, unverputzt, Fugen ausgestrichen;0.03;0.03;0.04;0.05;0.06
+Mauerziegelwand, unverputzt, Fugen ausgestrichen;0.03;0.03;0.03;0.04;0.05;0.06
 Mauerwerk, Hohllochziegel, Löcher sichtbar, 60 mm vor Massivwand;0.11;0.22;0.34;0.35;0.52;0.43
 Glattputz;0.02;0.02;0.03;0.03;0.04;0.06
 Kalkzementputz;0.03;0.03;0.02;0.04;0.05;0.05
@@ -17,7 +17,7 @@ Teppichboden, 7 mm bis 10 mm Florhöhe, auf massivem Untergrund;0.04;0.07;0.14;0
 Nadelfilz 7 mm, auf massivem Untergrund;0.02;0.04;0.12;0.20;0.36;0.57
 5 mm Teppich mit 5 mm Filzunterlage, auf massivem Untergrund;0.07;0.21;0.57;0.68;0.81;0.72
 PVC-Fußbodenbelag (2,5 mm) auf Betonboden;0.01;0.02;0.01;0.03;0.05;0.05
-Linoleum auf Beton;0.02;0.02;0.03;0.030.04;0.04
+Linoleum auf Beton;0.02;0.02;0.03;0.03;0.04;0.04
 Furnierte Holz- oder Spanplatte dicht vor festem Untergrund;0.04;0.04;0.05;0.06;0.06;0.06
 4 mm Hartfaserplatte, kassettiert ohne Dämmstoff, Wandabstand 60 mm;0.22;0.19;0.13;0.07;0.05;0.05
 4 mm Hartfaserplatte, kassettiert mit 40 mm Mineralwollplatte, Wandabstand 60 mm;0.63;0.25;0.14;0.08;0.06;0.05

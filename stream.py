@@ -107,7 +107,10 @@ alpha = basic_dict_2()
 
 for ind, octaveBand in enumerate(alpha):
     for material in main_materials:
-        alpha[octaveBand].append(material_dict[material][ind])
+        try:
+            alpha[octaveBand].append(material_dict[material][ind])
+        except:
+            alpha[octaveBand].append(None)
 
 sub_alpha = sub_alpha_dict(main_walls)
 
