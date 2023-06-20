@@ -32,17 +32,17 @@ area =  np.linspace(0,int(areas),int(areas)+1)
 
 main_surfaces = [] # Liste enthält alle Flächeninhalte der Hauptflächen, korrespondierend dazu die soll dict werden
 main_materials = [] # Materialien 
-names = [f'Grundflaeche {i+1}' for i in range(areas)]
+main_walls = [f'Grundflaeche {i+1}' for i in range(areas)]
 subAreas = 0
 material_dict = read_db()
 sub_surfaces = {}
 sub_materials = {}
-for key in names:
+for key in main_walls:
     sub_surfaces[key] = []
     sub_materials[key] = []
-tabs = st.tabs(names)
+tabs = st.tabs(main_walls)
 
-for tab, name in zip(tabs, names):
+for tab, name in zip(tabs, main_walls):
     with tab:
         if f'subAreas{name}' not in st.session_state:
                 st.session_state[f'subAreas{name}'] = 0
@@ -104,13 +104,18 @@ for tab, name in zip(tabs, names):
 
 alpha = basic_dict_2()
 
-for ind, octaveBands in enumerate(alpha):
+for ind, octaveBand in enumerate(alpha):
     for material in main_materials:
-        alpha[octaveBands].append(material_dict[material][ind])
+        alpha[octaveBand].append(material_dict[material][ind])
 
-sub_alpha = sub_alpha_dict()
+sub_alpha = sub_alpha_dict(main_walls)
 
-for 
+for ind, octaveBand in enumerate(sub_alpha):
+    for wall in sub_alpha[octaveBand]:
+        for material in sub_materials:
+            sub_alpha[octaveBand][wall].append(material_dict[material][ind])
+
+
 
 
 
