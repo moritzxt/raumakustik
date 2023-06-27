@@ -34,7 +34,7 @@ main_surfaces = {} # Dict enthält den Flächeninhalte der Hauptfläche, korresp
 main_materials = [] # Materialien 
 main_walls = [f'Grundflaeche {i+1}' for i in range(areas)]
 subAreas = 0
-material_dict = read_db()
+material_dict = read_db('Datenbank_DIN18041.csv')
 sub_surfaces = {}
 sub_materials = {}
 for key in main_walls:

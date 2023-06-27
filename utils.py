@@ -18,8 +18,8 @@ def sub_alpha_dict(key_list_surfaces):
 
     return sub_alpha
 
-def read_db():
-    with open('Datenbank_Absorptionsgrade.csv', 'r', ) as file:
+def read_db(filename):
+    with open(filename, 'r', ) as file:
         reader = csv.reader(file, delimiter=';')
         header = next(reader)
         dict_db2 = {}
