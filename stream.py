@@ -9,6 +9,15 @@ st.set_page_config(page_title= 'Tool für Raumakustik', layout='wide',
                     initial_sidebar_state='collapsed')
 
 # """Eingabe der Parameter"""
+tabs_list = []
+main_surfaces = {} # Dict enthält den Flächeninhalte der Hauptfläche, korrespondierend zum Key (name der Hauptfläche)
+main_materials = [] # Materialien 
+material_dict = read_db('Datenbank_DIN18041.csv')
+person_dict = read_db('equivalentAbsorptionSurface_people_data.csv')
+sub_surfaces = {}
+sub_materials = {}
+numberOfPeople = []
+peopleDescription = []
 
 with st.container():
     st.title('WebApp for Roomacoustics')
@@ -37,17 +46,11 @@ with st.container():
     
 area =  np.linspace(0,int(areas),int(areas)+1)
 
-tabs_list = []
-main_surfaces = {} # Dict enthält den Flächeninhalte der Hauptfläche, korrespondierend zum Key (name der Hauptfläche)
-main_materials = [] # Materialien 
+
+
 main_walls = [f'Grundflaeche {i+1}' for i in range(areas)]
 subAreas = 0
-material_dict = read_db('Datenbank_DIN18041.csv')
-person_dict = read_db('equivalentAbsorptionSurface_people_data.csv')
-sub_surfaces = {}
-sub_materials = {}
-numberOfPeople = []
-peopleDescription = []
+
 numPeople = 1 # Anzahl der Personengruppen im Raum 
 tabs_list.extend(main_walls)
 
@@ -59,91 +62,93 @@ for key in main_walls:
 tabs = st.tabs(tabs_list)
 
 
+# Tabs für die jeweiligen Flächen und die 
+# Personen
+
 for tab, name in zip(tabs, tabs_list):
+    with tab:
+    
+        if name == 'Personen':
+            col_11, col_12 = st.columns(2)
 
+            if 'add_persons' not in st.session_state:
+                st.session_state['add_persons'] = numPeople
 
-    if name == 'Personen':
-        col_11, col_12 = st.columns(2)
-
-        if 'add_persons' not in st.session_state:
-            st.session_state['add_persons'] = numPeople
-
-        if st.button('Add Person', key ='button_add_persons'):
-                    st.session_state['add_persons'] += 1
-        
-        
-        if st.button('Remove Person', key='remove_button_persons'):
-            if st.session_state['add_persons'] > 1:
-                st.session_state['add_persons'] -= 1
-                peopleDescription.pop()
-                numberOfPeople.pop()
-
-        numPeople = st.session_state['add_persons']
-
-        for num in range(0, numPeople):
-            with tab:
-
-                with col_11:
-                    numberOfPeople.append(st.number_input(
-                            f"Anzahl an Personen im Raum", value=1, key = f'people{num}'))
-                with col_12:
-                    peopleDescription.append(st.selectbox(label =  f'Beschreibung{num}',
-                                                     options=person_dict.keys()))        
-
-
-    else:
-        with tab:
-            if f'subAreas{name}' not in st.session_state:
-                    st.session_state[f'subAreas{name}'] = 0
-            con_1 = st.container()
-            con_2 = st.container()
-
-            with con_1:
-                col_1, col_2 = st.columns(2)
-
-                with col_1:
-                    main_surfaces[name] = (st.number_input(
-                        f"Fläche für {name}", value=1))
-
-                with col_2:
-                    main_materials.append(st.selectbox(label =  f'Bitte wählen Sie das Material der {name} aus.',
-                                                    options=material_dict.keys()))
-
-
-
-            with con_2:
-                col_1, col_2, col_3 = st.columns(3)
-
-                if st.button('Add Subwandfläche', key = f'Button subArea{subAreas} {name}'):
-                    st.session_state[f'subAreas{name}'] += 1
-                subAreas = st.session_state[f'subAreas{name}']
-
-                if st.button('Remove', key=f'remove Subfläche von {name}'):
-                    if st.session_state[f'subAreas{name}'] > 0:
-                        st.session_state[f'subAreas{name}'] -= 1
-                        sub_materials[name].pop()
-                        sub_surfaces[name].pop()
-
+            if st.button('Add Person', key ='button_add_persons'):
+                        st.session_state['add_persons'] += 1
             
-        #       '''
-        #           Wand 1 -> surface[Wand 1] = [m²]
-                    # sub_surfaces[Wand 1] =  [sub11 m², sub12 m², sub13m² ...]
-                    # sub_surfaces[Wand 2] =  [sub21 m², sub22 m², sub23m² ...]
-                    # sub_materials[wand 1] = [subMat]
+            
+            if st.button('Remove Person', key='remove_button_persons'):
+                if st.session_state['add_persons'] > 1:
+                    st.session_state['add_persons'] -= 1
+                    peopleDescription.pop()
+                    numberOfPeople.pop()
 
-                    # sub_alpha['125 Hz'][Wall 1] = [alpha_subwand1, alpha_subwand2 ...]
-                    # sub_alpha['2k Hz'][Wall 1] = [alpha_subwand1, alpha_subwand2 ...]
+            numPeople = st.session_state['add_persons']
 
-                    # '''
-                        
-                for num in range(0, subAreas):
+            for num in range(0, numPeople):
+                
+
+                    with col_11:
+                        numberOfPeople.append(st.number_input(
+                                f"Anzahl an Personen im Raum", value=1, key = f'people{num}'))
+                    with col_12:
+                        peopleDescription.append(st.selectbox(label =  f'Beschreibung{num}',
+                                                            options=person_dict.keys()))        
+
+        else:
+            
+                if f'subAreas{name}' not in st.session_state:
+                        st.session_state[f'subAreas{name}'] = 0
+                con_1 = st.container()
+                con_2 = st.container()
+
+                with con_1:
+                    col_1, col_2 = st.columns(2)
+
                     with col_1:
-                        sub_surfaces[name].append(st.number_input(f"Fläche für Subwandfläche {num +1 }",
-                                                                value=1, key = f'Fläche subArea{num} {name}'))
+                        main_surfaces[name] = (st.number_input(
+                            f"Fläche für {name}", value=1))
 
                     with col_2:
-                        sub_materials[name].append(st.selectbox(label =  f'Bitte wählen Sie das Material der Subfläche {num + 1} aus.'
-                            ,options=material_dict.keys(), key=f'Subfläche {num} von {name}'))
+                        main_materials.append(st.selectbox(label =  f'Bitte wählen Sie das Material der {name} aus.',
+                                                        options=material_dict.keys()))
+
+
+
+                with con_2:
+                    col_1, col_2, col_3 = st.columns(3)
+
+                    if st.button('Add Subwandfläche', key = f'Button subArea{subAreas} {name}'):
+                        st.session_state[f'subAreas{name}'] += 1
+                    subAreas = st.session_state[f'subAreas{name}']
+
+                    if st.button('Remove Subwandfläche', key=f'remove Subfläche von {name}'):
+                        if st.session_state[f'subAreas{name}'] > 0:
+                            st.session_state[f'subAreas{name}'] -= 1
+                            sub_materials[name].pop()
+                            sub_surfaces[name].pop()
+
+                
+            #       '''
+            #           Wand 1 -> surface[Wand 1] = [m²]
+                        # sub_surfaces[Wand 1] =  [sub11 m², sub12 m², sub13m² ...]
+                        # sub_surfaces[Wand 2] =  [sub21 m², sub22 m², sub23m² ...]
+                        # sub_materials[wand 1] = [subMat]
+
+                        # sub_alpha['125 Hz'][Wall 1] = [alpha_subwand1, alpha_subwand2 ...]
+                        # sub_alpha['2k Hz'][Wall 1] = [alpha_subwand1, alpha_subwand2 ...]
+
+                        # '''
+                            
+                    for num in range(0, subAreas):
+                        with col_1:
+                            sub_surfaces[name].append(st.number_input(f"Fläche für Subwandfläche {num +1 }",
+                                                                    value=1, key = f'Fläche subArea{num} {name}'))
+
+                        with col_2:
+                            sub_materials[name].append(st.selectbox(label =  f'Bitte wählen Sie das Material der Subfläche {num + 1} aus.'
+                                ,options=material_dict.keys(), key=f'Subfläche {num} von {name}'))
                         
         
 
