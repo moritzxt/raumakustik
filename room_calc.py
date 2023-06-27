@@ -209,7 +209,7 @@ class room:
                         name = 'Nachhallzeitenvergleich',
                         width = .2,
                         marker_color = 'rgba(28, 122, 255, 1)',
-                        # hovertemplate = 'Mittenfrequenz: %{x} Hz<br>Nachhallzeitenvergleich: %{y:.2f}', 
+                        hovertemplate = 'Oktavband: %{x} Hz<br>Nachhallzeitenvergleich: %{y:.2f}<extra></extra>'
                         )
         
         fig.update_xaxes(type = 'category')       
@@ -219,7 +219,7 @@ class room:
                           width = 1000, 
                           height = 600, 
                         #   legend={'traceorder':'normal'},
-                        #   hoverlabel = dict(bgcolor = 'rgba(28, 122, 255, .4)')
+                          hoverlabel = dict(bgcolor = 'rgba(28, 122, 255, .4)')
                           )
         
         fig.add_trace(trace1)
