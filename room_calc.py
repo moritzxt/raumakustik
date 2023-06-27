@@ -4,10 +4,14 @@ import plotly.graph_objects as go
 from utils import basic_dict, basic_dict_2, read_db
 
 class room: 
-    '''Class inheriting all functions for calculations and making plots.'''
+    '''
+    Class inheriting all functions for calculations and making plots.
+    '''
 
     def __init__(self, volume, surface, sub_surface, alpha, sub_alpha, peopleDescription, numberOfPeople, use):
-        '''Function to initialize the class "room"'''
+        '''
+        Function to initialize the class "room"
+        '''
         self.input = {'Volume': volume, 'Surface': surface, 'Absorption coefficient': alpha}
         self.volume = volume
         self.surface = surface
@@ -30,7 +34,9 @@ class room:
         return criticalDistance
         
     def equivalentAbsorptionSurface_walls(self):
-        '''Function to calculate the equivalent absorption surface.'''
+        '''
+        Function to calculate the equivalent absorption surface.
+        '''
 
         equivalentAbsorptionSurface = basic_dict()
 
@@ -95,7 +101,9 @@ class room:
         return reverberationTimeSeconds
     
     def reverberationTime_ratio(self):
-        '''Function to calculate the ratio of given reverberation time to wanted reverberation time. Wanted reverberation time is based on the rooms use case and its volume.'''
+        '''
+        Function to calculate the ratio of given reverberation time to wanted reverberation time. Wanted reverberation time is based on the rooms use case and its volume.
+        '''
 
         reverberationTime_ratio = basic_dict()
         ReverberationTime_upperlimit = {'125 Hz':1.45 , '250 Hz':1.2 , '500 Hz':1.2 , '1 kHz':1.2, '2 kHz':1.2 , '4 kHz':1.2 }
@@ -134,7 +142,9 @@ class room:
         return reverberationTime_ratio, self.ErrorMessage
     
     def plot_reverberationTime(self):
-        '''Function, which returns a plot of the reverberation time in octave bands.'''
+        '''
+        Function, which returns a plot of the reverberation time in octave bands.
+        '''
 
         freq = np.array([125,250,500,1000,2000,4000])
         reverberationTimeSeconds = self.reverberationTime() 
@@ -162,7 +172,8 @@ class room:
     def plot_reverberationTime_ratio(self):
         '''
         Function, which returns a plot of the calculated reverberation time in comparison to the wanted reverberation time 
-        and the allowed deviations in octave bands.'''
+        and the allowed deviations in octave bands.
+        '''
         
         frequencies = [125,250,500,1000,2000,4000]
         
