@@ -152,9 +152,10 @@ for tab, name in zip(tabs, tabs_list):
                         
         
 
-
+#Initialisierung des Dictionaries für die Absorptionsgrade
 alpha = basic_dict_2()
 
+#Befuellen des dicts mit den Absorptionsgeraden fuer die jeweiligen Oktavbaender und 
 for ind, octaveBand in enumerate(alpha):
     for material in main_materials:
         try:
