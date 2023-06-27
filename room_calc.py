@@ -1,7 +1,7 @@
 import math 
 import numpy as np
 import plotly.graph_objects as go
-from utils import basic_dict, read_db
+from utils import basic_dict, basic_dict_2, read_db
 
 class room: 
     '''Class inheriting all functions for calculations and making plots.'''
@@ -29,7 +29,7 @@ class room:
 
         return criticalDistance
         
-    def equivalentAbsorptionSurface(self):
+    def equivalentAbsorptionSurface_walls(self):
         '''Function to calculate the equivalent absorption surface.'''
 
         equivalentAbsorptionSurface = basic_dict()
@@ -62,30 +62,35 @@ class room:
         Function to add equivalent absorption surface based on the number of people in the room and their specification regarding age and position (e.g. standing, sitting).
         Data retrieved from Table A.1 in DIN 18041
         '''
-        equivalentAbsorptionSurface_total = basic_dict()
-        equivalentAbsorptionSurface_walls = self.equivalentAbsorptionSurface()
 
-        equivalentAbsorptionSurface_people = read_db('equivalentAbsorptionSurface_people_data.csv')
+        equivalentAbsorptionSurface_people = basic_dict()
 
-        equivalentAbsorptionSurface_people_list =  equivalentAbsorptionSurface_people[peopleDescription]
+        people_db = read_db('equivalentAbsorptionSurface_people_data.csv')
+        
+        for index in range(len(self.peopleDescription)):
+            equivalentAbsorptionSurface_people_list =  people_db[self.peopleDescription[index]]
 
-        index = 0
-
-        for octaveBands in equivalentAbsorptionSurface_walls:
+            for index_list, octaveBands in enumerate(equivalentAbsorptionSurface_people):
+                equivalentAbsorptionSurface_people[octaveBands] += self.numberOfPeople[index] * equivalentAbsorptionSurface_people_list[index_list]
             
-            equivalentAbsorptionSurface_total[octaveBands] = equivalentAbsorptionSurface_walls[octaveBands] + numberOfPeople * equivalentAbsorptionSurface_people_list[index]
-            index += 1
-            print(index)
+        return equivalentAbsorptionSurface_people
+    
+    def equivalentAbsorptionSurface(self):
+        equivalentAbsorptionSurface = basic_dict_2()
 
-        return equivalentAbsorptionSurface_total
+        for octaveBands in equivalentAbsorptionSurface:
+            equivalentAbsorptionSurface[octaveBands] = self.equivalentAbsorptionSurface_walls()[octaveBands] + self.equivalentAbsorptionSurface_people()[octaveBands]
 
+        return equivalentAbsorptionSurface
+   
     def reverberationTime(self):
         '''Function to calculate the reverberation time.'''
 
         reverberationTimeSeconds = basic_dict()
-        equivalentSurface = self.equivalentAbsorptionSurface()
-        for octavebands in equivalentSurface:
-            reverberationTimeSeconds[octavebands] = (self.volume / equivalentSurface[octavebands]) * 0.161
+        equivalentAbsorptionSurface = self.equivalentAbsorptionSurface()
+        
+        for octavebands in equivalentAbsorptionSurface:
+            reverberationTimeSeconds[octavebands] = (self.volume / equivalentAbsorptionSurface[octavebands]) * 0.161
 
         return reverberationTimeSeconds
     
@@ -132,23 +137,34 @@ class room:
         '''Function, which returns a plot of the reverberation time in octave bands.'''
 
         freq = np.array([125,250,500,1000,2000,4000])
-        reverberationTimeSeconds = self.reverberationTime()
+        reverberationTimeSeconds = self.reverberationTime() 
 
         fig = go.Figure()
 
-        trace1 = go.Bar(x = freq, y = list(reverberationTimeSeconds.values()), marker_color = 'blue')
+        trace1 = go.Bar(x = freq, 
+                        y = list(reverberationTimeSeconds.values()), 
+                        name = 'bar', 
+                        marker_color = 'blue', 
+                        showlegend= True, 
+                        width=.2)
+        
         fig.add_trace(trace1)
 
-        fig.update_layout(xaxis_title = 'Frequenz [Hz]', yaxis_title = 'Nachhallzeit [s]', width = 1000, height = 600)
+        fig.update_layout(xaxis_title = 'Frequenz [Hz]', 
+                          yaxis_title = 'Nachhallzeit [s]', 
+                          width = 1000, 
+                          height = 600)
+        
         fig.update_xaxes(type='category')
-        fig.update_traces(width=.2)
 
         return fig
     
     def plot_reverberationTime_ratio(self):
-        '''Function, which returns a plot of the calculated reverberation time in comparison to the wanted reverberation time and the allowed deviations in octave bands.'''
+        '''
+        Function, which returns a plot of the calculated reverberation time in comparison to the wanted reverberation time 
+        and the allowed deviations in octave bands.'''
         
-        freq = [125,250,500,1000,2000,4000]
+        frequencies = [125,250,500,1000,2000,4000]
         
         ReverberationTime_upperlimit = [1.45, 1.2, 1.2, 1.2, 1.2, 1.2]
         ReverberationTime_lowerlimit = [0.65, 0.8, 0.8, 0.8, 0.8, 0.65]
@@ -156,18 +172,47 @@ class room:
         reverberationTime_ratio = list(self.reverberationTime_ratio()[0].values())
 
         fig = go.Figure()
-        trace1 = go.Scatter(x = freq, y = ReverberationTime_lowerlimit, marker_color = 'green', mode='lines')
-        trace2 = go.Scatter(x = freq, y = ReverberationTime_upperlimit, marker_color = 'green', fill = 'tonexty', fillcolor='rgba(26, 199, 93, 0.1)', mode='lines')
-        trace3 = go.Bar(x = freq, y = reverberationTime_ratio, marker_color = 'blue')
+
+        trace1 = go.Scatter(x = frequencies, 
+                            y = ReverberationTime_lowerlimit, 
+                            name = 'Grenzen', 
+                            marker_color = 'green', 
+                            mode = 'lines', 
+                            legendgroup = 'boundaries',
+                            hoverinfo = 'skip'
+                            )
         
-        fig.update_xaxes(type='category')          
-        fig.update_layout(xaxis_title = 'Frequenz [Hz]', yaxis_title = 'T / T_soll', width = 1000, height = 600)
+        trace2 = go.Scatter(x = frequencies, 
+                            y = ReverberationTime_upperlimit, 
+                            marker_color = 'green', 
+                            fill = 'tonexty', 
+                            fillcolor = 'rgba(26, 199, 93, 0.1)',
+                            mode = 'lines',
+                            legendgroup = 'boundaries',
+                            showlegend = False,
+                            hoverinfo = 'skip',
+                            )
         
-        fig.add_trace(trace3)
-        fig.update_traces(width=.2)
+        trace3 = go.Bar(x = frequencies, 
+                        y = reverberationTime_ratio, 
+                        name = 'Nachhallzeitenvergleich',
+                        width = .2,
+                        marker_color = 'rgba(28, 122, 255, 1)',
+                        # hovertemplate = 'Mittenfrequenz: %{x} Hz<br>Nachhallzeitenvergleich: %{y:.2f}', 
+                        )
+        
+        fig.update_xaxes(type = 'category')       
+
+        fig.update_layout(xaxis_title = 'Frequenz [Hz]',
+                          yaxis_title = 'T / T_soll', 
+                          width = 1000, 
+                          height = 600, 
+                        #   legend={'traceorder':'normal'},
+                        #   hoverlabel = dict(bgcolor = 'rgba(28, 122, 255, .4)')
+                          )
+        
         fig.add_trace(trace1)
         fig.add_trace(trace2)
-       
+        fig.add_trace(trace3)
+        
         return fig
-
-
