@@ -6,7 +6,7 @@ from utils import basic_dict, read_db
 class room: 
     '''Class inheriting all functions for calculations and making plots.'''
 
-    def __init__(self, volume, surface, sub_surface, alpha, sub_alpha, use):
+    def __init__(self, volume, surface, sub_surface, alpha, sub_alpha, peopleDescription, numberOfPeople, use):
         '''Function to initialize the class "room"'''
         self.input = {'Volume': volume, 'Surface': surface, 'Absorption coefficient': alpha}
         self.volume = volume
@@ -14,6 +14,8 @@ class room:
         self.sub_surface = sub_surface
         self.alpha = alpha
         self.sub_alpha = sub_alpha
+        self.peopleDescription = peopleDescription
+        self.numberOfPeople = numberOfPeople
         self.use = use
         self.ErrorMessage = []
 
@@ -55,7 +57,7 @@ class room:
         return equivalentAbsorptionSurface
     
     
-    def equivalentAbsorptionSurface_people(self, peopleDescription, numberOfPeople):
+    def equivalentAbsorptionSurface_people(self):
         '''
         Function to add equivalent absorption surface based on the number of people in the room and their specification regarding age and position (e.g. standing, sitting).
         Data retrieved from Table A.1 in DIN 18041
