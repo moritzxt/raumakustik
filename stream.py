@@ -3,38 +3,38 @@ import numpy as np
 import streamlit as st
 #import streamlit_tags as sttags
 from room_calc import room
-from utils import basic_dict , read_db, basic_dict_2, add_row, usecase
+from utils import basic_dict , read_db, basic_dict_2, add_row, usecase, sub_alpha_dict
 import os
 import json
 from streamlit.runtime.scriptrunner.script_run_context import add_script_run_ctx
+from session_utils import write_session_file, load_session_file, write_session_key, init_starting_values
 
 
 #setup of  page data:
 st.set_page_config(page_title= 'Tool für Raumakustik', layout='wide',
                     initial_sidebar_state='collapsed')
 
+# """Eingabe der Parameter"""
+tabs_list = []
+main_surfaces = {} # Dict enthält den Flächeninhalte der Hauptfläche, korrespondierend zum Key (name der Hauptfläche)
+main_materials = [] # Materialien 
+material_dict = read_db('Datenbank_DIN18041.csv')
+person_dict = read_db('equivalentAbsorptionSurface_people_data.csv')
+sub_surfaces = {}
+sub_materials = {}
+numberOfPeople = []
+peopleDescription = []
+
 #create a json file with session id as file name
 state = add_script_run_ctx().streamlit_script_run_ctx.session_id +'.json'
-if not os.path.isfile(state):
-    #refactor all 2.WebApp.json to 2.WebApp variable
-    with open(state, 'w') as init:
-        json.dump({}, init)
+write_session_file(state)
 
 #load the last session into session json file
-if os.path.isfile('session_key.json'):
-    with open('session_key.json', 'r') as file:
-        last_session_keyy = json.load(file)
-        last_session_key = last_session_keyy['key']
-        if os.path.isfile(last_session_key + '.json'):
-            with open(last_session_key + '.json', 'r') as file:
-                last_session = json.load(file)
-                with open(state, 'w') as init:
-                    json.dump(last_session, init)
+load_session_file(state)
 
 #write current session id in session_key.json
 session = add_script_run_ctx().streamlit_script_run_ctx.session_id
-with open('session_key.json', 'w') as init:
-    json.dump({'key': session}, init)
+write_session_key(session)
 
 #load data from current session
 with open(state) as jsonkey:
@@ -44,51 +44,18 @@ with open(state) as jsonkey:
 material_dict = read_db('Datenbank_Absorptionsgrade.csv')
 
 #read starting positions of input elements from last session... 
-if not (json_data == {}):
-    usecase_init = json_data['usecase']         #could be done more elegantly, might change if i ever bother
-    if usecase_init == 'Musik':
-        usecase_index = 0
-    elif usecase_init == 'Sprache/Vortrag':
-        usecase_index = 1
-    elif usecase_init == 'Sprache/Vortrag inklusiv':
-        usecase_index = 2
-    elif usecase_init == 'Unterricht/Kommunikation':
-        usecase_index = 3
-    elif usecase_init == 'Sport':
-        usecase_index = 4
+init_data = init_starting_values(json_data,material_dict,person_dict)
+if 'volume' not in st.session_state:
+    st.session_state['volume'] = init_data['volume']
+if 'usecase' not in st.session_state:
+    st.session_state['usecase'] = init_data['usecase']
 
-    volume_init = json_data['volume']
-    number_walls_init = json_data['number_walls']
-    area_init = []
-    material_init = []
-    material_init_string = []
-    #fill area and material data for existing walls
-    for i in range(number_walls_init):
-        area_init.append(json_data['wall' + str(i+1)]['area'])
-        material_init_string.append(json_data['wall' + str(i+1)]['material'])
-        for j in range(len(list(material_dict))):
-            if list(material_dict)[j] == json_data['wall' + str(i+1)]['material']:   #what happens when key aint found?
-                material_init.append(j)
-    #then set data to defaults for 100 next indices, to allow adding more walls - so limiting the number of walls to 100 would be smart
-    for i in range(100):
-        area_init.append(1)
-        material_init_string.append(list(material_dict)[0])
-        material_init.append(0)
-#... if there isnt a last session, set starting positions to defaults
-else:
-    usecase_init = 'Music'
-    usecase_index = 0
-    volume_init = 30
-    number_walls_init = 1
-    area_init = []
-    material_init = []
-    material_init_string = []
-    #material_init_string = {'Walls,hard surfaces average (brick walls, plaster, hard floors, etc.)'}
-    for i in range(100):
-        area_init.append(1)
-        material_init_string.append(list(material_dict)[0])
-        material_init.append(0)
-
+#def _update_volume():
+#    name = st.session_state['file_name_open']
+##    name = st.session_state[key_file_name_open]
+#    with open(name + ".json", "r") as file:
+#        test = json.load(file)
+#    st.session_state['volume'] = test['volume']
 
 #definition of website data:
 #with col1:
@@ -97,61 +64,182 @@ with st.container():
     st.divider()
     st.header('Benötigt werden das Raumvolumen, die Anzahl'
         ' der Wände, deren Fläche, sowie das Material der Wandoberfläche')
-    #st.write(json_data['wall' + str(1)]['material'])       #for debugging purposes
+    #st.write(json_data['persons'])       #for debugging purposes
     #st.write(state)
+    col1, col2, col3, col4 = st.columns(4)
 
-col1, col2, col3 = st.columns(3)
-with col1:
-    #selection of usecase
-    use = st.selectbox('Usecase nach DIN 18041', options=usecase.keys(), index=usecase_index)
-    #on change save current usecase into json
-    json_data['usecase'] = use
-    with open(state,'w') as jsonkey:
-        json.dump(json_data, jsonkey)
+    with col1:
+        #selection of usecase
+        use = st.selectbox('Usecase nach DIN 18041', options=usecase.keys(), index=init_data['usecase_index'])
+        #on change save current usecase into json
+        json_data['usecase'] = use
+        with open(state,'w') as jsonkey:
+            json.dump(json_data, jsonkey)
 
-    #set boundaries of volume for usecase
-    min_lim =  min(usecase[use])
-    max_lim =  max(usecase[use])
-    #check if initial values are in limits and replace them if they are
-    if volume_init < min_lim:
-        volume_new_init = min_lim
-    elif volume_init > max_lim:
-        volume_new_init = max_lim
-    else:
-        volume_new_init = volume_init
+        #set boundaries of volume for usecase
+        min_lim =  min(usecase[use])
+        max_lim =  max(usecase[use])
+        #check if initial values are in limits and replace them if they are
+        if init_data['volume'] < min_lim:
+            volume_new_init = min_lim
+        elif init_data['volume'] > max_lim:
+            volume_new_init = max_lim
+        else:
+            volume_new_init = init_data['volume']
 
-with col2:
-    #input of volume
-    vol = st.number_input('Volumen in m³', min_value=min_lim,
-                        max_value=max_lim, value=volume_new_init)
-    #save current key in json
-    json_data['volume'] = vol
-    with open(state,'w') as jsonkey:
-        json.dump(json_data, jsonkey)
+    with col2:
+        #input of volume
+        vol = st.number_input('Volumen in m³', min_value=min_lim,
+                            max_value=max_lim,  key="volume")
+        #save current key in json
+        json_data['volume'] = vol
+        with open(state,'w') as jsonkey:
+            json.dump(json_data, jsonkey)
 
-with col3:
-    #input of amount of walls
-    areas = st.number_input('Anzahl der Wandflächen die Sie eingeben möchten'
-                            ,min_value=1, step=1, value=number_walls_init)
-    #save current key in json
-    json_data['number_walls'] = areas
-    for i in range(areas):
-        json_data['wall' + str(i+1)] = {"area": area_init[i], "material": material_init_string[i]}
-    #delete removed walls from file
-    for j in range(100):
-        if j > areas and ('wall' + str(j)) in json_data:
-            del json_data['wall' + str(j)]
-    with open(state,'w') as jsonkey:
-        json.dump(json_data, jsonkey)
+    with col3:
+        #input of amount of walls
+        areas = st.number_input('Anzahl der Wandflächen die Sie eingeben möchten'
+                                ,min_value=1, step=1, value=init_data['number_walls'])
+        #save current key in json
+        json_data['number_walls'] = areas
+        for i in range(areas):
+            json_data['wall' + str(i+1)] = {"area": init_data['area'][i], "material": init_data['material_string'][i]}
+        #delete removed walls from file
+        for j in range(100):
+            if j > areas and ('wall' + str(j)) in json_data:
+                del json_data['wall' + str(j)]
+        with open(state,'w') as jsonkey:
+            json.dump(json_data, jsonkey)
+    with col4:
+        st.empty()
+        #st.session_state['personen'] = init_data['persons']
+        if st.checkbox(label='Personen', value= False, key='personen', label_visibility='visible'):
+            tabs_list = ['Personen']
+        json_data['persons'] = st.session_state['personen']
+
 
 
 area =  np.linspace(0,int(areas),int(areas)+1)
+
+
+
+main_walls = [f'Grundflaeche {i+1}' for i in range(areas)]
+subAreas = 0
+
+numPeople = 1 # Anzahl der Personengruppen im Raum 
+tabs_list.extend(main_walls)
+
+for key in main_walls:
+    sub_surfaces[key] = []
+    sub_materials[key] = []
+    main_surfaces[key] = None
+
+tabs = st.tabs(tabs_list)
+
+
+# Tabs für die jeweiligen Flächen und die 
+# Personen
+
+for tab, name in zip(tabs, tabs_list):
+    with tab:
+    
+        if name == 'Personen':
+            col_11, col_12 = st.columns(2)
+
+            if 'add_persons' not in st.session_state:
+                st.session_state['add_persons'] = numPeople
+
+            if st.button('Add Person', key ='button_add_persons'):
+                        st.session_state['add_persons'] += 1
+            
+            
+            if st.button('Remove Person', key='remove_button_persons'):
+                if st.session_state['add_persons'] > 1:
+                    st.session_state['add_persons'] -= 1
+                    peopleDescription.pop()
+                    numberOfPeople.pop()
+
+            numPeople = st.session_state['add_persons']
+            json_data['number_people'] = numPeople
+            for i in range(numPeople):
+                json_data['person_type' + str(i+1)] = {"amount": init_data['amount'][i], "type": init_data['type_string'][i]}
+            with open(state,'w') as jsonkey:
+                json.dump(json_data, jsonkey)
+
+            for num in range(0, numPeople):
+                
+
+                    with col_11:
+                        numberOfPeople.append(st.number_input(
+                                f"Anzahl an Personen im Raum", value=1, key = f'people{num}'))
+                    with col_12:
+                        peopleDescription.append(st.selectbox(label =  f'Beschreibung{num}',
+                                                            options=person_dict.keys()))   
+                    json_data['person_type' + str(num+1)]['amount'] = numberOfPeople[num]
+                    json_data['person_type' + str(num+1)]['type'] = peopleDescription[num]
+                    with open(state,'w') as jsonkey:
+                        json.dump(json_data, jsonkey)     
+
+        else:
+            
+                if f'subAreas{name}' not in st.session_state:
+                        st.session_state[f'subAreas{name}'] = 0
+                con_1 = st.container()
+                con_2 = st.container()
+
+                with con_1:
+                    col_1, col_2 = st.columns(2)
+
+                    with col_1:
+                        main_surfaces[name] = (st.number_input(
+                            f"Fläche für {name}", value=1))
+
+                    with col_2:
+                        main_materials.append(st.selectbox(label =  f'Bitte wählen Sie das Material der {name} aus.',
+                                                        options=material_dict.keys()))
+
+
+
+                with con_2:
+                    col_1, col_2, col_3 = st.columns(3)
+
+                    if st.button('Add Subwandfläche', key = f'Button subArea{subAreas} {name}'):
+                        st.session_state[f'subAreas{name}'] += 1
+                    subAreas = st.session_state[f'subAreas{name}']
+
+                    if st.button('Remove Subwandfläche', key=f'remove Subfläche von {name}'):
+                        if st.session_state[f'subAreas{name}'] > 0:
+                            st.session_state[f'subAreas{name}'] -= 1
+                            sub_materials[name].pop()
+                            sub_surfaces[name].pop()
+
+                
+            #       '''
+            #           Wand 1 -> surface[Wand 1] = [m²]
+                        # sub_surfaces[Wand 1] =  [sub11 m², sub12 m², sub13m² ...]
+                        # sub_surfaces[Wand 2] =  [sub21 m², sub22 m², sub23m² ...]
+                        # sub_materials[wand 1] = [subMat]
+
+                        # sub_alpha['125 Hz'][Wall 1] = [alpha_subwand1, alpha_subwand2 ...]
+                        # sub_alpha['2k Hz'][Wall 1] = [alpha_subwand1, alpha_subwand2 ...]
+
+                        # '''
+                            
+                    for num in range(0, subAreas):
+                        with col_1:
+                            sub_surfaces[name].append(st.number_input(f"Fläche für Subwandfläche {num +1 }",
+                                                                    value=1, key = f'Fläche subArea{num} {name}'))
+
+                        with col_2:
+                            sub_materials[name].append(st.selectbox(label =  f'Bitte wählen Sie das Material der Subfläche {num + 1} aus.'
+                                ,options=material_dict.keys(), key=f'Subfläche {num} von {name}'))
+                        
 with st.container():
     col_1, col_2 = st.columns(2)
     with col_1:
         with st.form(key = 'surface'):
             #input of wall area
-            surfaces = [st.number_input(f"Fläche für Wandfläche {i+1}", value=area_init[i]) for i in range(int(areas))]
+            surfaces = [st.number_input(f"Fläche für Wandfläche {i+1}", value=init_data['area'][i]) for i in range(int(areas))]
             sub = st.form_submit_button('Submit')
             #save currenty wall area in json
             for i in range(int(areas)):
@@ -166,7 +254,7 @@ with st.container():
         with st.form(key = 'material'):
             #selection of wall material
             materials = [st.selectbox(label= f'Bitte wählen Sie das Material der Wand {i+1} aus.'
-                                      ,options=material_dict.keys(), index = material_init[i])for i in range(int(areas))]
+                                      ,options=material_dict.keys(), index = init_data['material'][i])for i in range(int(areas))]
             sub = st.form_submit_button('Submit')
             #save current wall material in json
             for i in range(int(areas)):
@@ -225,15 +313,28 @@ with st.container():
                     with open(state, "w") as open_json:
                         open_json.write(file.read())
                 st.experimental_rerun()
+                #with open(state) as jsonkey:
+                #    json_data = json.load(jsonkey)
+                #st.session_state.volume = json_data['volume']
 
 
+#Befuellen des dicts mit den Absorptionsgeraden fuer die jeweiligen Oktavbaender und 
+for ind, octaveBand in enumerate(alpha):
+    for material in main_materials:
+        try:
+            alpha[octaveBand].append(material_dict[material][ind])
+        except:
+            alpha[octaveBand].append(None)
+
+sub_alpha = sub_alpha_dict(main_walls)
           
 for ind, octaveBands in enumerate(alpha):
-    for material in materials:
-        alpha[octaveBands].append(material_dict[material][ind])
+    for wall in sub_alpha[octaveBand]:
+        for material in materials:
+            alpha[octaveBands].append(material_dict[material][ind])
 
 #Erstellen des Objektes Raum der Klasse room
-raum = room(volume=vol, surface=surfaces, alpha=alpha, use='Musik')
+raum = room(volume=vol, surface=main_surfaces, sub_surface=sub_surfaces, alpha=alpha, sub_alpha=sub_alpha, use=use)
 #Plots erstellen
 st.divider()
 st.subheader('Ergebnisse')
