@@ -166,6 +166,8 @@ for ind, octaveBand in enumerate(alpha):
 sub_alpha = sub_alpha_dict(main_walls)
 
 for ind, octaveBand in enumerate(sub_alpha):
+
+
     for wall in sub_alpha[octaveBand]:
         for material in sub_materials[wall]:
             sub_alpha[octaveBand][wall].append(material_dict[material][ind])
@@ -173,7 +175,8 @@ for ind, octaveBand in enumerate(sub_alpha):
 
 
 #Erstellen des Objektes Raum der Klasse room
-raum = room(volume=vol, surface=main_surfaces, sub_surface=sub_surfaces, alpha=alpha, sub_alpha=sub_alpha, use=use)
+raum = room(volume=vol, surface=main_surfaces, sub_surface=sub_surfaces, alpha=alpha, 
+            sub_alpha=sub_alpha, use=use, peopleDescription=peopleDescription, numberOfPeople=numberOfPeople)
 #Plots erstellen
 
 st.divider()
