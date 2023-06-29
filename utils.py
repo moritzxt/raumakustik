@@ -23,10 +23,19 @@ def read_db(filename):
         reader = csv.reader(file, delimiter=';')
         header = next(reader)
         dict_db2 = {}
+        dict_cat_mat = {}
         for row in reader:
             key = row[0]
-            values = row[1:]
-            dict_db2[key] = [float(v) for v in values]
+            
+            try:
+                values = row[1:]
+                dict_db2[key] = [float(v) for v in values]
+            except:
+                categorie = row[2]
+                values = row[2:]
+                dict_db2[key] = [float(v) for v in values]
+                dict_cat_mat[categorie] = dict_db2
+
         file.close()
     return dict_db2
 
