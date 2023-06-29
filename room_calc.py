@@ -175,12 +175,14 @@ class room:
         and the allowed deviations in octave bands.
         '''
         
-        frequencies = [125,250,500,1000,2000,4000]
+        frequencies = [63,125,250,500,1000,2000,4000,8000]
         
-        ReverberationTime_upperlimit = [1.45, 1.2, 1.2, 1.2, 1.2, 1.2]
-        ReverberationTime_lowerlimit = [0.65, 0.8, 0.8, 0.8, 0.8, 0.65]
+        ReverberationTime_upperlimit = [1.7,1.45, 1.2, 1.2, 1.2, 1.2, 1.2,1.2]
+        ReverberationTime_lowerlimit = [0.5,0.65, 0.8, 0.8, 0.8, 0.8, 0.65,0.5]
 
         reverberationTime_ratio = list(self.reverberationTime_ratio()[0].values())
+        reverberationTime_ratio.insert(0,0)
+        reverberationTime_ratio.append(0)
 
         fig = go.Figure()
 
