@@ -18,26 +18,35 @@ def sub_alpha_dict(key_list_surfaces):
 
     return sub_alpha
 
-def read_db():
-    with open('Datenbank_DIN18041.csv', 'r', ) as file:
+def read_db(filename):
+    with open(filename, 'r', encoding='utf-8') as file:
         reader = csv.reader(file, delimiter=';')
         header = next(reader)
         dict_db2 = {}
+        dict_cat_mat = {}
         for row in reader:
             key = row[0]
-            values = row[1:]
-            dict_db2[key] = [float(v) for v in values]
+            
+            try:
+                values = row[1:]
+                dict_db2[key] = [float(v) for v in values]
+            except:
+                categorie = row[2]
+                values = row[2:]
+                dict_db2[key] = [float(v) for v in values]
+                dict_cat_mat[categorie] = dict_db2
+
         file.close()
     return dict_db2
 
 def add_row(list):
     """Funktion um Daten der Datenbank hinzuzufügen"""
-    with open('Datenbank_DIN18041.csv', mode='a', newline='\n') as file:
+    with open('Datenbank_DIN18041.csv', mode='a', newline='\n', encoding='utf-8') as file:
         writer_object = csv.writer(file, delimiter=';')
         writer_object.writerow(list)
         file.close()
         
-# 30000 m^2, as it is the biggest room volume applicable with DIN 18041 (see page 5)
+# Sport: 30000 m^2, as it is the biggest room volume applicable with DIN 18041 (see page 5)
 usecase = {'Musik': [30, 1000], 'Sprache/Vortrag': [50, 5000], 'Sprache/Vortrag inklusiv': [30, 5000],
            'Unterricht/Kommunikation': [30, 1000], 'Sport': [200, 30000]} 
 

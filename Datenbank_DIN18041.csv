@@ -1,53 +1,58 @@
-Material;125 Hz;250 Hz;500 Hz;1 kHz;2 kHz;4 kHz;8 kHz
-Mauerziegelwand, unverputzt, Fugen ausgestrichen;0.03;0.03;0.03;0.04;0.05;0.06
-Mauerwerk, Hohllochziegel, Löcher sichtbar, 60 mm vor Massivwand;0.11;0.22;0.34;0.35;0.52;0.43
-Glattputz;0.02;0.02;0.03;0.03;0.04;0.06
-Kalkzementputz;0.03;0.03;0.02;0.04;0.05;0.05
-Tapete auf Kalkzementputz;0.02;0.03;0.04;0.05;0.07;0.08
-Spiegel, vor der Wand;0.12;0.1;0.05;0.04;0.02;0.02
-Tür, Holz, lackiert;0.1;0.08;0.06;0.05;0.05;0.05
-Stuckgips, unverputzter Beton;0.02;0.02;0.03;0.04;0.05;0.05
-Marmor, Fliesen, Klinker;0.01;0.01;0.02;0.02;0.03;0.03
-Fenster (Isolierverglasung);0.28;0.2;0.11;0.06;0.03;0.03
-Parkettfußboden, aufgeklebt;0.04;0.04;0.05;0.06;0.06;0.06
-Parkettfußboden, auf Blindboden;0.2;0.15;0.1;0.09;0.06;0.1
-Parkettfußboden, hohlliegend;0.15;0.08;0.07;0.06;0.06;0.06
-Teppichboden, bis 6 mm Florhöhe, auf massivem Untergrund;0.02;0.04;0.07;0.19;0.29;0.35
-Teppichboden, 7 mm bis 10 mm Florhöhe, auf massivem Untergrund;0.04;0.07;0.14;0.30;0.51;0.78
-Nadelfilz 7 mm, auf massivem Untergrund;0.02;0.04;0.12;0.20;0.36;0.57
-5 mm Teppich mit 5 mm Filzunterlage, auf massivem Untergrund;0.07;0.21;0.57;0.68;0.81;0.72
-PVC-Fußbodenbelag (2,5 mm) auf Betonboden;0.01;0.02;0.01;0.03;0.05;0.05
-Linoleum auf Beton;0.02;0.02;0.03;0.03;0.04;0.04
-Furnierte Holz- oder Spanplatte dicht vor festem Untergrund;0.04;0.04;0.05;0.06;0.06;0.06
-4 mm Hartfaserplatte, kassettiert ohne Dämmstoff, Wandabstand 60 mm;0.22;0.19;0.13;0.07;0.05;0.05
-4 mm Hartfaserplatte, kassettiert mit 40 mm Mineralwollplatte, Wandabstand 60 mm;0.63;0.25;0.14;0.08;0.06;0.05
-4 mm Hartfaserplatte, kassettiert ohne Dämmstoff, Wandabstand 120 mm;0.26;0.15;0.07;0.05;0.05;0.05
-4 mm Sperrholzplatte, 40 mm Mineralwolle, Wandabstand 120 mm;0.77;0.33;0.16;0.08;0.07;0.03
-Gipsplatte, 9,5 mm stark, Wandabstand 25 mm;0.27;0.17;0.10;0.09;0.11;0.12
-Gipsplatte 9,5 mm stark, Wandabstand 60 mm, Hohlraum kassettiert;0.30;0.10;0.05;0.07;0.09;0.08
-Kino-Bildwand;0.10;0.13;0.36;0.31;0.29;0.20
-Bühnenöffnung mit Dekoration;0.40;0.43;0.57;0.70;0.80;0.80
-Bücherregal in Bibliotheken (je m2 Oberfläche);0.30;0.39;0.39;0.31;0.29;0.21
-Lochsteine (vorsichtige Annahme);0.10;0.20;0.44;0.55;0.44;0.22
-3,5 mm Hartfaserplatte, 40 mm Mineralwolle, 30 mm Holzleisten 750 mm × 500 mm Kasten;0.61;0.26;0.19;0.07;0.07;0.03
-15 mm Mineralplatte mit Vlieskaschierung, 200 mm zur Rohdecke, ohne rückseitige Zusatzmaßnahmen;0.50;0.65;0.70;0.85;1.00;1.00
-15 mm Mineralplatte fein genadelt, 200 mm zur Rohdecke, ohne rückseitige Zusatzmaßnahmen;0.35;0.55;0.65;0.70;0.65;0.60
-15 mm Mineralplatte ungenadelt, 200 mm zur Rohdecke, ohne rückseitige Zusatzmaßnahmen;0.15;0.15;0.10;0.15;0.15;0.10
-gelochte Metallkassette, 16% Lochflächenanteil, 2,5 mm Lochdurchmesser, Akustikvlies, 200 mm zur Rohdecke, ohne rückseitige Zusatzmaßnahmen;0.35;0.70;0.85;0.75;0.75;0.75
-20 mm Recycle-Glaswollplatte mit mikroporöser Farbeschichtung, 200 mm zur Rohdecke, 100 mm rückseitiger Tieftonabsorber;0.75;0.95;0.95;1.00;1.00;1.00
-15 mm Recycle-Glaswollplatte, Vliesbeschichtung, 200 mm zur Rohdecke, ohne rückseitige Zusatz-maßnahmen;0.40;0.85;1.00;0.90;1.00;1.00
-Spanndecke mikroperforiert, 100 mm Abstand bzw. Luftschicht, kein Akustikvlies im Hohlraum;0.09;0.25;0.65;0.80;0.61;0.60
-Spanndecke mikroperforiert, 100 mm Abstand bzw. Luftschicht, 40 mm Akustikvlies direkt an Rückwand;0.28;0.69;1.00;0.89;0.75;0.71
-Gipsplatten Rasterdecke 8/18 Rundlochung, 15,5 % Lochflächenanteil, 200 mm zur Rohdecke, Akustikvlies, ohne Mineralwollauflage;0.45;0.60;0.70;0.60;0.55;0.65
-Gipsplatten Rasterdecke 8/18 Rundlochung, 15,5 % Lochflächenanteil, 200mm zur Rohdecke, Akustikvlies, 20 mm Mineralwollauflage;0.50;0.65;0.70;0.65;0.60;0.70
-Gipsplatten Rasterdecke 12/25 Quadratlochung, 7,8 % Lochflächenanteil, 200 mm zur Rohdecke, Akustikvlies, 20 mm Mineralwollauflage;0.45;0.50;0.50;0.40;0.35;0.35
-Gipsplatten Rasterdecke 12/25 Quadratlochung, 7,8 % Lochflächenanteil, 65 mm zur Rohdecke, Akustikvlies, 20 mm Mineralwollauflage;0.40;0.45;0.50;0.45;0.40;0.30
-Holzwolle-Leichtbauplatten 35 mm , direkt auf Wand;0.08;0.17;0.70;0.71;0.64;0.64
-Holzwolle-Leichtbauplatten 25 mm , Hohlraum leer, Wandabstand 50 mm;0.13;0.42;0.54;0.45;0.70;0.73
-Melaminharz-Schaumstoff, Rohdichte 8 kg/m3 bis 10 kg/m3, 30 mm dick;0.12;0.31;0.66;0.86;0.87;0.92
-Melaminharz-Schaumstoff, Rohdichte 8 kg/m3 bis 10 kg/m3, 50 mm dick;0.16;0.56;0.87;0.96;0.97;0.97
-40 mm Mineralwollmatte (20 kg/m3), ohne Loch-blechabdeckung;0.11;0.36;0.68;0.88;0.89;0.97
-40 mm Mineralwollmatte (20 kg/m3), mit Loch-blechabdeckung (18 %);0.11;0.36;0.69;0.95;0.81;0.70
-Gipsplatte 9,5 mm, 8/18 Rundlochung, 15% Loch-flächenanteil, mit Faservlies hinterlegt, Abstand 100 mm;0.12;0.28;0.75;0.50;0.38;0.30
-Gipsplatte, geschlitzt, 8,8 % offene Fläche, mit Faservlies hinterlegt, Abstand 100 mm;0.11;0.28;0.66;0.38;0.28;0.30
-gelochte Langfeld-Metallkassette, 20 % Lochflächen-anteil, 3 mm Lochdurchmesser, Akustikfilz, 300 mm Abstand;0.38;0.65;0.59;0.75;0.77;0.61 
+Material;Kategorie;125 Hz;250 Hz;500 Hz;1 kHz;2 kHz;4 kHz;8 kHz
+Mauerziegelwand, unverputzt, Fugen ausgestrichen;Wand;0.03;0.03;0.03;0.04;0.05;0.06
+Mauerwerk, Hohllochziegel, Löcher sichtbar, 60 mm vor Massivwand;Wand;0.11;0.22;0.34;0.35;0.52;0.43
+Glattputz;Wand;0.02;0.02;0.03;0.03;0.04;0.06
+Kalkzementputz;Wand;0.03;0.03;0.02;0.04;0.05;0.05
+Tapete auf Kalkzementputz;Wand;0.02;0.03;0.04;0.05;0.07;0.08
+Spiegel, vor der Wand;Wand;0.12;0.1;0.05;0.04;0.02;0.02
+Tür, Holz, lackiert;Wand;0.1;0.08;0.06;0.05;0.05;0.05
+Stuckgips, unverputzter Beton;Wand;0.02;0.02;0.03;0.04;0.05;0.05
+Marmor, Fliesen, Klinker;Wand;0.01;0.01;0.02;0.02;0.03;0.03
+Marmor, Fliesen, Klinker;Boden;0.01;0.01;0.02;0.02;0.03;0.03
+Fenster (Isolierverglasung);Wand;0.28;0.2;0.11;0.06;0.03;0.03
+Parkettfußboden, aufgeklebt;Boden;0.04;0.04;0.05;0.06;0.06;0.06
+Parkettfußboden, auf Blindboden;Boden;0.2;0.15;0.1;0.09;0.06;0.1
+Parkettfußboden, hohlliegend;Boden;0.15;0.08;0.07;0.06;0.06;0.06
+Teppichboden, bis 6 mm Florhöhe, auf massivem Untergrund;Boden;0.02;0.04;0.07;0.19;0.29;0.35
+Teppichboden, 7 mm bis 10 mm Florhöhe, auf massivem Untergrund;Boden;0.04;0.07;0.14;0.30;0.51;0.78
+Nadelfilz 7 mm, auf massivem Untergrund;Boden;0.02;0.04;0.12;0.20;0.36;0.57
+Nadelfilz 7 mm, auf massivem Untergrund;Absorber;0.02;0.04;0.12;0.20;0.36;0.57
+5 mm Teppich mit 5 mm Filzunterlage, auf massivem Untergrund;Boden;0.07;0.21;0.57;0.68;0.81;0.72
+PVC-Fußbodenbelag (2,5 mm) auf Betonboden;Boden;0.01;0.02;0.01;0.03;0.05;0.05
+Linoleum auf Beton;Boden;0.02;0.02;0.03;0.03;0.04;0.04
+Furnierte Holz- oder Spanplatte dicht vor festem Untergrund;Boden;0.04;0.04;0.05;0.06;0.06;0.06
+4 mm Hartfaserplatte, kassettiert ohne Dämmstoff, Wandabstand 60 mm;Wand;0.22;0.19;0.13;0.07;0.05;0.05
+4 mm Hartfaserplatte, kassettiert ohne Dämmstoff, Wandabstand 60 mm;Absorber;0.22;0.19;0.13;0.07;0.05;0.05
+4 mm Hartfaserplatte, kassettiert mit 40 mm Mineralwollplatte, Wandabstand 60 mm;Wand;0.63;0.25;0.14;0.08;0.06;0.05
+4 mm Hartfaserplatte, kassettiert mit 40 mm Mineralwollplatte, Wandabstand 60 mm;Absorber;0.63;0.25;0.14;0.08;0.06;0.05
+4 mm Hartfaserplatte, kassettiert ohne Dämmstoff, Wandabstand 120 mm;Wand;0.26;0.15;0.07;0.05;0.05;0.05
+4 mm Hartfaserplatte, kassettiert ohne Dämmstoff, Wandabstand 120 mm;Absorber;0.26;0.15;0.07;0.05;0.05;0.05
+4 mm Sperrholzplatte, 40 mm Mineralwolle, Wandabstand 120 mm;Wand;0.77;0.33;0.16;0.08;0.07;0.03
+4 mm Sperrholzplatte, 40 mm Mineralwolle, Wandabstand 120 mm;Absorber;0.77;0.33;0.16;0.08;0.07;0.03
+Gipsplatte, 9,5 mm stark, Wandabstand 25 mm;Wand;0.27;0.17;0.10;0.09;0.11;0.12
+Gipsplatte 9,5 mm stark, Wandabstand 60 mm, Hohlraum kassettiert;Wand;0.30;0.10;0.05;0.07;0.09;0.08
+Kino-Bildwand;Wand;0.10;0.13;0.36;0.31;0.29;0.20
+Bühnenöffnung mit Dekoration;Wand;0.40;0.43;0.57;0.70;0.80;0.80
+Bücherregal in Bibliotheken (je m2 Oberfläche);Wand;0.30;0.39;0.39;0.31;0.29;0.21
+Lochsteine (vorsichtige Annahme);Wand;0.10;0.20;0.44;0.55;0.44;0.22
+15 mm Mineralplatte mit Vlieskaschierung, 200 mm zur Rohdecke, ohne rückseitige Zusatzmaßnahmen;Decke;0.50;0.65;0.70;0.85;1.00;1.00
+15 mm Mineralplatte fein genadelt, 200 mm zur Rohdecke, ohne rückseitige Zusatzmaßnahmen;Decke;0.35;0.55;0.65;0.70;0.65;0.60
+15 mm Mineralplatte ungenadelt, 200 mm zur Rohdecke, ohne rückseitige Zusatzmaßnahmen;Decke;0.15;0.15;0.10;0.15;0.15;0.10
+gelochte Metallkassette, 16% Lochflächenanteil, 2,5 mm Lochdurchmesser, Akustikvlies, 200 mm zur Rohdecke, ohne rückseitige Zusatzmaßnahmen;Decke;0.35;0.70;0.85;0.75;0.75;0.75
+20 mm Recycle-Glaswollplatte mit mikroporöser Farbeschichtung, 200 mm zur Rohdecke, 100 mm rückseitiger Tieftonabsorber;Decke;0.75;0.95;0.95;1.00;1.00;1.00
+15 mm Recycle-Glaswollplatte, Vliesbeschichtung, 200 mm zur Rohdecke, ohne rückseitige Zusatz-maßnahmen;Decke;0.40;0.85;1.00;0.90;1.00;1.00
+Spanndecke mikroperforiert, 100 mm Abstand bzw. Luftschicht, kein Akustikvlies im Hohlraum;Decke;0.09;0.25;0.65;0.80;0.61;0.60
+Spanndecke mikroperforiert, 100 mm Abstand bzw. Luftschicht, 40 mm Akustikvlies direkt an Rückwand;Decke;0.28;0.69;1.00;0.89;0.75;0.71
+Gipsplatten Rasterdecke 8/18 Rundlochung, 15,5 % Lochflächenanteil, 200 mm zur Rohdecke, Akustikvlies, ohne Mineralwollauflage;Decke;0.45;0.60;0.70;0.60;0.55;0.65
+Gipsplatten Rasterdecke 8/18 Rundlochung, 15,5 % Lochflächenanteil, 200mm zur Rohdecke, Akustikvlies, 20 mm Mineralwollauflage;Decke;0.50;0.65;0.70;0.65;0.60;0.70
+Gipsplatten Rasterdecke 12/25 Quadratlochung, 7,8 % Lochflächenanteil, 200 mm zur Rohdecke, Akustikvlies, 20 mm Mineralwollauflage;Decke;0.45;0.50;0.50;0.40;0.35;0.35
+Gipsplatten Rasterdecke 12/25 Quadratlochung, 7,8 % Lochflächenanteil, 65 mm zur Rohdecke, Akustikvlies, 20 mm Mineralwollauflage;Decke;0.40;0.45;0.50;0.45;0.40;0.30
+Holzwolle-Leichtbauplatten 35 mm , direkt auf Wand;Absorber;0.08;0.17;0.70;0.71;0.64;0.64
+Holzwolle-Leichtbauplatten 25 mm , Hohlraum leer, Wandabstand 50 mm;Absorber;0.13;0.42;0.54;0.45;0.70;0.73
+Melaminharz-Schaumstoff, Rohdichte 8 kg/m3 bis 10 kg/m3, 30 mm dick;Absorber;0.12;0.31;0.66;0.86;0.87;0.92
+Melaminharz-Schaumstoff, Rohdichte 8 kg/m3 bis 10 kg/m3, 50 mm dick;Absorber;0.16;0.56;0.87;0.96;0.97;0.97
+40 mm Mineralwollmatte (20 kg/m3), ohne Loch-blechabdeckung;Absorber;0.11;0.36;0.68;0.88;0.89;0.97
+40 mm Mineralwollmatte (20 kg/m3), mit Loch-blechabdeckung (18 %);Absorber;0.11;0.36;0.69;0.95;0.81;0.70
+Gipsplatte 9,5 mm, 8/18 Rundlochung, 15% Loch-flächenanteil, mit Faservlies hinterlegt, Abstand 100 mm;Absorber;0.12;0.28;0.75;0.50;0.38;0.30
+Gipsplatte, geschlitzt, 8,8 % offene Fläche, mit Faservlies hinterlegt, Abstand 100 mm;Absorber;0.11;0.28;0.66;0.38;0.28;0.30
+gelochte Langfeld-Metallkassette, 20 % Lochflächen-anteil, 3 mm Lochdurchmesser, Akustikfilz, 300 mm Abstand;Absorber;0.38;0.65;0.59;0.75;0.77;0.61 

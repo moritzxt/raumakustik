@@ -123,8 +123,14 @@ area =  np.linspace(0,int(areas),int(areas)+1)
 
 
 
+
+
 main_walls = [f'Grundflaeche {i+1}' for i in range(areas)]
 subAreas = 0
+
+numPeople = 1 # Anzahl der Personengruppen im Raum 
+tabs_list.extend(main_walls)
+
 
 numPeople = 1 # Anzahl der Personengruppen im Raum 
 tabs_list.extend(main_walls)
@@ -140,6 +146,13 @@ tabs = st.tabs(tabs_list)
 # Tabs für die jeweiligen Flächen und die 
 # Personen
 
+tabs = st.tabs(tabs_list)
+
+
+# Tabs für die jeweiligen Flächen und die 
+# Personen
+
+for tab, name in zip(tabs, tabs_list):
 for tab, name in zip(tabs, tabs_list):
     with tab:
     
@@ -203,9 +216,9 @@ for tab, name in zip(tabs, tabs_list):
                 with con_2:
                     col_1, col_2, col_3 = st.columns(3)
 
-                    if st.button('Add Subwandfläche', key = f'Button subArea{subAreas} {name}'):
-                        st.session_state[f'subAreas{name}'] += 1
-                    subAreas = st.session_state[f'subAreas{name}']
+                            if st.button('Add Subwandfläche', key = f'Button subArea{subAreas} {name}'):
+                                st.session_state[f'subAreas{name}'] += 1
+                            subAreas = st.session_state[f'subAreas{name}']
 
                     if st.button('Remove Subwandfläche', key=f'remove Subfläche von {name}'):
                         if st.session_state[f'subAreas{name}'] > 0:
@@ -230,11 +243,11 @@ for tab, name in zip(tabs, tabs_list):
                             sub_surfaces[name].append(st.number_input(f"Fläche für Subwandfläche {num +1 }",
                                                                     value=1, key = f'Fläche subArea{num} {name}'))
 
-                        with col_2:
-                            sub_materials[name].append(st.selectbox(label =  f'Bitte wählen Sie das Material der Subfläche {num + 1} aus.'
-                                ,options=material_dict.keys(), key=f'Subfläche {num} von {name}'))
-                        
-with st.container():
+                                with col_2:
+                                    sub_materials[name].append(st.selectbox(label =  f'Bitte wählen Sie das Material der Subfläche {num + 1} aus.'
+                                        ,options=material_dict.keys(), key=f'Subfläche {num} von {name}'))
+                                
+        with st.container():
     col_1, col_2 = st.columns(2)
     with col_1:
         with st.form(key = 'surface'):
@@ -248,8 +261,10 @@ with st.container():
                 json.dump(json_data, jsonkey)
     
 
-    alpha = basic_dict_2()
+#Initialisierung des Dictionaries für die Absorptionsgrade
+alpha = basic_dict_2()
 
+#Befuellen des dicts mit den Absorptionsgeraden fuer die jeweiligen Oktavbaender und 
     with col_2:
         with st.form(key = 'material'):
             #selection of wall material
@@ -329,6 +344,8 @@ for ind, octaveBand in enumerate(alpha):
 sub_alpha = sub_alpha_dict(main_walls)
           
 for ind, octaveBands in enumerate(alpha):
+
+
     for wall in sub_alpha[octaveBand]:
         for material in materials:
             alpha[octaveBands].append(material_dict[material][ind])
@@ -336,7 +353,8 @@ for ind, octaveBands in enumerate(alpha):
 
 
 #Erstellen des Objektes Raum der Klasse room
-raum = room(volume=vol, surface=main_surfaces, sub_surface=sub_surfaces, alpha=alpha, sub_alpha=sub_alpha, use=use)
+raum = room(volume=vol, surface=main_surfaces, sub_surface=sub_surfaces, alpha=alpha, 
+            sub_alpha=sub_alpha, use=use, peopleDescription=peopleDescription, numberOfPeople=numberOfPeople)
 #Plots erstellen
 
 st.divider()
