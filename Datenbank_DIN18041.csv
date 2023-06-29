@@ -1,5 +1,5 @@
 Material;Kategorie;125 Hz;250 Hz;500 Hz;1 kHz;2 kHz;4 kHz;8 kHz
-Mauerziegelwand, unverputzt, Fugen ausgestrichen;Wand;0.03;0.03;0.04;0.05;0.06
+Mauerziegelwand, unverputzt, Fugen ausgestrichen;Wand;0.03;0.03;0.03;0.04;0.05;0.06
 Mauerwerk, Hohllochziegel, Löcher sichtbar, 60 mm vor Massivwand;Wand;0.11;0.22;0.34;0.35;0.52;0.43
 Glattputz;Wand;0.02;0.02;0.03;0.03;0.04;0.06
 Kalkzementputz;Wand;0.03;0.03;0.02;0.04;0.05;0.05
@@ -19,7 +19,7 @@ Nadelfilz 7 mm, auf massivem Untergrund;Boden;0.02;0.04;0.12;0.20;0.36;0.57
 Nadelfilz 7 mm, auf massivem Untergrund;Absorber;0.02;0.04;0.12;0.20;0.36;0.57
 5 mm Teppich mit 5 mm Filzunterlage, auf massivem Untergrund;Boden;0.07;0.21;0.57;0.68;0.81;0.72
 PVC-Fußbodenbelag (2,5 mm) auf Betonboden;Boden;0.01;0.02;0.01;0.03;0.05;0.05
-Linoleum auf Beton;Boden;0.02;0.02;0.03;0.030.04;0.04
+Linoleum auf Beton;Boden;0.02;0.02;0.03;0.03;0.04;0.04
 Furnierte Holz- oder Spanplatte dicht vor festem Untergrund;Boden;0.04;0.04;0.05;0.06;0.06;0.06
 4 mm Hartfaserplatte, kassettiert ohne Dämmstoff, Wandabstand 60 mm;Wand;0.22;0.19;0.13;0.07;0.05;0.05
 4 mm Hartfaserplatte, kassettiert ohne Dämmstoff, Wandabstand 60 mm;Absorber;0.22;0.19;0.13;0.07;0.05;0.05
@@ -31,7 +31,7 @@ Furnierte Holz- oder Spanplatte dicht vor festem Untergrund;Boden;0.04;0.04;0.05
 4 mm Sperrholzplatte, 40 mm Mineralwolle, Wandabstand 120 mm;Absorber;0.77;0.33;0.16;0.08;0.07;0.03
 Gipsplatte, 9,5 mm stark, Wandabstand 25 mm;Wand;0.27;0.17;0.10;0.09;0.11;0.12
 Gipsplatte 9,5 mm stark, Wandabstand 60 mm, Hohlraum kassettiert;Wand;0.30;0.10;0.05;0.07;0.09;0.08
-Kino-Bildwand;;Wand;0.10;0.13;0.36;0.31;0.29;0.20
+Kino-Bildwand;Wand;0.10;0.13;0.36;0.31;0.29;0.20
 Bühnenöffnung mit Dekoration;Wand;0.40;0.43;0.57;0.70;0.80;0.80
 Bücherregal in Bibliotheken (je m2 Oberfläche);Wand;0.30;0.39;0.39;0.31;0.29;0.21
 Lochsteine (vorsichtige Annahme);Wand;0.10;0.20;0.44;0.55;0.44;0.22
