@@ -3,7 +3,7 @@ import numpy as np
 import streamlit as st
 #import streamlit_tags as sttags
 from room_calc import room
-from utils import basic_dict , read_db, basic_dict_2, add_row, usecase, sub_alpha_dict
+from utils import basic_dict , read_db, basic_dict_2, add_row, usecase, sub_alpha_dict, flatten_dict
 
 st.set_page_config(page_title= 'Tool für Raumakustik', layout='wide',
                     initial_sidebar_state='collapsed')
@@ -13,6 +13,8 @@ tabs_list = []
 main_surfaces = {} # Dict enthält den Flächeninhalte der Hauptfläche, korrespondierend zum Key (name der Hauptfläche)
 main_materials = [] # Materialien 
 material_dict = read_db('Datenbank_DIN18041.csv')
+material_dict_flattened = flatten_dict(material_dict)
+
 person_dict = read_db('equivalentAbsorptionSurface_people_data.csv')
 sub_surfaces = {}
 sub_materials = {}
@@ -111,8 +113,9 @@ for tab, name in zip(tabs, tabs_list):
                             f"Fläche für {name}", value=1))
 
                     with col_2:
+                        category = st.selectbox(label='Bitte wählen Sie die Kategorie des Materials aus', options=material_dict.keys())
                         main_materials.append(st.selectbox(label =  f'Bitte wählen Sie das Material der {name} aus.',
-                                                        options=material_dict.keys()))
+                                                        options=material_dict[f'{category}'].keys()))
 
 
 
@@ -147,8 +150,10 @@ for tab, name in zip(tabs, tabs_list):
                                                                     value=1, key = f'Fläche subArea{num} {name}'))
 
                         with col_2:
+                            category = st.selectbox(label='Bitte wählen Sie die Kategorie des Materials aus',
+                                                     options=material_dict.keys(), key= f'cat_sub_{num}')
                             sub_materials[name].append(st.selectbox(label =  f'Bitte wählen Sie das Material der Subfläche {num + 1} aus.'
-                                ,options=material_dict.keys(), key=f'Subfläche {num} von {name}'))
+                                ,options=material_dict[f'{category}'].keys(), key=f'Subfläche {num} von {name}'))
                         
         
 
@@ -159,18 +164,16 @@ alpha = basic_dict_2()
 for ind, octaveBand in enumerate(alpha):
     for material in main_materials:
         try:
-            alpha[octaveBand].append(material_dict[material][ind])
+            alpha[octaveBand].append(material_dict[category][material][ind])
         except:
             alpha[octaveBand].append(None)
 
 sub_alpha = sub_alpha_dict(main_walls)
 
 for ind, octaveBand in enumerate(sub_alpha):
-
-
     for wall in sub_alpha[octaveBand]:
-        for material in sub_materials[wall]:
-            sub_alpha[octaveBand][wall].append(material_dict[material][ind])
+            for material in sub_materials[wall]:
+                sub_alpha[octaveBand][wall].append(material_dict[category][material][ind])
 
 
 
