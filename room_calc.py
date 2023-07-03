@@ -38,7 +38,7 @@ class room:
         Function to calculate the equivalent absorption surface.
         '''
 
-        equivalentAbsorptionSurface = basic_dict()
+        equivalentAbsorptionSurface_walls = basic_dict()
 
         wall_index = 0
         # equivalent absorption surface for main walls 
@@ -46,7 +46,7 @@ class room:
             alphaList = self.alpha[octaveBands]
 
             for walls in self.surface:
-                equivalentAbsorptionSurface[octaveBands] = equivalentAbsorptionSurface[octaveBands] + (self.surface[walls] - sum(self.sub_surface[walls])) * alphaList[wall_index]
+                equivalentAbsorptionSurface_walls[octaveBands] = equivalentAbsorptionSurface_walls[octaveBands] + (self.surface[walls] - sum(self.sub_surface[walls])) * alphaList[wall_index]
                 wall_index = wall_index + 1
             wall_index = 0
 
@@ -58,9 +58,9 @@ class room:
                 sub_surfaceList = self.sub_surface[sub_walls]
                     
                 for sub_wall_index in range(len(sub_surfaceList)):
-                    equivalentAbsorptionSurface[octaveBands] = equivalentAbsorptionSurface[octaveBands] + sub_surfaceList[sub_wall_index] * sub_alphaList[sub_wall_index]
+                    equivalentAbsorptionSurface_walls[octaveBands] = equivalentAbsorptionSurface_walls[octaveBands] + sub_surfaceList[sub_wall_index] * sub_alphaList[sub_wall_index]
 
-        return equivalentAbsorptionSurface
+        return equivalentAbsorptionSurface_walls
     
     
     def equivalentAbsorptionSurface_people(self):
