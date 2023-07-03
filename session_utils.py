@@ -46,31 +46,52 @@ def init_starting_values(json_data,material_dict,person_dict):
         area_init = []
         material_init = []
         material_init_string = []
+        number_subareas_init = []
+        subarea_material_init = []
+        subarea_material_init_string = []
+    
         #fill area and material data for existing walls
         for i in range(number_walls_init):
+            subarea_material_init.append([])
+            subarea_material_init_string.append([])
             area_init.append(json_data['wall' + str(i+1)]['area'])
             material_init_string.append(json_data['wall' + str(i+1)]['material'])
+            number_subareas_init.append(json_data['wall' + str(i+1)]['number_subareas'])
+
             for j in range(len(list(material_dict))):
                 if list(material_dict)[j] == json_data['wall' + str(i+1)]['material']:   #what happens when key aint found?
                     material_init.append(j)
+            for j in range(number_subareas_init[i]):
+                #subarea_material_init_string[i].append(json_data(['wall' + str(i+1)]['subarea' + str(j+1)]['material']))
+                for k in range(len(list(material_dict))):
+                    if list(material_dict)[k] == json_data['wall' + str(i+1)]['subarea' + str(j+1)]['material']:
+                        subarea_material_init[i].append(k)
+                
         #then set data to defaults for 100 next indices, to allow adding more walls - so limiting the number of walls to 100 would be smart
         for i in range(100):
             area_init.append(1)
             material_init_string.append(list(material_dict)[0])
             material_init.append(0)
+            number_subareas_init.append(0)
+            subarea_material_init.append([])
+            for j in range(100):
+                subarea_material_init[i].append(0)
+                #subarea_material_init_string[i].append(list(material_dict)[0])
+
         
         persons_init = json_data['persons']
+        number_people_init = json_data['number_people']
         amount_init = []
         type_init = []
         type_init_string = []
         #fill amount and type data for existing people
-        for i in range(persons_init):
+        for i in range(number_people_init):
             amount_init.append(json_data['person_type' + str(i+1)]['amount'])
             type_init_string.append(json_data['person_type' + str(i+1)]['type'])
             for j in range(len(list(person_dict))):
                 if list(person_dict)[j] == json_data['person_type' + str(i+1)]['type']:   #what happens when key aint found?
-                    material_init.append(j)
-        #then set data to defaults for 100 next indices, to allow adding more walls - so limiting the number of walls to 100 would be smart
+                    type_init.append(j)
+        #then set data to defaults for 100 next indices, to allow adding more people types - so limiting the number of people types to 100 would be smart
         for i in range(100):
             amount_init.append(1)
             type_init_string.append(list(person_dict)[0])
@@ -110,5 +131,8 @@ def init_starting_values(json_data,material_dict,person_dict):
     init_data['amount'] = amount_init
     init_data['type_string'] = type_init_string
     init_data['type'] = type_init
+    init_data['number_subareas'] = number_subareas_init
+    init_data['sub_material'] = subarea_material_init
+    #init_data['sub_material_string'] = subarea_material_init_string
 
     return init_data
