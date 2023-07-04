@@ -113,7 +113,7 @@ for tab, name in zip(tabs, tabs_list):
 
                     with col_1:
                         main_surfaces[name] = (st.number_input(
-                            f"Fläche für {name}", value=1))
+                            f"Fläche für {name}", value=1, min_value=0))
 
                     with col_2:
                         category = st.selectbox(label='Bitte wählen Sie die Kategorie des Materials aus',
@@ -149,7 +149,7 @@ for tab, name in zip(tabs, tabs_list):
                     for num in range(0, subAreas):
                         with col_1:
                             sub_surfaces[name].append(st.number_input(f"Fläche für Subwandfläche {num +1 }",
-                                                                    value=1, key = f'Fläche subArea{num} {name}'))
+                                                                    value=1, key = f'Fläche subArea{num} {name}',min_value=0))
 
                         with col_2:
                             category = st.selectbox(label='Bitte wählen Sie die Kategorie des Materials aus',
