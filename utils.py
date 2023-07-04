@@ -28,5 +28,5 @@ def add_row(list):
         
 # Sport: 30000 m^2, as it is the biggest room volume applicable with DIN 18041 (see page 5)
 usecase = {'Musik': [30, 1000], 'Sprache/Vortrag': [50, 5000], 'Sprache/Vortrag inklusiv': [30, 5000],
-           'Unterricht/Kommunikation': [30, 1000], 'Sport': [200, 30000]} 
+           'Unterricht/Kommunikation': [30, 1000],'Unterricht/Kommunikation inklusiv': [30, 500], 'Sport': [200, 30000]} 
 
