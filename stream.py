@@ -3,7 +3,7 @@ import numpy as np
 import streamlit as st
 #import streamlit_tags as sttags
 from room_calc import room
-from utils import basic_dict , read_db, basic_dict_2, add_row, usecase, sub_alpha_dict
+from utils import basic_dict , read_db, basic_dict_2, add_row, usecase, sub_alpha_dict, flatten_dict
 import os
 import json
 from streamlit.runtime.scriptrunner.script_run_context import add_script_run_ctx
@@ -19,6 +19,8 @@ tabs_list = []
 main_surfaces = {} # Dict enthält den Flächeninhalte der Hauptfläche, korrespondierend zum Key (name der Hauptfläche)
 main_materials = [] # Materialien 
 material_dict = read_db('Datenbank_DIN18041.csv')
+material_dict_flattened = flatten_dict(material_dict)
+
 person_dict = read_db('equivalentAbsorptionSurface_people_data.csv')
 sub_surfaces = {}
 sub_materials = {}
@@ -149,18 +151,11 @@ for tab, name in zip(tabs, tabs_list):
             if 'add_persons' not in st.session_state:
                 st.session_state['add_persons'] = numPeople
 
-            if st.button('Add Person', key ='button_add_persons'):
-                        st.session_state['add_persons'] += 1
-            
+            if st.button('Add Personen', key ='button_add_persons'):
+                st.session_state['add_persons'] += 1
+
             #for i in range(st.session_state['add_persons']):
             #    peopleDescription.append(init_data['type'][i])
-            
-            if st.button('Remove Person', key='remove_button_persons'):
-                if st.session_state['add_persons'] > 1:
-                    st.session_state['add_persons'] -= 1
-                    peopleDescription.pop()
-                    numberOfPeople.pop()
-
             numPeople = st.session_state['add_persons']
             json_data['number_people'] = numPeople
             for i in range(numPeople):
@@ -176,12 +171,23 @@ for tab, name in zip(tabs, tabs_list):
                         numberOfPeople.append(st.number_input(
                                 f"Anzahl an Personen im Raum", value = 1, key = f'people{num}'))
                     with col_12:
-                        peopleDescription.append(st.selectbox(label =  f'Beschreibung{num}',
-                                                            options=person_dict.keys()))   
+                        peopleDescription.append(st.selectbox(label =  f'Beschreibung',
+                                                            key=f'Beschreibung{num}',options=person_dict.keys()))  
+
+
+       
                     json_data['person_type' + str(num+1)]['amount'] = numberOfPeople[num]
                     json_data['person_type' + str(num+1)]['type'] = peopleDescription[num]
                     with open(state,'w') as jsonkey:
                         json.dump(json_data, jsonkey)
+            
+            if st.button('Remove Personen', key='remove_button_persons'):
+                if st.session_state['add_persons'] > 1 and len(peopleDescription) > 0:
+                    st.session_state['add_persons'] -= 1
+                    peopleDescription.pop()
+                    numberOfPeople.pop()
+                    st.experimental_rerun()
+     
 
         else:
             
@@ -191,15 +197,18 @@ for tab, name in zip(tabs, tabs_list):
                 con_2 = st.container()
 
                 with con_1:
-                    col_1, col_2 = st.columns(2)
+                    col_1, col_2, col_3 = st.columns(3)
 
                     with col_1:
                         main_surfaces[name] = (st.number_input(
                             f"Fläche für {name}", value=1))
 
                     with col_2:
+                        category = st.selectbox(label='Bitte wählen Sie die Kategorie des Materials aus',
+                                                key=f'{name}' ,options=material_dict.keys())
+                    with col_3:
                         main_materials.append(st.selectbox(label =  f'Bitte wählen Sie das Material der {name} aus.',
-                                                        options=material_dict.keys()))
+                                                        options=material_dict[f'{category}'].keys()))
                         
                     #extract number of base area
                     number1 = name[13]
@@ -215,9 +224,10 @@ for tab, name in zip(tabs, tabs_list):
                     json_data['wall' + str(number)]['material'] = main_materials[number-1]
                     with open(state,'w') as jsonkey:
                         json.dump(json_data, jsonkey)
-
+                
 
                 with con_2:
+                    st.divider()
                     col_1, col_2, col_3 = st.columns(3)
 
                     if st.button('Add Subwandfläche', key = f'Button subArea{subAreas} {name}'):
@@ -253,8 +263,11 @@ for tab, name in zip(tabs, tabs_list):
                                                                     value=1, key = f'Fläche subArea{num} {name}'))
                         
                         with col_2:
+                            category = st.selectbox(label='Bitte wählen Sie die Kategorie des Materials aus',
+                                                     options=material_dict.keys(), key= f'cat_sub_{num}')
+                        with col_3:
                             sub_materials[name].append(st.selectbox(label =  f'Bitte wählen Sie das Material der Subfläche {num + 1} aus.'
-                               ,options=material_dict.keys(), key=f'Subfläche {num} von {name}'))
+                               ,options=material_dict[f'{category}'].keys(), key=f'Subfläche {num} von {name}'))
                             
                     #for i in range(subAreas):
                         #for every subarea, write area and material in json
@@ -353,16 +366,16 @@ with st.container():
 for ind, octaveBand in enumerate(alpha):
     for material in main_materials:
         try:
-            alpha[octaveBand].append(material_dict[material][ind])
+            alpha[octaveBand].append(material_dict[category][material][ind])
         except:
             alpha[octaveBand].append(None)
 
 sub_alpha = sub_alpha_dict(main_walls)
-          
-for ind, octaveBands in enumerate(alpha):
+
+for ind, octaveBand in enumerate(sub_alpha):
     for wall in sub_alpha[octaveBand]:
-        for material in materials:
-            alpha[octaveBands].append(material_dict[material][ind])
+            for material in sub_materials[wall]:
+                sub_alpha[octaveBand][wall].append(material_dict[category][material][ind])
 
 #Erstellen des Objektes Raum der Klasse room
 raum = room(volume=vol, surface=main_surfaces, sub_surface=sub_surfaces, alpha=alpha, 
@@ -372,6 +385,7 @@ st.divider()
 st.subheader('Ergebnisse')
 st.divider()
 tab1, tab2 = st.tabs(['Nachhallzeit', 'Vergleich der Nachhallzeit'])
+
 with tab1:
     fig1 = raum.plot_reverberationTime()
     st.plotly_chart(fig1)
