@@ -1,0 +1,1 @@
+{"usecase": "Musik", "volume": 30, "number_walls": 1, "wall1": {"area": 1, "material": "Walls,hard surfaces average (brick walls, plaster, hard floors, etc.)"}, "persons": true, "number_people": 2, "person_type1": {"amount": 1, "type": "Kind in Vorschuleinrichtungen"}, "person_type2": {"amount": 1, "type": "Person sitzend auf ungepolsterter Bestuhlung"}}
