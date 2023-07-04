@@ -264,11 +264,18 @@ for tab, name in zip(tabs, tabs_list):
                         
                         with col_2:
                             category = st.selectbox(label='Bitte wählen Sie die Kategorie des Materials aus',
-                                                     options=material_dict.keys(), key= f'cat_sub_{num}')
+                                                     options=material_dict.keys(), key= f'cat_sub_{name}{num}')
                         with col_3:
                             sub_materials[name].append(st.selectbox(label =  f'Bitte wählen Sie das Material der Subfläche {num + 1} aus.'
                                ,options=material_dict[f'{category}'].keys(), key=f'Subfläche {num} von {name}'))
-                            
+                                
+                    if st.button('Remove Subwandfläche', key=f'remove Subfläche von {name}') and len(sub_materials[name]) > 0:
+                        if st.session_state[f'subAreas{name}'] > 0:
+                            st.session_state[f'subAreas{name}'] -= 1
+                            sub_materials[name].pop()
+                            sub_surfaces[name].pop()
+                            st.experimental_rerun()
+                        
                     #for i in range(subAreas):
                         #for every subarea, write area and material in json
                         json_data['wall' + str(number)]['subarea' + str(num+1)] = {"area": sub_surfaces[name][num], "material": sub_materials[name][num]}
