@@ -81,13 +81,31 @@ class room:
             
         return equivalentAbsorptionSurface_people
     
+    def equivalentAbsorptionSurface_air(self):
+        '''
+        Function to account for the dampening in air, resulting in additional equivalentAbsorptionSurface
+        '''
+
+        equivalentAbsorptionSurface_air = basic_dict()
+
+        dampening = [0.1, 0.3, 0.6, 1, 1.9, 5.8]
+
+        for index_list, octaveBands in enumerate(equivalentAbsorptionSurface_air):
+            equivalentAbsorptionSurface_air[octaveBands] = 4 * dampening[index_list] * 10**(-3) * self.volume * .9
+
+        return equivalentAbsorptionSurface_air
+    
     def equivalentAbsorptionSurface(self):
+        '''
+        Function to add the equivalentAbsorptionSurface 
+        '''
         equivalentAbsorptionSurface = basic_dict_2()
 
         for octaveBands in equivalentAbsorptionSurface:
-            equivalentAbsorptionSurface[octaveBands] = self.equivalentAbsorptionSurface_walls()[octaveBands] + self.equivalentAbsorptionSurface_people()[octaveBands]
+            equivalentAbsorptionSurface[octaveBands] = self.equivalentAbsorptionSurface_walls()[octaveBands] + self.equivalentAbsorptionSurface_people()[octaveBands] + self.equivalentAbsorptionSurface_air()[octaveBands]
 
         return equivalentAbsorptionSurface
+   
    
     def reverberationTime(self):
         '''Function to calculate the reverberation time.'''
