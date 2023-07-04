@@ -91,7 +91,7 @@ class room:
         dampening = [0.1, 0.3, 0.6, 1, 1.9, 5.8]
 
         for index_list, octaveBands in enumerate(equivalentAbsorptionSurface_air):
-            equivalentAbsorptionSurface_air[octaveBands] = 4 * dampening[index_list] * 10**(-3) * self.volume * .9
+            equivalentAbsorptionSurface_air[octaveBands] = 4 * dampening[index_list] * 10**(-3) * self.volume * .95
 
         return equivalentAbsorptionSurface_air
     
