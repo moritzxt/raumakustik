@@ -113,7 +113,8 @@ for tab, name in zip(tabs, tabs_list):
                             f"Fläche für {name}", value=1))
 
                     with col_2:
-                        category = st.selectbox(label='Bitte wählen Sie die Kategorie des Materials aus', options=material_dict.keys())
+                        category = st.selectbox(label='Bitte wählen Sie die Kategorie des Materials aus',
+                                                key=f'{name}' ,options=material_dict.keys())
                         main_materials.append(st.selectbox(label =  f'Bitte wählen Sie das Material der {name} aus.',
                                                         options=material_dict[f'{category}'].keys()))
 
