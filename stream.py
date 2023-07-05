@@ -20,6 +20,14 @@ sub_surfaces = {}
 sub_materials = {}
 numberOfPeople = []
 peopleDescription = []
+main_walls = []
+#_walls = []
+#if len(main_walls) == 0:
+if 'main_walls' not in st.session_state:
+    st.session_state.main_walls = ['Grundfläche 1']
+
+#session_state = st.session_state.get(main_walls = main_walls)
+#    print('True')
 
 with st.container():
     st.title('WebApp for Roomacoustics')
@@ -37,8 +45,13 @@ with st.container():
         vol = st.number_input('Volumen in m³', min_value=min_lim,
                             max_value=max_lim, value=min_lim)
     with col3:
-        areas = st.number_input('Anzahl der Wandflächen die Sie eingeben möchten'
-                                ,min_value=1, step=1)
+        #areas = st.number_input('Anzahl der Wandflächen die Sie eingeben möchten'
+        #                        ,min_value=1, step=1)
+        wall_name = st.text_input('Name der Wandfläche', value='Wand 1')
+        
+        if st.button('Add'):
+            st.session_state.main_walls.append(wall_name)
+
 
     with col4:
         st.empty()
@@ -46,30 +59,30 @@ with st.container():
             tabs_list = ['Personen']
 
     
-area =  np.linspace(0,int(areas),int(areas)+1)
+#area =  np.linspace(0,int(areas),int(areas)+1)
 
 
 
-main_walls = [f'Grundflaeche {i+1}' for i in range(areas)]
+#main_walls = [f'Grundflaeche {i+1}' for i in range(areas)]
 subAreas = 0
 
 numPeople = 1 # Anzahl der Personengruppen im Raum 
-tabs_list.extend(main_walls)
+st.session_state.main_walls.extend(tabs_list)
 
-for key in main_walls:
+for key in st.session_state.main_walls:
     sub_surfaces[key] = []
     sub_materials[key] = []
     main_surfaces[key] = None
 
-tabs = st.tabs(tabs_list)
+tabs = st.tabs(st.session_state.main_walls)
 
 
 # Tabs für die jeweiligen Flächen und die 
 # Personen
 
-for tab, name in zip(tabs, tabs_list):
+for tab, name in zip(tabs, st.session_state.main_walls):
     with tab:
-    
+        print(name)
         if name == 'Personen':
             col_11, col_12 = st.columns(2)
 
