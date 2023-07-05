@@ -23,7 +23,7 @@ peopleDescription = []
 main_walls = []
 
 if 'main_walls' not in st.session_state:
-    '''creating List for main_walls in current session, so it can be updated by add button'''
+    #'''creating List for main_walls in current session, so it can be updated by add button'''
     st.session_state.main_walls = ['Grundfläche 1']
 
 
@@ -64,13 +64,14 @@ subAreas = 0
 numPeople = 1 # Anzahl der Personengruppen im Raum 
 
 if 'Personen' not in st.session_state.main_walls:
-    '''check if Personen already exist, otherwise there are more personen tabs'''
+    #'''check if Personen already exist, otherwise there are more personen tabs'''
     st.session_state.main_walls.extend(tabs_list)
 
 for key in st.session_state.main_walls:
-    sub_surfaces[key] = []
-    sub_materials[key] = []
-    if not key == 'Personen':
+     if not key == 'Personen':
+        #making sure, that Person is no key for the lists    
+        sub_surfaces[key] = []
+        sub_materials[key] = []
         main_surfaces[key] = 0
 
 tabs = st.tabs(st.session_state.main_walls)
