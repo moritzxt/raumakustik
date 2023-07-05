@@ -1,5 +1,5 @@
 raumakustik
-=====
+===========
 
 .. automodule:: room_calc
    :members:
