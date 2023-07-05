@@ -70,6 +70,7 @@ numPeople = 1 # Anzahl der Personengruppen im Raum
 st.session_state.main_walls.extend(tabs_list)
 
 for key in st.session_state.main_walls:
+    print(key)
     sub_surfaces[key] = []
     sub_materials[key] = []
     main_surfaces[key] = None
@@ -191,7 +192,7 @@ for ind, octaveBand in enumerate(alpha):
         except:
             alpha[octaveBand].append(None)
 
-sub_alpha = sub_alpha_dict(main_walls)
+sub_alpha = sub_alpha_dict(st.session_state.main_walls)
 
 for ind, octaveBand in enumerate(sub_alpha):
     for wall in sub_alpha[octaveBand]:
