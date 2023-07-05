@@ -41,12 +41,13 @@ def read_db(filename):
                 dict_cat_mat[key] = [float(v) for v in values]
 
             except:
+                #dict_db2 = {}
                 #dict_db = {}
                 category = row[1]
                 values = row[2:]
-                dict_db2[key] = [float(v) for v in values]
-                dict_cat_mat[category] = dict_db2
-
+                if category not in dict_cat_mat:
+                    dict_cat_mat.update({category: dict()})
+                dict_cat_mat[category].update({key: [float(v) for v in values]})
         file.close()
     return dict_cat_mat
 
