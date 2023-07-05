@@ -55,4 +55,9 @@ Melaminharz-Schaumstoff, Rohdichte 8 kg/m3 bis 10 kg/m3, 50 mm dick;Absorber;0.1
 40 mm Mineralwollmatte (20 kg/m3), mit Loch-blechabdeckung (18 %);Absorber;0.11;0.36;0.69;0.95;0.81;0.70
 Gipsplatte 9,5 mm, 8/18 Rundlochung, 15% Loch-flächenanteil, mit Faservlies hinterlegt, Abstand 100 mm;Absorber;0.12;0.28;0.75;0.50;0.38;0.30
 Gipsplatte, geschlitzt, 8,8 % offene Fläche, mit Faservlies hinterlegt, Abstand 100 mm;Absorber;0.11;0.28;0.66;0.38;0.28;0.30
-gelochte Langfeld-Metallkassette, 20 % Lochflächen-anteil, 3 mm Lochdurchmesser, Akustikfilz, 300 mm Abstand;Absorber;0.38;0.65;0.59;0.75;0.77;0.61 
+gelochte Langfeld-Metallkassette, 20 % Lochflächen-anteil, 3 mm Lochdurchmesser, Akustikfilz, 300 mm Abstand;Absorber;0.38;0.65;0.59;0.75;0.77;0.61
+test;user;0.01;0.02;0.03;0.04;0.05;0.06
+test2;Wand;0.01;0.02;0.03;0.04;0.05;0.06
+test2;Wand;0.01;0.02;0.03;0.04;0.05;0.06
+test2;Boden;0.01;0.02;0.03;0.04;0.05;0.06
+test2;Boden;0.01;0.02;0.03;0.04;0.05;0.06
