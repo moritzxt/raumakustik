@@ -3,14 +3,14 @@ import pandas as pd
 from utils import read_db, add_row
 # from streamlit_js_eval import streamlit_js_eval 
 
-dict_alpha = read_db('Datenbank_DIN18041.csv')
+material_dict = read_db('Datenbank_DIN18041.csv')
 dataframe =  pd.read_csv('Datenbank_DIN18041.csv',sep = ';')
 st.set_page_config(page_title= 'Database', layout='wide')
 st.title('Materialdatenbank')
 st.divider()
 st.dataframe(dataframe, use_container_width= True)
 
-material_dict = read_db('Datenbank_Absorptionsgrade.csv')
+#material_dict = read_db('Datenbank_Absorptionsgrade.csv')
 
 
 def valuesAreValid(values):
@@ -35,11 +35,17 @@ with st.container():
             'Neuer Eintrag wird erst angezeitgt,'
             ' nachdem die Seite einmale neu geladen wurde.')
     st.divider()
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
+
     with col1:
         key_add = st.text_input("Key")
+
     with col2:
+        category = st.selectbox(label= 'Kategorie', options=material_dict.keys())
+
+    with col3:
         value_add = st.text_input("Value")
+
     button = st.button("Add")
     if button:
         if key_add and value_add:
@@ -48,7 +54,7 @@ with st.container():
                 if (valuesAreValid(values)):
                     material_dict[key_add] = values
                     list_add = [key_add]
-                    list_add.append('user')
+                    list_add.append(category)
                     for v in material_dict[key_add]:
                         list_add.append(v)
                     add_row(list_add)
@@ -56,7 +62,8 @@ with st.container():
                     # automatischer reload --> kommt mit neuen requirements und ungetestet
                     #streamlit_js_eval(js_expressions="parent.window.location.reload()")
                     # reruns the script -> st.error get displayed gain
-                    # st.experimental_rerun
+                    st.experimental_rerun()
+
                 else:
                     st.error('Das Material konnte der Datenbank nicht hinzugefügt werden.'
                              'Bitte Werte für die sechs Oktavbänder von 125Hz bis 4kHZ eingeben ' 
