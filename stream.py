@@ -21,13 +21,11 @@ sub_materials = {}
 numberOfPeople = []
 peopleDescription = []
 main_walls = []
-#_walls = []
-#if len(main_walls) == 0:
+
 if 'main_walls' not in st.session_state:
+    '''creating List for main_walls in current session, so it can be updated by add button'''
     st.session_state.main_walls = ['Grundfläche 1']
 
-#session_state = st.session_state.get(main_walls = main_walls)
-#    print('True')
 
 with st.container():
     st.title('WebApp for Roomacoustics')
@@ -45,12 +43,14 @@ with st.container():
         vol = st.number_input('Volumen in m³', min_value=min_lim,
                             max_value=max_lim, value=min_lim)
     with col3:
-        #areas = st.number_input('Anzahl der Wandflächen die Sie eingeben möchten'
-        #                        ,min_value=1, step=1)
+
         wall_name = st.text_input('Name der Wandfläche', value='Wand 1')
         
         if st.button('Add'):
-            st.session_state.main_walls.append(wall_name)
+            if 'Grundfläche 1' in st.session_state.main_walls:
+                st.session_state.main_walls = [wall_name]
+            else:
+                st.session_state.main_walls.append(wall_name)
 
 
     with col4:
@@ -58,22 +58,20 @@ with st.container():
         if st.checkbox(label='Personen', value= False, key='personen', label_visibility='visible'):
             tabs_list = ['Personen']
 
-    
-#area =  np.linspace(0,int(areas),int(areas)+1)
 
-
-
-#main_walls = [f'Grundflaeche {i+1}' for i in range(areas)]
 subAreas = 0
 
 numPeople = 1 # Anzahl der Personengruppen im Raum 
-st.session_state.main_walls.extend(tabs_list)
+
+if 'Personen' not in st.session_state.main_walls:
+    '''check if Personen already exist, otherwise there are more personen tabs'''
+    st.session_state.main_walls.extend(tabs_list)
 
 for key in st.session_state.main_walls:
-    print(key)
     sub_surfaces[key] = []
     sub_materials[key] = []
-    main_surfaces[key] = None
+    if not key == 'Personen':
+        main_surfaces[key] = 0
 
 tabs = st.tabs(st.session_state.main_walls)
 
@@ -83,7 +81,6 @@ tabs = st.tabs(st.session_state.main_walls)
 
 for tab, name in zip(tabs, st.session_state.main_walls):
     with tab:
-        print(name)
         if name == 'Personen':
             col_11, col_12 = st.columns(2)
 
@@ -191,6 +188,7 @@ for ind, octaveBand in enumerate(alpha):
             alpha[octaveBand].append(material_dict_flattened[material][ind])
         except:
             alpha[octaveBand].append(None)
+            print('Appended None')
 
 sub_alpha = sub_alpha_dict(st.session_state.main_walls)
 
@@ -212,10 +210,11 @@ st.divider()
 tab1, tab2 = st.tabs(['Nachhallzeit', 'Vergleich der Nachhallzeit'])
 
 with tab1:
-    fig1 = raum.plot_reverberationTime()
-    st.plotly_chart(fig1)
+    if st.button('Berechne Nachhallzeit1'):
+        fig1 = raum.plot_reverberationTime()
+        st.plotly_chart(fig1)
 
 with tab2:
-    fig2 = raum.plot_reverberationTime_ratio()
-
-    st.plotly_chart(fig2)
+    if st.button('Berechne Nachhallzeit'):
+        fig2 = raum.plot_reverberationTime_ratio()
+        st.plotly_chart(fig2)

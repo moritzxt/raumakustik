@@ -62,7 +62,7 @@ with st.container():
                     # automatischer reload --> kommt mit neuen requirements und ungetestet
                     #streamlit_js_eval(js_expressions="parent.window.location.reload()")
                     # reruns the script -> st.error get displayed gain
-                    st.experimental_rerun()
+                    #st.experimental_rerun()
 
                 else:
                     st.error('Das Material konnte der Datenbank nicht hinzugefügt werden.'
