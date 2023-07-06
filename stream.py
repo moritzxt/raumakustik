@@ -190,8 +190,9 @@ for ind, octaveBand in enumerate(alpha):
         except:
             alpha[octaveBand].append(None)
             print('Appended None')
+walls = [i for i in st.session_state.main_walls if 'Personen' not in i]
 
-sub_alpha = sub_alpha_dict(st.session_state.main_walls)
+sub_alpha = sub_alpha_dict(walls)
 
 for ind, octaveBand in enumerate(sub_alpha):
     for wall in sub_alpha[octaveBand]:
