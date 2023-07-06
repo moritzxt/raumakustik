@@ -26,7 +26,7 @@ def write_session_key(session):
         json.dump({'key': session}, init)
 
 def init_starting_values(json_data,material_dict,person_dict):
-    if not (json_data == {}):
+    #if not (json_data == {}):
         #for key, value in usecase:
         #    if json_data['usecase'] == 
         usecase_init = json_data['usecase']         #could be done more elegantly, might change if i ever bother
@@ -38,43 +38,82 @@ def init_starting_values(json_data,material_dict,person_dict):
             usecase_index = 2
         elif usecase_init == 'Unterricht/Kommunikation':
             usecase_index = 3
-        elif usecase_init == 'Sport':
+        elif usecase_init == 'Unterricht/Kommunikation inklusiv':
             usecase_index = 4
+        elif usecase_init == 'Sport':
+            usecase_index = 5
+        else:
+            usecase_init = 'Musik'
+            usecase_index = 0
 
-        volume_init = json_data['volume']
-        number_walls_init = json_data['number_walls']
+        if 'volume' in json_data:
+            volume_init = json_data['volume']
+        else:
+            volume_init = 30
+        
+        if 'number_walls' in json_data:
+            number_walls_init = json_data['number_walls']
+        else:
+            number_walls_init = 1
         area_init = []
+        category_init = []
+        category_init_string = []
         material_init = []
         material_init_string = []
         number_subareas_init = []
+        subarea_area_init = []
+        subarea_category_init = []
+        subarea_category_init_string = []
         subarea_material_init = []
         subarea_material_init_string = []
     
         #fill area and material data for existing walls
         for i in range(number_walls_init):
+            subarea_area_init.append([])
+            subarea_category_init.append([])
+            subarea_category_init_string.append([])
             subarea_material_init.append([])
             subarea_material_init_string.append([])
             area_init.append(json_data['wall' + str(i+1)]['area'])
+            category_init_string.append(json_data['wall' + str(i+1)]['category'])
             material_init_string.append(json_data['wall' + str(i+1)]['material'])
             number_subareas_init.append(json_data['wall' + str(i+1)]['number_subareas'])
 
-            for j in range(len(list(material_dict))):
-                if list(material_dict)[j] == json_data['wall' + str(i+1)]['material']:   #what happens when key aint found?
-                    material_init.append(j)
+            for j in range(len(material_dict.keys())):
+                if list(material_dict.keys())[j] == json_data['wall' + str(i+1)]['category']:
+                    category_init.append(j)
+                    #print(category_init)
+            for j in range(len(category_init)):
+                for k in range(len(list(material_dict[f'{category_init_string[j]}'].keys()))): 
+                    if list(material_dict[f'{category_init_string[j]}'].keys())[k] == json_data['wall' + str(i+1)]['material']:   #what happens when key aint found? material_dict[f'{category}'].keys()
+                        material_init.append(k)
+
             for j in range(number_subareas_init[i]):
+                subarea_category_init_string[i].append(json_data['wall' + str(i+1)]['subarea' + str(j+1)]['category'])
                 #subarea_material_init_string[i].append(json_data(['wall' + str(i+1)]['subarea' + str(j+1)]['material']))
-                for k in range(len(list(material_dict))):
-                    if list(material_dict)[k] == json_data['wall' + str(i+1)]['subarea' + str(j+1)]['material']:
-                        subarea_material_init[i].append(k)
+                subarea_area_init[i].append(json_data['wall' + str(i+1)]['subarea' + str(j+1)]['area'])
+                for n in range(len(material_dict.keys())):
+                    if list(material_dict.keys())[n] == json_data['wall' + str(i+1)]['subarea' + str(j+1)]['category']:
+                        subarea_category_init[i].append(n)
+                for l in range(len(subarea_category_init[i])):
+                    for k in range(len(list(material_dict[f'{subarea_category_init_string[i][l]}'].keys()))):
+                        if list(material_dict[f'{subarea_category_init_string[i][l]}'].keys())[k] == json_data['wall' + str(i+1)]['subarea' + str(j+1)]['material']:
+                            subarea_material_init[i].append(k)
                 
         #then set data to defaults for 100 next indices, to allow adding more walls - so limiting the number of walls to 100 would be smart
         for i in range(100):
             area_init.append(1)
+            category_init.append(0)
+            category_init_string.append(list(material_dict)[0])
             material_init_string.append(list(material_dict)[0])
             material_init.append(0)
             number_subareas_init.append(0)
+            subarea_area_init.append([])
+            subarea_category_init.append([])
             subarea_material_init.append([])
             for j in range(100):
+                subarea_area_init[i].append(1)
+                subarea_category_init[i].append(0)
                 subarea_material_init[i].append(0)
                 #subarea_material_init_string[i].append(list(material_dict)[0])
 
@@ -97,42 +136,64 @@ def init_starting_values(json_data,material_dict,person_dict):
             type_init_string.append(list(person_dict)[0])
             type_init.append(0)
     #... if there isnt a last session, set starting positions to defaults
-    else:
-        usecase_init = 'Musik'
-        usecase_index = 0
-        volume_init = 30
-        number_walls_init = 1
-        area_init = []
-        material_init = []
-        material_init_string = []
-        persons_init = False
-        amount_init = []
-        type_init = []
-        type_init_string = []
-        #material_init_string = {'Walls,hard surfaces average (brick walls, plaster, hard floors, etc.)'}
-        for i in range(100):
-            area_init.append(1)
-            material_init_string.append(list(material_dict)[0])
-            material_init.append(0)
-            amount_init.append(1)
-            type_init_string.append(list(person_dict)[0])
-            type_init.append(0)
+    #else:                                                                                           #still be made up to date
+    #    usecase_init = 'Musik'
+    #    usecase_index = 0
+    #    volume_init = 30
+    #    number_walls_init = 1
+    #    area_init = []
+    #    material_init = []
+    #    material_init_string = []
+    #    persons_init = False
+    #    amount_init = []
+    #    type_init = []
+    #    type_init_string = []
+    #    #material_init_string = {'Walls,hard surfaces average (brick walls, plaster, hard floors, etc.)'}
+    #    for i in range(100):
+    #       area_init.append(1)
+    #       material_init_string.append(list(material_dict)[0])
+    #       material_init.append(0)
+    #       amount_init.append(1)
+    #       type_init_string.append(list(person_dict)[0])
+    #       type_init.append(0)
 
 
-    init_data = dict()
-    init_data['usecase'] = usecase_init
-    init_data['usecase_index'] = usecase_index
-    init_data['volume'] = volume_init
-    init_data['number_walls'] = number_walls_init
-    init_data['area'] = area_init
-    init_data['material_string'] = material_init_string
-    init_data['material'] = material_init
-    init_data['persons'] = persons_init
-    init_data['amount'] = amount_init
-    init_data['type_string'] = type_init_string
-    init_data['type'] = type_init
-    init_data['number_subareas'] = number_subareas_init
-    init_data['sub_material'] = subarea_material_init
-    #init_data['sub_material_string'] = subarea_material_init_string
+        init_data = dict()
+        init_data['usecase'] = usecase_init
+        init_data['usecase_index'] = usecase_index
+        init_data['volume'] = volume_init
+        init_data['number_walls'] = number_walls_init
+        init_data['area'] = area_init
+        init_data['category'] = category_init
+        init_data['category_string'] = category_init_string
+        init_data['material_string'] = material_init_string
+        init_data['material'] = material_init
+        init_data['persons'] = persons_init
+        init_data['amount'] = amount_init
+        init_data['type_string'] = type_init_string
+        init_data['type'] = type_init
+        init_data['number_subareas'] = number_subareas_init
+        init_data['sub_area'] = subarea_area_init
+        init_data['sub_category'] = subarea_category_init
+        init_data['sub_material'] = subarea_material_init
+        #init_data['sub_material_string'] = subarea_material_init_string
 
-    return init_data
+        return init_data
+
+def sync_session(state):
+    with open(state) as jsonkey:
+        json_data = json.load(jsonkey)
+    json_data['usecase'] = st.session_state['usecase']
+    json_data['volume'] = st.session_state['volume']
+    #json_data['number_walls'] = st.session_state['number_walls']
+    with open(state,'w') as jsonkey:
+        json.dump(json_data, jsonkey)
+
+def load_session(state):
+    
+    #read contents of session file
+    with open(state) as jsonkey:
+        json_data = json.load(jsonkey)
+    #set session states to file content
+    for keys in json_data:
+        st.session_state[keys] = json_data[keys]
