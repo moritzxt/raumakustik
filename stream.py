@@ -60,6 +60,10 @@ with st.container():
             if 'Personen' not in st.session_state.main_walls:
                 #'''check if Personen already exist, otherwise there are more personen tabs'''
                 st.session_state.main_walls.insert(0, 'Personen')
+        else:
+            if 'Personen' in st.session_state.main_walls:
+                # delete Personstab if it is deactivated
+                st.session_state.main_walls.pop(0)
 
 
 subAreas = 0
