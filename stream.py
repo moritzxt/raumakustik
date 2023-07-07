@@ -57,15 +57,16 @@ with st.container():
         st.empty()
         if st.checkbox(label='Personen', value= False, key='personen', label_visibility='visible'):
             tabs_list = ['Personen']
+            if 'Personen' not in st.session_state.main_walls:
+                #'''check if Personen already exist, otherwise there are more personen tabs'''
+                st.session_state.main_walls.insert(0, 'Personen')
 
 
 subAreas = 0
 
 numPeople = 1 # Anzahl der Personengruppen im Raum 
 
-if 'Personen' not in st.session_state.main_walls:
-    #'''check if Personen already exist, otherwise there are more personen tabs'''
-    st.session_state.main_walls.extend(tabs_list)
+
 
 for key in st.session_state.main_walls:
      if not key == 'Personen':
