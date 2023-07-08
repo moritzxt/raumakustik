@@ -7,7 +7,7 @@ from utils import basic_dict , read_db, basic_dict_2, add_row, usecase, sub_alph
 import os
 import json
 from streamlit.runtime.scriptrunner.script_run_context import add_script_run_ctx
-from session_utils import write_session_file, load_session_file, write_session_key, init_starting_values, sync_session, load_session, negate_checkbox
+from session_utils import write_session_file, load_session_file, write_session_key, init_starting_values, sync_session, load_session, negate_checkbox, write_json
 
 
 #setup of  page data:
@@ -153,7 +153,9 @@ with st.container():
         #st.write(st.session_state['personen'])
         #checkboxvar = json_data['persons']
         #st.session_state['personen'] = init_data['persons']
-        if st.checkbox(label='Personen', value= init_data['persons'], key='personen', label_visibility='visible', on_change = negate_checkbox, kwargs = {"json_data": json_data, "state": state}):
+        #st.write(init_data['persons'])
+        json_data['persons'] = init_data['persons']
+        if st.checkbox(label='Personen', key='personen', label_visibility='visible', on_change = negate_checkbox, kwargs = {"json_data": json_data, "state": state}):
             tabs_list = ['Personen']
         #json_data['persons'] = checkboxvar
         #st.write(st.session_state['personen'])
@@ -203,9 +205,10 @@ for tab, name in zip(tabs, tabs_list):
             numPeople = st.session_state['add_persons']
             json_data['number_people'] = numPeople
             for i in range(numPeople):
-                json_data['person_type' + str(i+1)] = {}
-                json_data['person_type' + str(i+1)]['amount'] = init_data['amount'][i]
-                json_data['person_type' + str(i+1)]['type'] = init_data['type_string'][i]
+                if 'person_type' + str(i+1) not in json_data:
+                    json_data['person_type' + str(i+1)] = {}
+                #json_data['person_type' + str(i+1)]['amount'] = init_data['amount'][i]
+                #json_data['person_type' + str(i+1)]['type'] = init_data['type_string'][i]
             with open(state,'w') as jsonkey:
                 json.dump(json_data, jsonkey)
 
@@ -216,11 +219,11 @@ for tab, name in zip(tabs, tabs_list):
                     #if f'people{num}' not in st.session_state:   {"amount": init_data['amount'][i], "type": init_data['type_string'][i]}
                     #    st.session_state[f'people{num}'] = int(init_data['amount'][0])
                     #st.session_state[f'people{num}'] = init_data['amount'][num]
-
+                   
                     with col_11:
                         numberOfPeople.append(st.number_input(
-                                f"Anzahl an Personen im Raum", step = 1, key = f'people{num}', value=init_data['amount'][num-1]))
-                        st.write(st.session_state[f'people{num}'])
+                                f"Anzahl an Personen im Raum", step = 1, key = f'people{num}', value=init_data['amount'][num-1], on_change = write_json, kwargs = {"json_data": json_data, "state": state, "num":num}))
+                        st.write(num)
                         
                     with col_12:
                         peopleDescription.append(st.selectbox(label =  f'Beschreibung',
@@ -232,7 +235,7 @@ for tab, name in zip(tabs, tabs_list):
                     
                     #init_data['amount'][num] = st.session_state[f'people{num}']
 
-                    json_data['person_type' + str(num+1)]['amount'] = st.session_state[f'people{num}']
+                    #json_data['person_type' + str(num+1)]['amount'] = st.session_state[f'people{num}']
                     json_data['person_type' + str(num+1)]['type'] = peopleDescription[num]
                     with open(state,'w') as jsonkey:
                         json.dump(json_data, jsonkey)

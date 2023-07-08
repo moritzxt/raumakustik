@@ -221,13 +221,20 @@ def load_session(state):
     for number in range(0,100):
         if f'Grundflaeche {number}' in st.session_state or f'wall{number}' in json_data:
             st.session_state[f'subAreasGrundflaeche {number}'] = json_data['wall' + str(number)]['number_subareas']
-        #if f'person_type{number+1}' in json_data:
-        #    st.session_state[f'people{number}'] = json_data['person_type' + str(number+1)]['amount']
+        if f'person_type{number+1}' in json_data:
+            st.session_state[f'people{number}'] = json_data['person_type' + str(number+1)]['amount']
         #    st.session_state[f'Beschreibung{number}'] = json_data['person_type' + str(number+1)]['type']
-    st.session_state['personen'] = json_data['persons']
-    st.session_state['add_persons'] = json_data['number_people']
+    if 'persons' in json_data:
+        st.session_state['personen'] = json_data['persons']
+    if 'number_people' in json_data:
+        st.session_state['add_persons'] = json_data['number_people']
 
 def negate_checkbox(json_data, state):
     json_data['persons'] = not json_data['persons']
+    with open(state,'w') as jsonkey:
+        json.dump(json_data, jsonkey)
+
+def write_json(json_data,state,num):
+    json_data['person_type' + str(num+1)]['amount'] = st.session_state[f'people{num}']
     with open(state,'w') as jsonkey:
         json.dump(json_data, jsonkey)
