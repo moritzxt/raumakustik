@@ -7,7 +7,7 @@ from utils import basic_dict , read_db, basic_dict_2, add_row, usecase, sub_alph
 import os
 import json
 from streamlit.runtime.scriptrunner.script_run_context import add_script_run_ctx
-from session_utils import write_session_file, load_session_file, write_session_key, init_starting_values, sync_session, load_session
+from session_utils import write_session_file, load_session_file, write_session_key, init_starting_values, sync_session, load_session, negate_checkbox
 
 
 #setup of  page data:
@@ -68,7 +68,11 @@ with st.container():
     st.divider()
     st.header('Benötigt werden das Raumvolumen, die Anzahl'
         ' der Wände, deren Fläche, sowie das Material der Wandoberfläche')
-    st.write(init_data['sub_area'])       #for debugging purposes
+    #testvar = []
+    #for keys in st.session_state:
+    #    testvar.append([keys, st.session_state[keys]])
+    #st.write(testvar)
+    #st.write(init_data['sub_area'])       #for debugging purposes
     #st.write(state)
     #import random
     #def _update_slider(value):
@@ -96,6 +100,9 @@ with st.container():
         #set boundaries of volume for usecase
         min_lim =  min(usecase[use])
         max_lim =  max(usecase[use])
+
+        if 'volume' not in st.session_state:
+            st.session_state['volume'] = init_data['volume']
         #check if initial values are in limits and replace them if they aren't
         if init_data['volume'] < min_lim:
             volume_new_init = min_lim
@@ -109,7 +116,7 @@ with st.container():
             st.session_state['volume'] = max_lim
 
     with col2:
-        st.write(st.session_state['volume'])
+        #st.write(st.session_state['volume'])
         #input of volume
         vol = st.number_input('Volumen in m³', min_value=min_lim,
                             max_value=max_lim,  key='volume', on_change = sync_session, kwargs ={"state": state})
@@ -117,12 +124,16 @@ with st.container():
         json_data['volume'] = vol
         with open(state,'w') as jsonkey:
             json.dump(json_data, jsonkey)
-        st.write(st.session_state['volume'])
+        #st.write(st.session_state['volume'])
         #sync_session(state)
 
         
     with col3:
+        if 'number_walls' not in st.session_state:
+            st.session_state['number_walls'] = init_data['number_walls']
         #input of amount of walls
+        #areas = st.number_input('Anzahl der Wandflächen die Sie eingeben möchten'
+        #                        ,min_value=1, step=1, key = 'number_walls')
         areas = st.number_input('Anzahl der Wandflächen die Sie eingeben möchten'
                                 ,min_value=1, step=1, value=init_data['number_walls'])
         #areas = st.number_input('Anzahl der Wandflächen die Sie eingeben möchten'
@@ -139,10 +150,18 @@ with st.container():
             json.dump(json_data, jsonkey)
     with col4:
         st.empty()
+        #st.write(st.session_state['personen'])
+        #checkboxvar = json_data['persons']
         #st.session_state['personen'] = init_data['persons']
-        if st.checkbox(label='Personen', value= False, key='personen', label_visibility='visible'):
+        if st.checkbox(label='Personen', value= init_data['persons'], key='personen', label_visibility='visible', on_change = negate_checkbox, kwargs = {"json_data": json_data, "state": state}):
             tabs_list = ['Personen']
-        json_data['persons'] = st.session_state['personen']
+        #json_data['persons'] = checkboxvar
+        #st.write(st.session_state['personen'])
+    #json_data['persons'] = not json_data['persons']
+        #json_data['persons'] = st.session_state['personen']
+    
+    #st.write(json_data['persons'])
+    
 
 
 
@@ -173,8 +192,8 @@ for tab, name in zip(tabs, tabs_list):
         if name == 'Personen':
             col_11, col_12 = st.columns(2)
 
-            #if 'add_persons' not in st.session_state:
-            st.session_state['add_persons'] = numPeople
+            if 'add_persons' not in st.session_state:
+                st.session_state['add_persons'] = numPeople
 
             if st.button('Add Personen', key ='button_add_persons'):
                 st.session_state['add_persons'] += 1
@@ -184,6 +203,7 @@ for tab, name in zip(tabs, tabs_list):
             numPeople = st.session_state['add_persons']
             json_data['number_people'] = numPeople
             for i in range(numPeople):
+                json_data['person_type' + str(i+1)] = {}
                 json_data['person_type' + str(i+1)]['amount'] = init_data['amount'][i]
                 json_data['person_type' + str(i+1)]['type'] = init_data['type_string'][i]
             with open(state,'w') as jsonkey:
@@ -195,19 +215,32 @@ for tab, name in zip(tabs, tabs_list):
                     #st.session_state[f'Beschreibung{num}'] = 
                     #if f'people{num}' not in st.session_state:   {"amount": init_data['amount'][i], "type": init_data['type_string'][i]}
                     #    st.session_state[f'people{num}'] = int(init_data['amount'][0])
+                    #st.session_state[f'people{num}'] = init_data['amount'][num]
+
                     with col_11:
                         numberOfPeople.append(st.number_input(
-                                f"Anzahl an Personen im Raum", step = 1, key = f'people{num}'))
+                                f"Anzahl an Personen im Raum", step = 1, key = f'people{num}', value=init_data['amount'][num-1]))
+                        st.write(st.session_state[f'people{num}'])
+                        
                     with col_12:
                         peopleDescription.append(st.selectbox(label =  f'Beschreibung',
-                                                            key=f'Beschreibung{num}',options=person_dict.keys(), index = init_data['type'][num]))  
+                                                            key=f'Beschreibung{num}',options=person_dict.keys(), index = init_data['type'][num])) 
+                        
+                        #with open(state,'w') as jsonkey:
+                        #    json.dump(json_data, jsonkey)
+                        
+                    
+                    #init_data['amount'][num] = st.session_state[f'people{num}']
 
-
-                    #json_data['person_type' + str(num+1)]['amount'] = st.session_state[f'people{num}'] 
-                    json_data['person_type' + str(num+1)]['amount'] = numberOfPeople[num]
+                    json_data['person_type' + str(num+1)]['amount'] = st.session_state[f'people{num}']
                     json_data['person_type' + str(num+1)]['type'] = peopleDescription[num]
                     with open(state,'w') as jsonkey:
                         json.dump(json_data, jsonkey)
+                    #json_data['person_type' + str(num+1)]['amount'] = st.session_state[f'people{num}'] 
+                    #json_data['person_type' + str(num+1)]['amount'] = numberOfPeople[num]
+                    #json_data['person_type' + str(num+1)][ ]
+                    
+                    
             
             if st.button('Remove Personen', key='remove_button_persons'):
                 if st.session_state['add_persons'] > 1 and len(peopleDescription) > 0:
@@ -215,6 +248,9 @@ for tab, name in zip(tabs, tabs_list):
                     peopleDescription.pop()
                     numberOfPeople.pop()
                     #st.experimental_rerun()
+                    json_data['number_people'] = st.session_state[f'add_persons']
+                    with open(state,'w') as jsonkey:
+                        json.dump(json_data, jsonkey)  
      
 
         else:
@@ -228,7 +264,7 @@ for tab, name in zip(tabs, tabs_list):
 
 
                 if f'subAreas{name}' not in st.session_state:
-                        st.session_state[f'subAreas{name}'] = init_data['number_subareas'][number]
+                    st.session_state[f'subAreas{name}'] = init_data['number_subareas'][number]          #with this only one subarea is possible, but that one works just as intended
                 con_1 = st.container()
                 con_2 = st.container()
 
@@ -249,7 +285,7 @@ for tab, name in zip(tabs, tabs_list):
                     #save currenty wall area in json
                     #for i in range(int(areas)):
                     json_data['wall' + str(number)]['area'] = main_surfaces[name]
-                    json_data['wall' + str(number)]['category'] = category
+                    json_data['wall' + str(number)]['category'] = st.session_state[f'{name}']
                     json_data['wall' + str(number)]['material'] = main_materials[number-1]
                     with open(state,'w') as jsonkey:
                         json.dump(json_data, jsonkey)
@@ -259,7 +295,7 @@ for tab, name in zip(tabs, tabs_list):
                     st.divider()
                     col_1, col_2, col_3 = st.columns(3)
 
-                    subAreas = init_data['number_subareas'][number]
+                    #subAreas = init_data['number_subareas'][number]
 
                     if st.button('Add Subwandfläche', key = f'Button subArea{subAreas} {name}'):
                         st.session_state[f'subAreas{name}'] += 1
@@ -328,7 +364,10 @@ for tab, name in zip(tabs, tabs_list):
                             st.session_state[f'subAreas{name}'] -= 1
                             sub_materials[name].pop()
                             sub_surfaces[name].pop()
-                            st.experimental_rerun()
+                            #st.experimental_rerun()
+                            json_data['wall' + str(number)]['number_subareas'] = st.session_state[f'subAreas{name}']
+                            with open(state,'w') as jsonkey:
+                                json.dump(json_data, jsonkey)  
                                 
 #with st.container():
     #col_1, col_2 = st.columns(2)
