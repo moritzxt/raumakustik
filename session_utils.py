@@ -26,11 +26,9 @@ def write_session_key(session):
         json.dump({'key': session}, init)
 
 def init_starting_values(json_data,material_dict,person_dict):
-    #if not (json_data == {}):
-        #for key, value in usecase:
-        #    if json_data['usecase'] == 
+        #initialize usecase init data. if it doesnt exist yet, set to default
         if 'usecase' in json_data:
-            usecase_init = json_data['usecase']         #could be done more elegantly, might change if i ever bother
+            usecase_init = json_data['usecase']
             if usecase_init == 'Musik':
                 usecase_index = 0
             elif usecase_init == 'Sprache/Vortrag':
@@ -46,13 +44,13 @@ def init_starting_values(json_data,material_dict,person_dict):
         else:
             usecase_init = 'Musik'
             usecase_index = 0
-
+        #initialize volume init data. if it doesnt exist yet, set to default
         if 'volume' in json_data:
             volume_init = json_data['volume']
         else:
             volume_init = usecase[usecase_init]
             volume_init = volume_init[0]
-        
+        #initialize walls init data. if it doesnt exist yet, set to default
         if 'number_walls' in json_data:
             number_walls_init = json_data['number_walls']
             area_init = []
@@ -82,7 +80,7 @@ def init_starting_values(json_data,material_dict,person_dict):
                 for j in range(len(material_dict.keys())):
                     if list(material_dict.keys())[j] == json_data['wall' + str(i+1)]['category']:
                         category_init.append(j)
-                        #print(category_init)
+
                 for j in range(len(category_init)):
                     for k in range(len(list(material_dict[f'{category_init_string[j]}'].keys()))): 
                         if list(material_dict[f'{category_init_string[j]}'].keys())[k] == json_data['wall' + str(i+1)]['material']:   #what happens when key aint found? material_dict[f'{category}'].keys()
@@ -90,7 +88,6 @@ def init_starting_values(json_data,material_dict,person_dict):
 
                 for j in range(number_subareas_init[i]):
                     subarea_category_init_string[i].append(json_data['wall' + str(i+1)]['subarea' + str(j+1)]['category'])
-                    #subarea_material_init_string[i].append(json_data(['wall' + str(i+1)]['subarea' + str(j+1)]['material']))
                     subarea_area_init[i].append(json_data['wall' + str(i+1)]['subarea' + str(j+1)]['area'])
                     for n in range(len(material_dict.keys())):
                         if list(material_dict.keys())[n] == json_data['wall' + str(i+1)]['subarea' + str(j+1)]['category']:
@@ -128,14 +125,13 @@ def init_starting_values(json_data,material_dict,person_dict):
                 subarea_area_init[i].append(1)
                 subarea_category_init[i].append(0)
                 subarea_material_init[i].append(0)
-                #subarea_material_init_string[i].append(list(material_dict)[0])
 
-        
+        #initialize person init data. if it doesnt exist yet, set to defaults
         if 'persons' in json_data:
             persons_init = json_data['persons']
         else:
             persons_init = False
-
+        #initialize number of person types init data. if it doesnt exist yet, set to defaults
         if 'number_people' in json_data:
             number_people_init = json_data['number_people']
         else:
@@ -156,29 +152,8 @@ def init_starting_values(json_data,material_dict,person_dict):
             amount_init.append(1)
             type_init_string.append(list(person_dict)[0])
             type_init.append(0)
-    #... if there isnt a last session, set starting positions to defaults
-    #else:                                                                                           #still be made up to date
-    #    usecase_init = 'Musik'
-    #    usecase_index = 0
-    #    volume_init = 30
-    #    number_walls_init = 1
-    #    area_init = []
-    #    material_init = []
-    #    material_init_string = []
-    #    persons_init = False
-    #    amount_init = []
-    #    type_init = []
-    #    type_init_string = []
-    #    #material_init_string = {'Walls,hard surfaces average (brick walls, plaster, hard floors, etc.)'}
-    #    for i in range(100):
-    #       area_init.append(1)
-    #       material_init_string.append(list(material_dict)[0])
-    #       material_init.append(0)
-    #       amount_init.append(1)
-    #       type_init_string.append(list(person_dict)[0])
-    #       type_init.append(0)
 
-
+        #put all the init data into dictionary and return
         init_data = dict()
         init_data['usecase'] = usecase_init
         init_data['usecase_index'] = usecase_index
@@ -197,21 +172,20 @@ def init_starting_values(json_data,material_dict,person_dict):
         init_data['sub_area'] = subarea_area_init
         init_data['sub_category'] = subarea_category_init
         init_data['sub_material'] = subarea_material_init
-        #init_data['sub_material_string'] = subarea_material_init_string
 
         return init_data
 
 def sync_session(state):
+    #used to sync the session states to json file
     with open(state) as jsonkey:
         json_data = json.load(jsonkey)
     json_data['usecase'] = st.session_state['usecase']
     json_data['volume'] = st.session_state['volume']
-    #json_data['number_walls'] = st.session_state['number_walls']
     with open(state,'w') as jsonkey:
         json.dump(json_data, jsonkey)
 
 def load_session(state):
-    
+    #used to set necessary session states to starting values
     #read contents of session file
     with open(state) as jsonkey:
         json_data = json.load(jsonkey)
@@ -223,18 +197,19 @@ def load_session(state):
             st.session_state[f'subAreasGrundflaeche {number}'] = json_data['wall' + str(number)]['number_subareas']
         if f'person_type{number+1}' in json_data:
             st.session_state[f'people{number}'] = json_data['person_type' + str(number+1)]['amount']
-        #    st.session_state[f'Beschreibung{number}'] = json_data['person_type' + str(number+1)]['type']
     if 'persons' in json_data:
         st.session_state['personen'] = json_data['persons']
     if 'number_people' in json_data:
         st.session_state['add_persons'] = json_data['number_people']
 
 def negate_checkbox(json_data, state):
+    #used so that persons checkbox works properly
     json_data['persons'] = not json_data['persons']
     with open(state,'w') as jsonkey:
         json.dump(json_data, jsonkey)
 
 def write_json(json_data,state,num):
+    #used so that person inputs work properly with json
     json_data['person_type' + str(num+1)]['amount'] = st.session_state[f'people{num}']
     with open(state,'w') as jsonkey:
         json.dump(json_data, jsonkey)
