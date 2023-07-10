@@ -1,10 +1,38 @@
-.. RaumakustikApp documentation master file
+Raumakustik App
+===============
 
-Welcome to Raumakustik App's documentation!
-===========================================
+short description...
+
+
+some images
+
+
+Content
+========
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
+   :caption: Main:
+
+   self
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Getting Started:
+
+   setup
+   usage
+
+.. toctree::
+   :maxdepth: 1
    :caption: Module:
 
-   raumakustik
+   room_calc
+   utils
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Documentation of calculations
+   
+   calc_docs
+   

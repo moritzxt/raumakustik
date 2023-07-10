@@ -18,8 +18,8 @@ sys.path.insert(0, os.path.abspath('../'))
 # -- Project information -----------------------------------------------------
 
 project = 'RaumakustikApp'
-copyright = '2023, ...'
-author = '...'
+copyright = '2023, Noah Jens, Moritz Thömen, Flora Henning, Malte Cohrt​'
+author = 'Noah Jens, Moritz Thömen, Flora Henning, Malte Cohrt​'
 
 # The full version, including alpha/beta/rc tags
 release = '0.1'
@@ -31,7 +31,9 @@ release = '0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-'sphinx.ext.autodoc'
+'sphinx.ext.autodoc',
+'sphinx.ext.autosummary',
+'sphinx_rtd_theme'
 ]
 
 autodoc_default_options = {
@@ -61,4 +63,5 @@ html_theme = 'alabaster'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
+html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
