@@ -23,7 +23,7 @@ class room:
         :type sub_surface: dict of str: list of number
         
         :param alpha: Dictionary with octave bands as keys and lists of absorption coefficients of main surfaces as values
-        :type: dict of str: list of float
+        :type alpha: dict of str: list of float
         
         :param sub_alpha: Dictionary of Dictionarys. With octave bands as first keys, main surfaces as second keys and lists of absorption coefficients of sub surfaces as values
         :type sub_alpha: dict of str: dict of str: list of float

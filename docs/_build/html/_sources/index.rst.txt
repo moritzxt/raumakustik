@@ -1,22 +1,10 @@
-.. RaumakustikApp documentation master file, created by
-   sphinx-quickstart on Tue Jun 27 21:10:27 2023.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. RaumakustikApp documentation master file
 
-Welcome to RaumakustikApp's documentation!
-==========================================
+Welcome to Raumakustik App's documentation!
+===========================================
 
 .. toctree::
    :maxdepth: 2
-   :caption: raumakustikModule:
+   :caption: Module:
 
    raumakustik
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

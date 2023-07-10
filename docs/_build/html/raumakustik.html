@@ -15,7 +15,7 @@
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Welcome to RaumakustikApp’s documentation!" href="index.html" />
+    <link rel="prev" title="Welcome to Raumakustik App’s documentation!" href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -32,62 +32,256 @@
 
           <div class="body" role="main">
             
-  <section id="raumakustik">
-<h1>raumakustik<a class="headerlink" href="#raumakustik" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-room_calc"></span><dl class="py class">
+  <section id="module-room_calc">
+<span id="raumakustik"></span><h1>raumakustik<a class="headerlink" href="#module-room_calc" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
 <dt class="sig sig-object py" id="room_calc.room">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">room_calc.</span></span><span class="sig-name descname"><span class="pre">room</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class inheriting all functions for calculations and making plots.</p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">room_calc.</span></span><span class="sig-name descname"><span class="pre">room</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peopleDescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numberOfPeople</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class inheriting all characteristics of the room as well as calculation and plotting functionality.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="room_calc.room.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peopleDescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numberOfPeople</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor for room object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>volume</strong> (<em>number</em>) – Volume of the room in cubic meters</p></li>
+<li><p><strong>surface</strong> (<em>dict of str: number</em>) – Dictionary with the names of the main surfaces as keys and their areas in square meters as values</p></li>
+<li><p><strong>sub_surface</strong> (<em>dict of str: list of number</em>) – Dictionary with the names of the main surfaces as keys and lists of their subsurface areas in square meters as values</p></li>
+<li><p><strong>alpha</strong> (<em>dict of str: list of float</em>) – Dictionary with octave bands as keys and lists of absorption coefficients of main surfaces as values</p></li>
+<li><p><strong>sub_alpha</strong> (<em>dict of str: dict of str: list of float</em>) – Dictionary of Dictionarys. With octave bands as first keys, main surfaces as second keys and lists of absorption coefficients of sub surfaces as values</p></li>
+<li><p><strong>peopleDescription</strong> (<em>list of str</em>) – List of descriptions of people in the room based on DIN18041</p></li>
+<li><p><strong>numberOfPeople</strong> (<em>list of number</em>) – List of numbers for different kind of people in the room</p></li>
+<li><p><strong>use</strong> (<em>str</em>) – Usecase for the room based on DIN18041</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns a room instance, which handles all calculations</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>class: room</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="room_calc.room.criticalDistance">
 <span class="sig-name descname"><span class="pre">criticalDistance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.criticalDistance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function to calculate the critical distance, where the energy densities of the direct and reflected soundfield are equal. 
-Calculation is made with an approximate formula based on statistical acoustics in a diffuse soundfield.</p>
+<dd><p>Returns the critical distance, at which energy densities of the direct and reflected soundfield are equal. 
+Makes use of an approximate formula based on statistical acoustics in a diffuse soundfield.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>critical distance in meters</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="room_calc.room.equivalentAbsorptionSurface_walls">
+<span class="sig-name descname"><span class="pre">equivalentAbsorptionSurface_walls</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.equivalentAbsorptionSurface_walls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns equivalent absorption surface for the walls by calculating the equivalent absorption surface for every wall and summing them. People and air are not taken into account.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>equivalent absoprtion surface in square meters</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="room_calc.room.equivalentAbsorptionSurface_people">
+<span class="sig-name descname"><span class="pre">equivalentAbsorptionSurface_people</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.equivalentAbsorptionSurface_people" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns equivalent absorption surface for the people in the room based on the number of people and their specification regarding age and position (e.g. standing, sitting).
+Data retrieved from Table A.1 in DIN 18041.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>equivalent absorption surface of the people in the room in square meters</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="room_calc.room.equivalentAbsorptionSurface_air">
+<span class="sig-name descname"><span class="pre">equivalentAbsorptionSurface_air</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.equivalentAbsorptionSurface_air" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns equivalent absorption surface resulting from the dampening in air.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>equivalent absorption surface of the air in square meters</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="room_calc.room.equivalentAbsorptionSurface">
 <span class="sig-name descname"><span class="pre">equivalentAbsorptionSurface</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.equivalentAbsorptionSurface" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function to calculate the equivalent absorption surface.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="room_calc.room.equivalentAbsorptionSurface_people">
-<span class="sig-name descname"><span class="pre">equivalentAbsorptionSurface_people</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peopleDescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numberOfPeople</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.equivalentAbsorptionSurface_people" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function to add equivalent absorption surface based on the number of people in the room and their specification regarding age and position (e.g. standing, sitting).
-Data retrieved from Table A.1 in DIN 18041</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="room_calc.room.plot_reverberationTime">
-<span class="sig-name descname"><span class="pre">plot_reverberationTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.plot_reverberationTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function, which returns a plot of the reverberation time in octave bands.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="room_calc.room.plot_reverberationTime_ratio">
-<span class="sig-name descname"><span class="pre">plot_reverberationTime_ratio</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.plot_reverberationTime_ratio" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function, which returns a plot of the calculated reverberation time in comparison to the wanted reverberation time and the allowed deviations in octave bands.</p>
+<dd><p>Returns sum of all equivalent absorption surfaces (walls, people, air).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>sum of equivalent absorption surfaces in square meters</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="room_calc.room.reverberationTime">
 <span class="sig-name descname"><span class="pre">reverberationTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.reverberationTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function to calculate the reverberation time.</p>
+<dd><p>Returns the reverberation time calculated by the formula of Sabine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>reverberation time in s</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="room_calc.room.reverberationTime_ratio">
 <span class="sig-name descname"><span class="pre">reverberationTime_ratio</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.reverberationTime_ratio" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function to calculate the ratio of given reverberation time to wanted reverberation time. Wanted reverberation time is based on the rooms use case and its volume.</p>
+<dd><p>Returns the ratio of calculated reverberation time to wanted reverberation time. Wanted reverberation time is based on the rooms use case and its volume.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>ratio calculated to wanted reverberation time</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="room_calc.room.plot_reverberationTime">
+<span class="sig-name descname"><span class="pre">plot_reverberationTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.plot_reverberationTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a plot presenting the reverberation time in octave bands using plotly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>plot of reverberation time</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>plotly figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="room_calc.room.plot_reverberationTime_ratio">
+<span class="sig-name descname"><span class="pre">plot_reverberationTime_ratio</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.plot_reverberationTime_ratio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates presenting the calculated reverberation time in comparison to the wanted reverberation time, also showing the allowed deviations in octave bands using plotly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>plot comparing calculated and wanted reverberation time</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>plotly figure</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
 <span class="target" id="module-utils"></span><dl class="py function">
+<dt class="sig sig-object py" id="utils.basic_dict">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">basic_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utils.basic_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary with the octavebands from 125 Hz to 4 kHz as keys. Values are initialized with zero.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dictionary with the octavebands from 125 Hz to 4 kHz as keys. Values are initialized with zero.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict of str: float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.basic_dict_2">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">basic_dict_2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utils.basic_dict_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary with the octavebands from 125 Hz to 4 kHz as keys. Values are initialized with empty lists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dictionary with the octavebands from 125 Hz to 4 kHz as keys. Values are initialized with empty lists.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict of str: list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.sub_alpha_dict">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">sub_alpha_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key_list_surfaces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.sub_alpha_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary with the octavebands from 125 Hz to 4 kHz as first keys and names of the main surfaces as second keys. Values are initialized with empty lists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key_list_surfaces</strong> (<em>list of str</em>) – list of the names of the main surfaces</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dictionary with the octavebands from 125 Hz to 4 kHz as first keys and names of the main surfaces as second keys. Values are initialized with empty lists.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict of str: dict of str: list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.read_db">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">read_db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.read_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads the csv database and returns a Dictionary. The first key is the category of the material, second key is the material, values are the absorption coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – filepath of csv file</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dictionary of Dictionary. The first key is the category of the material, second key is the material, values are absorption coefficients</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict of str: dict of str: float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="utils.add_row">
 <span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">add_row</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.add_row" title="Permalink to this definition">¶</a></dt>
-<dd><p>Funktion um Daten der Datenbank hinzuzufügen</p>
+<dd><p>Adds an entry (new material) to the database. Takes in a list in which every item represents one column in the csv file e.g. [“material”, “category”, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>list</strong> (<em>list</em>) – List of data representing the new material</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.flatten_dict">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">flatten_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.flatten_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flattens two level dict to a one level dict. Category key will be lost.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dict</strong> (<em>dict of str: dict of str: float</em>) – Dictionary to be flattened</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Flattened dictionary. Category key is lost.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict of str: float</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -109,7 +303,7 @@ Data retrieved from Table A.1 in DIN 18041</p>
 
 
 <h3>Navigation</h3>
-<p class="caption" role="heading"><span class="caption-text">raumakustikModule:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Module:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">raumakustik</a></li>
 </ul>
@@ -118,7 +312,7 @@ Data retrieved from Table A.1 in DIN 18041</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="index.html" title="previous chapter">Welcome to RaumakustikApp’s documentation!</a></li>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to Raumakustik App’s documentation!</a></li>
   </ul></li>
 </ul>
 </div>
