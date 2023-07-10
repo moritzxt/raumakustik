@@ -46,11 +46,17 @@ with st.container():
 
         wall_name = st.text_input('Name der Wandfläche', value='Wand 1')
         
-        if st.button('Add'):
+        if st.button('Hinzufügen'):
             if 'Grundfläche 1' in st.session_state.main_walls:
                 st.session_state.main_walls = [wall_name]
             else:
                 st.session_state.main_walls.append(wall_name)
+        if st.button('Entferne letzte Wand'):
+            if wall_name in st.session_state.main_walls and len(st.session_state.main_walls) > 1:
+                #Removing last Mainwall
+                st.session_state.main_walls.pop()
+
+
 
 
     with col4:
