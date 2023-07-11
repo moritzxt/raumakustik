@@ -84,25 +84,25 @@ def init_starting_values(json_data,material_dict,person_dict):
                 material_init_string.append(json_data['wall' + str(i+1)]['material'])
                 number_subareas_init.append(json_data['wall' + str(i+1)]['number_subareas'])
 
-            #     for j in range(len(material_dict.keys())):
-            #         if list(material_dict.keys())[j] == json_data['wall' + str(i+1)]['category']:
-            #             category_init.append(j)
+                for j in range(len(material_dict.keys())):
+                    if list(material_dict.keys())[j] == json_data['wall' + str(i+1)]['category']:
+                        category_init.append(j)
 
-            #     for j in range(len(category_init)):
-            #         for k in range(len(list(material_dict[f'{category_init_string[j]}'].keys()))): 
-            #             if list(material_dict[f'{category_init_string[j]}'].keys())[k] == json_data['wall' + str(i+1)]['material']:   #what happens when key aint found? material_dict[f'{category}'].keys()
-            #                 material_init.append(k)
+                for j in range(len(category_init)):
+                    for k in range(len(list(material_dict[f'{category_init_string[j]}'].keys()))): 
+                        if list(material_dict[f'{category_init_string[j]}'].keys())[k] == json_data['wall' + str(i+1)]['material']:   #what happens when key aint found? material_dict[f'{category}'].keys()
+                            material_init.append(k)
 
-            #     for j in range(number_subareas_init[i]):
-            #         subarea_category_init_string[i].append(json_data['wall' + str(i+1)]['subarea' + str(j+1)]['category'])
-            #         subarea_area_init[i].append(json_data['wall' + str(i+1)]['subarea' + str(j+1)]['area'])
-            #         for n in range(len(material_dict.keys())):
-            #             if list(material_dict.keys())[n] == json_data['wall' + str(i+1)]['subarea' + str(j+1)]['category']:
-            #                 subarea_category_init[i].append(n)
-            #         for l in range(len(subarea_category_init[i])):
-            #             for k in range(len(list(material_dict[f'{subarea_category_init_string[i][l]}'].keys()))):
-            #                 if list(material_dict[f'{subarea_category_init_string[i][l]}'].keys())[k] == json_data['wall' + str(i+1)]['subarea' + str(j+1)]['material']:
-            #                     subarea_material_init[i].append(k)
+                for j in range(number_subareas_init[i]):
+                    subarea_category_init_string[i].append(json_data['wall' + str(i+1)]['subarea' + str(j+1)]['category'])
+                    subarea_area_init[i].append(json_data['wall' + str(i+1)]['subarea' + str(j+1)]['area'])
+                    for n in range(len(material_dict.keys())):
+                        if list(material_dict.keys())[n] == json_data['wall' + str(i+1)]['subarea' + str(j+1)]['category']:
+                            subarea_category_init[i].append(n)
+                    for l in range(len(subarea_category_init[i])):
+                        for k in range(len(list(material_dict[f'{subarea_category_init_string[i][l]}'].keys()))):
+                            if list(material_dict[f'{subarea_category_init_string[i][l]}'].keys())[k] == json_data['wall' + str(i+1)]['subarea' + str(j+1)]['material']:
+                                subarea_material_init[i].append(k)
         else:
             number_walls_init = 1
             area_init = []
@@ -194,7 +194,6 @@ def sync_session(state):
         json.dump(json_data, jsonkey)
 
 def load_session(state):
-    #st.session_state.main_walls = ['Wando', 'Wand 1', 'Wanda']
     #used to set necessary session states to starting values
     #read contents of session file
     with open(state) as jsonkey:
@@ -214,14 +213,11 @@ def load_session(state):
                     st.session_state.main_walls.append(name)
             #else put it in tabs beginning from the first
             else:
-                #    ind = st.session_state.main_walls.index(name)
                 if len(st.session_state.main_walls) >= number:
                     st.session_state.main_walls[number-1] = name
                 else:
                     st.session_state.main_walls.append(name)
             st.session_state[f'subAreas{name}'] = json_data['wall' + str(number)]['number_subareas']
-    #    if f'person_type{number+1}' in json_data:
-    #        st.session_state[f'people{number}'] = json_data['person_type' + str(number+1)]['amount']
     if 'persons' in json_data:
         st.session_state['personen'] = json_data['persons']
     if 'number_people' in json_data:
@@ -238,6 +234,3 @@ def write_json(json_data,state,num):
     json_data['person_type' + str(num+1)]['amount'] = st.session_state[f'people{num}']
     with open(state,'w') as jsonkey:
         json.dump(json_data, jsonkey)
-
-# def subArea_subst(name):
-#     st.session_state[f'subAreas{name}'] -= 1

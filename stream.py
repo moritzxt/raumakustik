@@ -31,8 +31,6 @@ main_walls = []
 if 'main_walls' not in st.session_state:
     #'''creating List for main_walls in current session, so it can be updated by add button'''
     st.session_state.main_walls = ['Grundfläche 1']
-#if 'remove_wall_last_run' not in st.session_state:
-#    st.session_state.remove_wall_last_run = False
 
 
 #create a json file with session id as file name
@@ -118,13 +116,15 @@ with st.container():
 
         
     with col3:
+        #input for name of next wall that is being added
+        wall_name = st.text_input('Name der Wandfläche', value='Wand 1')
 
-        wall_name = st.text_input('Name der Wandfläche', value='Wand 1') #NEEDS an error when Wall already exists
-        
+        #check if wall name exists already, if yes, tell user
         if st.button('Hinzufügen'):
             if wall_name in st.session_state.main_walls:
                 st.write("Diese Wand existiert bereits")
             else:
+            #if not, create new wall
                 if 'Grundfläche 1' in st.session_state.main_walls:
                     st.session_state.main_walls = [wall_name]
                 else:
@@ -142,8 +142,6 @@ with st.container():
             json_data['number_walls'] = len(st.session_state.main_walls)
         with open(state,'w') as jsonkey:
             json.dump(json_data, jsonkey)
-
-        #st.write(st.session_state['main_walls'])
         
 
     with col4:
@@ -161,7 +159,6 @@ with st.container():
                 # delete Personstab if it is deactivated
                 st.session_state.main_walls.pop(0)
 
-#hier noch init data reinhauen
 subAreas = 0
 
 numPeople = init_data['number_people'] # Anzahl der Personengruppen im Raum 
@@ -191,6 +188,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
             if st.button('Add Personen', key ='button_add_persons'):
                 st.session_state['add_persons'] += 1
 
+            #if person type has been removed on last runthrough, display one less
             if 'remove_button_persons' in st.session_state:
                 if st.session_state.remove_button_persons == True:
                     numPeople = st.session_state.add_persons-1
@@ -208,7 +206,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     #input of amount of persons per person type
                     with col_11:
                         numberOfPeople.append(st.number_input(
-                                f"Anzahl an Personen im Raum", step = 1, key = f'people{num}', value=init_data['amount'][num-1], on_change = write_json, kwargs = {"json_data": json_data, "state": state, "num":num}))
+                                f"Anzahl an Personen im Raum", step = 1, key = f'people{num}', value=init_data['amount'][num], on_change = write_json, kwargs = {"json_data": json_data, "state": state, "num":num}))
                         
                     #put amount of people of type in json file
                     json_data['person_type' + str(num+1)]['amount'] = numberOfPeople[num]
@@ -234,30 +232,10 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     json_data['number_people'] = st.session_state[f'add_persons']
                     with open(state,'w') as jsonkey:
                         json.dump(json_data, jsonkey)  
-
-
-            # if st.button('Remove Subwandfläche', key=f'remove Subfläche von {name}') and len(sub_materials[name]) > 0:
-            #             if st.session_state[f'subAreas{name}'] > 0:
-            #                 #subArea_subst(name)
-            #                 st.session_state[f'subAreas{name}'] -= 1
-            #                 sub_materials[name].pop()
-            #                 sub_surfaces[name].pop()
-            #                 json_data['wall' + str(number+1)].pop('subarea' + str(subAreas+1))
-            #                 #st.session_state.remove_wall_last_run = True
-            #         #sync number of subareas with json file
-            #         json_data['wall' + str(number+1)]['number_subareas'] = st.session_state[f'subAreas{name}']
-            #         with open(state,'w') as jsonkey:
-            #             json.dump(json_data, jsonkey)  
      
 
         else:
-                #extract number of base area
-                #number1 = name[12]
-                #try:
-                #    number2 = name[13]
-                #    number = 10*int(number)+int(number2)
-                #except IndexError:
-                #    number = int(number1)
+                #extract number of base area (differently if persons is ticked or not)
                 if 'Personen' in st.session_state.main_walls:
                     number = st.session_state.main_walls.index(name)-1
                 else:
@@ -303,16 +281,13 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     st.divider()
                     col_1, col_2, col_3 = st.columns(3)
 
+                    #get initial data for number of subareas
                     subAreas = init_data['number_subareas'][number]
                     #button for adding subareas
-                    # st.write(st.session_state[f'subAreas{name}'])
-                    # st.write(st.session_state[f'remove Subfläche von {name}'])
-                    # st.write(json_data['wall'+str(number+1)])
                     if st.button('Add Subwandfläche', key = f'Button subArea{subAreas} {name}'):
                         st.session_state[f'subAreas{name}'] += 1
                     #check if "remove subwandfläche"-button has been hit last runthrough, in that case, display one less subarea
                     if f'remove Subfläche von {name}' in st.session_state:
-                        #st.session_state[f'remove Subfläche von {name}']
                         if st.session_state[f'remove Subfläche von {name}'] == True:
                             subAreas = st.session_state[f'subAreas{name}'] -1
                         else:
@@ -352,24 +327,17 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                         with open(state,'w') as jsonkey:
                             json.dump(json_data, jsonkey)     
 
-                    #st.session_state.remove_wall_last_run = False
                     #removal button for subareas           
                     if st.button('Remove Subwandfläche', key=f'remove Subfläche von {name}') and len(sub_materials[name]) > 0:
                         if st.session_state[f'subAreas{name}'] > 0:
-                            #subArea_subst(name)
                             st.session_state[f'subAreas{name}'] -= 1
                             sub_materials[name].pop()
                             sub_surfaces[name].pop()
                             json_data['wall' + str(number+1)].pop('subarea' + str(subAreas+1))
-                            #st.session_state.remove_wall_last_run = True
                     #sync number of subareas with json file
                     json_data['wall' + str(number+1)]['number_subareas'] = st.session_state[f'subAreas{name}']
                     with open(state,'w') as jsonkey:
                         json.dump(json_data, jsonkey)  
-
-                    # st.write(st.session_state[f'subAreas{name}'])
-                    # st.write(st.session_state[f'remove Subfläche von {name}'])
-                    # st.write(json_data['wall'+str(number+1)])
     
 
     #Initialisierung des Dictionaries für die Absorptionsgrade
