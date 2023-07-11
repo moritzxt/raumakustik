@@ -1,5 +1,5 @@
 import numpy as np 
-
+import pickle
 import streamlit as st
 #import streamlit_tags as sttags
 from room_calc import room
@@ -93,6 +93,7 @@ tabs = st.tabs(st.session_state.main_walls)
 # Personen
 
 for tab, name in zip(tabs, st.session_state.main_walls):
+    print(name)
     with tab:
         if name == 'Personen':
             col_11, col_12 = st.columns(2)
@@ -217,6 +218,9 @@ for ind, octaveBand in enumerate(sub_alpha):
 raum = room(volume=vol, surface=main_surfaces, sub_surface=sub_surfaces, alpha=alpha, 
             sub_alpha=sub_alpha, use=use, peopleDescription=peopleDescription, numberOfPeople=numberOfPeople)
 #Plots erstellen
+fileObj = open('raum.obj', 'wb')
+pickle.dump(raum, fileObj)
+fileObj.close()
 
 st.divider()
 st.subheader('Ergebnisse')
