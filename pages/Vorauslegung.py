@@ -21,4 +21,19 @@ with col1:
 with col2:
     sub_surface_count = len(raum_fine.sub_surface[wall])
     sub_wall_list = [f'Subflaeche {i+1}' for i in range(sub_surface_count)]
-    sub_wallmaterial = st.selectbox('Wähle die Subwandfläche aus', options=sub_wall_list)
+    sub_wall = st.selectbox('Wähle die Subwandfläche aus', options=sub_wall_list)
+    sub_wall_ind =  sub_wall_list.index(sub_wall)
+
+with col3:
+    max_area =  float(raum_fine.surface[wall] - sum(raum_fine.sub_surface[wall]))
+    raum_fine.sub_surface[wall][sub_wall_ind] = st.slider(label= 'Fläche der Subwandfläche',min_value=.0,max_value=max_area, key='SubAreaSlider', step=0.1) 
+
+tab1, tab2 = st.tabs(['Nachhallzeit', 'Vergleich der Nachhallzeit'])
+
+with tab1:
+    fig1 = raum_fine.plot_reverberationTime()
+    st.plotly_chart(fig1)
+
+with tab2:
+    fig2 = raum_fine.plot_reverberationTime_ratio()
+    st.plotly_chart(fig2)
