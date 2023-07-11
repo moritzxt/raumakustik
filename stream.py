@@ -51,10 +51,11 @@ with st.container():
                 st.session_state.main_walls = [wall_name]
             else:
                 st.session_state.main_walls.append(wall_name)
-        if st.button('Entferne letzte Wand'):
+        if st.button('Entfernen'):
             if wall_name in st.session_state.main_walls and len(st.session_state.main_walls) > 1:
-                #Removing last Mainwall
-                st.session_state.main_walls.pop()
+                ind = st.session_state.main_walls.index(wall_name)
+                #Removing specific Mainwall
+                st.session_state.main_walls.pop(ind)
 
 
 
