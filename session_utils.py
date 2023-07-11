@@ -173,6 +173,7 @@ def init_starting_values(json_data,material_dict,person_dict):
         init_data['material_string'] = material_init_string
         init_data['material'] = material_init
         init_data['persons'] = persons_init
+        init_data['number_people'] = number_people_init
         init_data['amount'] = amount_init
         init_data['type_string'] = type_init_string
         init_data['type'] = type_init
@@ -193,7 +194,7 @@ def sync_session(state):
         json.dump(json_data, jsonkey)
 
 def load_session(state):
-    st.session_state.main_walls = ['Wando', 'Wand 1', 'Wanda']
+    #st.session_state.main_walls = ['Wando', 'Wand 1', 'Wanda']
     #used to set necessary session states to starting values
     #read contents of session file
     with open(state) as jsonkey:
@@ -201,16 +202,24 @@ def load_session(state):
     #set session states to file content
     for keys in json_data:
         st.session_state[keys] = json_data[keys]
-    for number in range(0,100):
+    for number in range(1,100):
         #if not st.session_state.main_walls[number-1] == 'Personen': 
-            if f'wall{number}' in json_data:
-                name = json_data['wall'+str(number)]['name']
+        if f'wall{number}' in json_data:
+            name = json_data['wall'+str(number)]['name']
+            #if there is a 'personen' tab, put it in tabs beginning from the second...
+            if 'Personen' in st.session_state.main_walls:
+                if len(st.session_state.main_walls) > number:
+                    st.session_state.main_walls[number] = name
+                else:
+                    st.session_state.main_walls.append(name)
+            #else put it in tabs beginning from the first
+            else:
                 #    ind = st.session_state.main_walls.index(name)
                 if len(st.session_state.main_walls) >= number:
                     st.session_state.main_walls[number-1] = name
                 else:
                     st.session_state.main_walls.append(name)
-                st.session_state[f'subAreas{name}'] = json_data['wall' + str(number)]['number_subareas']
+            st.session_state[f'subAreas{name}'] = json_data['wall' + str(number)]['number_subareas']
     #    if f'person_type{number+1}' in json_data:
     #        st.session_state[f'people{number}'] = json_data['person_type' + str(number+1)]['amount']
     if 'persons' in json_data:
