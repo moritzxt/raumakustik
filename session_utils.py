@@ -52,7 +52,10 @@ def init_starting_values(json_data,material_dict,person_dict):
             volume_init = volume_init[0]
         #initialize walls init data. if it doesnt exist yet, set to default
         if 'number_walls' in json_data:
+        #if 'main_walls' in st.session_state:
             number_walls_init = json_data['number_walls']
+            #number_walls_init = len(st.session_state.main_walls)
+            name_init = []
             area_init = []
             category_init = []
             category_init_string = []
@@ -64,6 +67,9 @@ def init_starting_values(json_data,material_dict,person_dict):
             subarea_category_init_string = []
             subarea_material_init = []
             subarea_material_init_string = []
+            for wall_name in st.session_state.main_walls:
+                ind = st.session_state.main_walls.index(wall_name)
+                name_init.append(st.session_state.main_walls[ind])
         
             #fill area and material data for existing walls
             for i in range(number_walls_init):
@@ -72,6 +78,7 @@ def init_starting_values(json_data,material_dict,person_dict):
                 subarea_category_init_string.append([])
                 subarea_material_init.append([])
                 subarea_material_init_string.append([])
+                
                 area_init.append(json_data['wall' + str(i+1)]['area'])
                 category_init_string.append(json_data['wall' + str(i+1)]['category'])
                 material_init_string.append(json_data['wall' + str(i+1)]['material'])
@@ -159,12 +166,14 @@ def init_starting_values(json_data,material_dict,person_dict):
         init_data['usecase_index'] = usecase_index
         init_data['volume'] = volume_init
         init_data['number_walls'] = number_walls_init
+        init_data['name'] = name_init
         init_data['area'] = area_init
         init_data['category'] = category_init
         init_data['category_string'] = category_init_string
         init_data['material_string'] = material_init_string
         init_data['material'] = material_init
         init_data['persons'] = persons_init
+        init_data['number_people'] = number_people_init
         init_data['amount'] = amount_init
         init_data['type_string'] = type_init_string
         init_data['type'] = type_init
@@ -192,11 +201,23 @@ def load_session(state):
     #set session states to file content
     for keys in json_data:
         st.session_state[keys] = json_data[keys]
-    for number in range(0,100):
-        if f'Grundflaeche {number}' in st.session_state or f'wall{number}' in json_data:
-            st.session_state[f'subAreasGrundflaeche {number}'] = json_data['wall' + str(number)]['number_subareas']
-        if f'person_type{number+1}' in json_data:
-            st.session_state[f'people{number}'] = json_data['person_type' + str(number+1)]['amount']
+    for number in range(1,100):
+        #if not st.session_state.main_walls[number-1] == 'Personen': 
+        if f'wall{number}' in json_data:
+            name = json_data['wall'+str(number)]['name']
+            #if there is a 'personen' tab, put it in tabs beginning from the second...
+            if 'Personen' in st.session_state.main_walls:
+                if len(st.session_state.main_walls) > number:
+                    st.session_state.main_walls[number] = name
+                else:
+                    st.session_state.main_walls.append(name)
+            #else put it in tabs beginning from the first
+            else:
+                if len(st.session_state.main_walls) >= number:
+                    st.session_state.main_walls[number-1] = name
+                else:
+                    st.session_state.main_walls.append(name)
+            st.session_state[f'subAreas{name}'] = json_data['wall' + str(number)]['number_subareas']
     if 'persons' in json_data:
         st.session_state['personen'] = json_data['persons']
     if 'number_people' in json_data:
