@@ -51,7 +51,7 @@ with st.container():
                 st.session_state.main_walls = [wall_name]
             else:
                 st.session_state.main_walls.append(wall_name)
-        if st.button('Entfernen'):
+        if st.button('Entfernen', help= 'Geben Sie den Namen der Wandfläche ein, die Sie entfernen möchten.'):
             if wall_name in st.session_state.main_walls and len(st.session_state.main_walls) > 1:
                 ind = st.session_state.main_walls.index(wall_name)
                 #Removing specific Mainwall
