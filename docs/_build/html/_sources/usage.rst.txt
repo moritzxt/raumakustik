@@ -1,7 +1,14 @@
 Usage
 =====
 
-Running Raumakustik App
-------------------------
+Run Raumakustik App
+-----------------------
 
-...description...
+Open a console navigate to the raumakustik directory:
+
+.. code-block:: console
+
+	streamlit run stream.py
+
+
+    

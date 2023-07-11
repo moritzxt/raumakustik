@@ -247,7 +247,7 @@ class room:
     
     def plot_reverberationTime_ratio(self):
         '''
-        Creates presenting the calculated reverberation time in comparison to the wanted reverberation time, also showing the allowed deviations in octave bands using plotly.
+        Creates a plot presenting the calculated reverberation time in comparison to the wanted reverberation time, also showing the allowed deviations in octave bands using plotly.
         
         :return: plot comparing calculated and wanted reverberation time
         :rtype: plotly figure
