@@ -1,5 +1,5 @@
 import numpy as np 
-
+import pickle
 import streamlit as st
 #import streamlit_tags as sttags
 from room_calc import room
@@ -10,7 +10,14 @@ from streamlit.runtime.scriptrunner.script_run_context import add_script_run_ctx
 from session_utils import write_session_file, load_session_file, write_session_key, init_starting_values, sync_session, load_session, negate_checkbox, write_json
 
 
+<<<<<<< HEAD
 #setup of  page data:
+=======
+# sessionObj = open('session.obj', 'rb')
+# st.session_state = pickle.load(sessionObj)
+# sessionObj.close()
+
+>>>>>>> gui
 st.set_page_config(page_title= 'Tool für Raumakustik', layout='wide',
                     initial_sidebar_state='collapsed')
 
@@ -124,7 +131,7 @@ with st.container():
                 st.session_state.main_walls = [wall_name]
             else:
                 st.session_state.main_walls.append(wall_name)
-        if st.button('Entfernen'):
+        if st.button('Entfernen', help= 'Geben Sie den Namen der Wandfläche ein, die Sie entfernen möchten.'):
             if wall_name in st.session_state.main_walls and len(st.session_state.main_walls) > 1:
                 ind = st.session_state.main_walls.index(wall_name)
                 #Removing specific Mainwall
@@ -169,6 +176,7 @@ tabs = st.tabs(st.session_state.main_walls)
 # Personen
 
 for tab, name in zip(tabs, st.session_state.main_walls):
+    print(name)
     with tab:
         if name == 'Personen':
             col_11, col_12 = st.columns(2)
@@ -279,8 +287,13 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                         #input for area for each subarea
                         with col_1:
                             sub_surfaces[name].append(st.number_input(f"Fläche für Subwandfläche {num +1 }",
+<<<<<<< HEAD
                                                                     value=init_data['sub_area'][number-1][num] , key = f'Fläche subArea{num} {name}',min_value=0))
                         #input for category for each subarea
+=======
+                                                                    value=1., key = f'Fläche subArea{num} {name}',min_value=.0, max_value=float((main_surfaces[name] - sum(sub_surfaces[name])))))
+
+>>>>>>> gui
                         with col_2:
                             category = st.selectbox(label='Bitte wählen Sie die Kategorie des Materials aus',
                                                      options=material_dict.keys(), key= f'cat_sub_{name}{num}', index = init_data['sub_category'][number-1][num])
@@ -385,17 +398,27 @@ for ind, octaveBand in enumerate(sub_alpha):
 raum = room(volume=vol, surface=main_surfaces, sub_surface=sub_surfaces, alpha=alpha, 
             sub_alpha=sub_alpha, use=use, peopleDescription=peopleDescription, numberOfPeople=numberOfPeople)
 #Plots erstellen
+<<<<<<< HEAD
+=======
+fileObj = open('raum.obj', 'wb')
+pickle.dump(raum, fileObj)
+fileObj.close()
+
+>>>>>>> gui
 st.divider()
 st.subheader('Ergebnisse')
 st.divider()
 tab1, tab2 = st.tabs(['Nachhallzeit', 'Vergleich der Nachhallzeit'])
 
 with tab1:
-    if st.button('Berechne Nachhallzeit1'):
-        fig1 = raum.plot_reverberationTime()
-        st.plotly_chart(fig1)
+    
+    fig1 = raum.plot_reverberationTime()
+    st.plotly_chart(fig1)
 
 with tab2:
-    if st.button('Berechne Nachhallzeit'):
-        fig2 = raum.plot_reverberationTime_ratio()
-        st.plotly_chart(fig2)
+    fig2 = raum.plot_reverberationTime_ratio()
+    st.plotly_chart(fig2)
+
+# sessionObj = open('session.obj', 'wb')
+# pickle.dump(st.session_state, sessionObj)
+# sessionObj.close()
