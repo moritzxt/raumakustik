@@ -1,6 +1,6 @@
 import streamlit as st
 import csv
-
+import base64
 
 def basic_dict():
     """
@@ -111,6 +111,22 @@ def flatten_dict(dict):
             flattened_dict[key_2] = dict[key][key_2]
     return flattened_dict
 
+def displayPDF(filepath):
+    '''
+    Displays pdf file.
+    
+    :param filepath: filepath of pdf file to display
+    :type filepath: str
+    '''
+    # Opening file from file path
+    with open(filepath, "rb") as f:
+        base64_pdf = base64.b64encode(f.read()).decode('utf-8')
+
+    # Embedding PDF in HTML
+    pdf_display = F'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf"></iframe>'
+
+    # Displaying File
+    st.markdown(pdf_display, unsafe_allow_html=True)
 
 # Sport: 30000 m^2, as it is the biggest room volume applicable with DIN 18041 (see page 5)
 usecase = {'Musik': [30, 1000], 'Sprache/Vortrag': [50, 5000], 'Sprache/Vortrag inklusiv': [30, 5000],
