@@ -1,9 +1,14 @@
 import numpy as np 
-
+import pickle
 import streamlit as st
 #import streamlit_tags as sttags
 from room_calc import room
 from utils import basic_dict , read_db, basic_dict_2, add_row, usecase, sub_alpha_dict, flatten_dict
+
+
+# sessionObj = open('session.obj', 'rb')
+# st.session_state = pickle.load(sessionObj)
+# sessionObj.close()
 
 st.set_page_config(page_title= 'Tool für Raumakustik', layout='wide',
                     initial_sidebar_state='collapsed')
@@ -93,6 +98,7 @@ tabs = st.tabs(st.session_state.main_walls)
 # Personen
 
 for tab, name in zip(tabs, st.session_state.main_walls):
+    print(name)
     with tab:
         if name == 'Personen':
             col_11, col_12 = st.columns(2)
@@ -173,7 +179,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     for num in range(0, subAreas):
                         with col_1:
                             sub_surfaces[name].append(st.number_input(f"Fläche für Subwandfläche {num +1 }",
-                                                                    value=1, key = f'Fläche subArea{num} {name}',min_value=0))
+                                                                    value=1., key = f'Fläche subArea{num} {name}',min_value=.0, max_value=float((main_surfaces[name] - sum(sub_surfaces[name])))))
 
                         with col_2:
                             category = st.selectbox(label='Bitte wählen Sie die Kategorie des Materials aus',
@@ -217,6 +223,9 @@ for ind, octaveBand in enumerate(sub_alpha):
 raum = room(volume=vol, surface=main_surfaces, sub_surface=sub_surfaces, alpha=alpha, 
             sub_alpha=sub_alpha, use=use, peopleDescription=peopleDescription, numberOfPeople=numberOfPeople)
 #Plots erstellen
+fileObj = open('raum.obj', 'wb')
+pickle.dump(raum, fileObj)
+fileObj.close()
 
 st.divider()
 st.subheader('Ergebnisse')
@@ -224,11 +233,14 @@ st.divider()
 tab1, tab2 = st.tabs(['Nachhallzeit', 'Vergleich der Nachhallzeit'])
 
 with tab1:
-    if st.button('Berechne Nachhallzeit1'):
-        fig1 = raum.plot_reverberationTime()
-        st.plotly_chart(fig1)
+    
+    fig1 = raum.plot_reverberationTime()
+    st.plotly_chart(fig1)
 
 with tab2:
-    if st.button('Berechne Nachhallzeit'):
-        fig2 = raum.plot_reverberationTime_ratio()
-        st.plotly_chart(fig2)
+    fig2 = raum.plot_reverberationTime_ratio()
+    st.plotly_chart(fig2)
+
+# sessionObj = open('session.obj', 'wb')
+# pickle.dump(st.session_state, sessionObj)
+# sessionObj.close()
