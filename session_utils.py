@@ -52,9 +52,7 @@ def init_starting_values(json_data,material_dict,person_dict):
             volume_init = volume_init[0]
         #initialize walls init data. if it doesnt exist yet, set to default
         if 'number_walls' in json_data:
-        #if 'main_walls' in st.session_state:
             number_walls_init = json_data['number_walls']
-            #number_walls_init = len(st.session_state.main_walls)
             name_init = []
             area_init = []
             category_init = []
@@ -105,6 +103,7 @@ def init_starting_values(json_data,material_dict,person_dict):
                                 subarea_material_init[i].append(k)
         else:
             number_walls_init = 1
+            name_init = []
             area_init = []
             category_init = []
             category_init_string = []
@@ -120,6 +119,7 @@ def init_starting_values(json_data,material_dict,person_dict):
         #then set data to defaults for 100 next indices, to allow adding more walls - so limiting the number of walls to 100 would be smart
         for i in range(100):
             area_init.append(1)
+            name_init = "Wand "+str(i+1)
             category_init.append(0)
             category_init_string.append(list(material_dict)[0])
             material_init_string.append(list(material_dict)[0])
@@ -202,7 +202,6 @@ def load_session(state):
     for keys in json_data:
         st.session_state[keys] = json_data[keys]
     for number in range(1,100):
-        #if not st.session_state.main_walls[number-1] == 'Personen': 
         if f'wall{number}' in json_data:
             name = json_data['wall'+str(number)]['name']
             #if there is a 'personen' tab, put it in tabs beginning from the second...

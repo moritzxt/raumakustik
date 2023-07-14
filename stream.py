@@ -9,15 +9,11 @@ import json
 from streamlit.runtime.scriptrunner.script_run_context import add_script_run_ctx
 from session_utils import write_session_file, load_session_file, write_session_key, init_starting_values, sync_session, load_session, negate_checkbox, write_json#, subArea_subst
 
-
-<<<<<<< HEAD
 #setup of  page data:
-=======
 # sessionObj = open('session.obj', 'rb')
 # st.session_state = pickle.load(sessionObj)
 # sessionObj.close()
 
->>>>>>> gui
 st.set_page_config(page_title= 'Tool für Raumakustik', layout='wide',
                     initial_sidebar_state='collapsed')
 
@@ -318,7 +314,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                         #input for area for each subarea
                         with col_1:
                             sub_surfaces[name].append(st.number_input(f"Fläche für Subwandfläche {num +1 }",
-                                                                    value=init_data['sub_area'][number][num] , key = f'Fläche subArea{num} {name}',min_value=0, max_value=float((main_surfaces[name] - sum(sub_surfaces[name])))))
+                                                                    value=init_data['sub_area'][number][num] , key = f'Fläche subArea{num} {name}',min_value=0, max_value=int((main_surfaces[name] - sum(sub_surfaces[name])))))
                         #input for category for each subarea
                         with col_2:
                             category = st.selectbox(label='Bitte wählen Sie die Kategorie des Materials aus',
