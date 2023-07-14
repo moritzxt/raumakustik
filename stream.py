@@ -8,6 +8,7 @@ import os
 import json
 from streamlit.runtime.scriptrunner.script_run_context import add_script_run_ctx
 from session_utils import write_session_file, load_session_file, write_session_key, init_starting_values, sync_session, load_session, negate_checkbox, write_json#, subArea_subst
+from pdf_protocol import pdfprotocol
 
 #setup of  page data:
 # sessionObj = open('session.obj', 'rb')
@@ -30,10 +31,11 @@ sub_materials = {}
 numberOfPeople = []
 peopleDescription = []
 main_walls = []
+default_area = 'Default'
 
 if 'main_walls' not in st.session_state:
     #'''creating List for main_walls in current session, so it can be updated by add button'''
-    st.session_state.main_walls = ['Grundfläche 1']
+    st.session_state.main_walls = [default_area]
 
 
 #create a json file with session id as file name
@@ -119,19 +121,19 @@ with st.container():
         
     with col3:
         #input for name of next wall that is being added
-        wall_name = st.text_input('Name der Wand', value='Wand 1')
+        wall_name = st.text_input('Name der Wandfläche', value='Wand 1')
 
         #check if wall name exists already, if yes, tell user
         if st.button('Hinzufügen'):
             if wall_name in st.session_state.main_walls:
-                st.write("Diese Wand existiert bereits")
+                st.write("Diese Grundfläche existiert bereits")
             else:
             #if not, create new wall
-                if 'Grundfläche 1' in st.session_state.main_walls:
+                if default_area in st.session_state.main_walls:
                     st.session_state.main_walls = [wall_name]
                 else:
                     st.session_state.main_walls.append(wall_name)
-        if st.button('Entfernen', help= 'Geben Sie den Namen der Wand ein, die Sie entfernen möchten.'):
+        if st.button('Entfernen', help= 'Geben Sie den Namen der Grundfläche ein, die Sie entfernen möchten.'):
             if wall_name in st.session_state.main_walls and len(st.session_state.main_walls) > 1:
                 ind = st.session_state.main_walls.index(wall_name)
                 #Removing specific Mainwall
@@ -179,7 +181,7 @@ tabs = st.tabs(st.session_state.main_walls)
 # Personen
 
 for tab, name in zip(tabs, st.session_state.main_walls):
-    print(name)
+
     with tab:
         if name == 'Personen':
             col_11, col_12 = st.columns(2)
@@ -289,7 +291,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     #button for adding subareas
                     if st.button('Subfläche hinzufügen', key = f'Button subArea{subAreas} {name}'):
                         st.session_state[f'subAreas{name}'] += 1
-                    #check if "remove subwandfläche"-button has been hit last runthrough, in that case, display one less subarea
+                    #check if "remove subfläche"-button has been hit last runthrough, in that case, display one less subarea
                     if f'remove Subfläche von {name}' in st.session_state:
                         if st.session_state[f'remove Subfläche von {name}'] == True:
                             subAreas = st.session_state[f'subAreas{name}'] -1
@@ -312,7 +314,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                             json.dump(json_data, jsonkey)   
                         #input for area for each subarea
                         with col_1:
-                            sub_surfaces[name].append(st.number_input(f"Fläche für Subwandfläche {num +1 }",
+                            sub_surfaces[name].append(st.number_input(f"Fläche für Subfläche {num +1 }",
                                                                     value=init_data['sub_area'][number][num] , key = f'Fläche subArea{num} {name}',min_value=0, max_value=int((main_surfaces[name] - sum(sub_surfaces[name])))))
                         #input for category for each subarea
                         with col_2:
@@ -438,6 +440,13 @@ with tab2:
     fig2 = raum.plot_reverberationTime_ratio()
     st.plotly_chart(fig2)
 
-# sessionObj = open('session.obj', 'wb')
-# pickle.dump(st.session_state, sessionObj)
-# sessionObj.close()
+#Exporting the results as PDF with pdfprotocol class and download the pdf
+
+st.divider()
+st.subheader('Exportieren der Ergebnisse als PDF')
+#creating the pdf
+pdf1 = pdfprotocol('save_test.json', raum.plot_reverberationTime(), raum.plot_reverberationTimeRatio())
+st.button('Erstellen der PDF', on_click=pdf1.protocol())
+
+st.download_button('pdf_test.pdf')
+
