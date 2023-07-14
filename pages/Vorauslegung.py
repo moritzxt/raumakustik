@@ -1,6 +1,8 @@
 import streamlit as st
 import copy
+import json
 from utils import usecase
+#from session_utils import load_session, add_script_run_ctx, write_json, write_session_file, load_session_file, write_session_key
 from stream import sub_materials
 import pickle
 
@@ -8,6 +10,25 @@ fileObj = open('raum.obj', 'rb')
 raum_fine = pickle.load(fileObj)
 fileObj.close()
 
+# #create a json file with session id as file name
+# state = add_script_run_ctx().streamlit_script_run_ctx.session_id +'.json'
+# write_session_file(state)
+
+# #load the last session into session json file
+# load_session_file(state)
+
+# #write current session id in session_key.json
+# session = add_script_run_ctx().streamlit_script_run_ctx.session_id
+# write_session_key(session)
+
+# #load data from current session
+# with open(state) as jsonkey:
+#     json_data = json.load(jsonkey)
+
+# load_session(state)
+
+#read starting positions of input elements from last session... 
+# init_data = init_starting_values(json_data,material_dict,person_dict)
 main_walls = [element for element in st.session_state['main_walls'] if element != 'Personen']
 
 def slider_for_surface(raum_fine, key = 1):

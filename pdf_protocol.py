@@ -1,5 +1,5 @@
 from fpdf import FPDF
-from fpdf.enums import XPos, YPos
+from fpdf.enum import XPos, YPos
 import json
 import plotly.io as pio
 
