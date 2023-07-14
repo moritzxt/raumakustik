@@ -171,8 +171,8 @@ class room:
 
         trace1 = go.Bar(x = freq, 
                         y = list(reverberationTimeSeconds.values()), 
-                        name = 'bar', 
-                        marker_color = 'blue', 
+                        name = 'Nachhallzeit', 
+                        marker_color = 'rgba(28, 122, 255, 1)', 
                         showlegend= True, 
                         width=.2)
         
@@ -206,7 +206,7 @@ class room:
 
         trace1 = go.Scatter(x = frequencies, 
                             y = ReverberationTime_lowerlimit, 
-                            name = 'Grenzen', 
+                            name = 'Fehlergrenzen', 
                             marker_color = 'green', 
                             mode = 'lines', 
                             legendgroup = 'boundaries',

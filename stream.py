@@ -75,16 +75,15 @@ load_session(state)
 init_data = init_starting_values(json_data,material_dict,person_dict)
 
 with st.container():
-    st.title('WebApp for Roomacoustics')
+    st.title('Web-App für Nachhallzeitenanalyse')
     st.divider()
-    st.header('Benötigt werden das Raumvolumen, die Anzahl'
-        ' der Wände, deren Fläche, sowie das Material der Wandoberfläche')
+    st.header('Eingabeparameter')
 
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
         #selection of usecase
-        use = st.selectbox('Usecase nach DIN 18041', options=usecase.keys(), index=init_data['usecase_index'],)
+        use = st.selectbox('Nutzungsart nach DIN 18041', options=usecase.keys(), index=init_data['usecase_index'],)
         #on change save current usecase into json
         json_data['usecase'] = use
         with open(state,'w') as jsonkey:
@@ -266,11 +265,11 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                             f"Fläche für {name}", value=init_data['area'][number], min_value=0))
                     #category for each subarea
                     with col_2:
-                        category = st.selectbox(label='Bitte wählen Sie die Kategorie des Materials aus',
+                        category = st.selectbox(label='Materialkategorie',
                                                 key=f'{name}' ,options=material_dict.keys(), index=init_data['category'][number])
                     #material for every subarea
                     with col_3:
-                        main_materials.append(st.selectbox(label =  f'Bitte wählen Sie das Material der {name} aus.',
+                        main_materials.append(st.selectbox(label =  f'Material von {name}',
                                                         options=material_dict[f'{category}'].keys(), index=init_data['material'][number]))
 
                     #save currenty wall area, category and type in json
@@ -288,7 +287,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     #get initial data for number of subareas
                     subAreas = init_data['number_subareas'][number]
                     #button for adding subareas
-                    if st.button('Add Subwandfläche', key = f'Button subArea{subAreas} {name}'):
+                    if st.button('Subfläche hinzufügen', key = f'Button subArea{subAreas} {name}'):
                         st.session_state[f'subAreas{name}'] += 1
                     #check if "remove subwandfläche"-button has been hit last runthrough, in that case, display one less subarea
                     if f'remove Subfläche von {name}' in st.session_state:
@@ -332,7 +331,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                             json.dump(json_data, jsonkey)     
 
                     #removal button for subareas           
-                    if st.button('Remove Subwandfläche', key=f'remove Subfläche von {name}') and len(sub_materials[name]) > 0:
+                    if st.button('Subfläche entfernen', key=f'remove Subfläche von {name}') and len(sub_materials[name]) > 0:
                         if st.session_state[f'subAreas{name}'] > 0:
                             st.session_state[f'subAreas{name}'] -= 1
                             sub_materials[name].pop()
@@ -357,7 +356,7 @@ with st.container():
         if "save_as" not in st.session_state:
             st.session_state["save_as"] = False
 
-        if st.button("save as"):
+        if st.button("Speichern"):
             st.session_state["save_as"] = not st.session_state["save_as"]
 
         key_file_name_save = " "
@@ -382,7 +381,7 @@ with st.container():
         if "open_file" not in st.session_state:
             st.session_state["open_file"] = False
 
-        if st.button("open file"):
+        if st.button("Datei öffnen"):
             st.session_state["open_file"] = not st.session_state["open_file"]
 
         key_file_name_open = ""
@@ -428,7 +427,7 @@ fileObj.close()
 st.divider()
 st.subheader('Ergebnisse')
 st.divider()
-tab1, tab2 = st.tabs(['Nachhallzeit', 'Vergleich der Nachhallzeit'])
+tab1, tab2 = st.tabs(['Nachhallzeit', 'Nachhallzeitenvergleich'])
 
 with tab1:
     
