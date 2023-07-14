@@ -173,7 +173,7 @@ class room:
                         y = list(reverberationTimeSeconds.values()), 
                         name = 'Nachhallzeit', 
                         marker_color = 'rgba(28, 122, 255, 1)', 
-                        showlegend= True, 
+                        showlegend= False, 
                         width=.2)
         
         fig.add_trace(trace1)

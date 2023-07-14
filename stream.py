@@ -119,7 +119,7 @@ with st.container():
         
     with col3:
         #input for name of next wall that is being added
-        wall_name = st.text_input('Name der Wandfläche', value='Wand 1')
+        wall_name = st.text_input('Name der Wand', value='Wand 1')
 
         #check if wall name exists already, if yes, tell user
         if st.button('Hinzufügen'):
@@ -131,7 +131,7 @@ with st.container():
                     st.session_state.main_walls = [wall_name]
                 else:
                     st.session_state.main_walls.append(wall_name)
-        if st.button('Entfernen', help= 'Geben Sie den Namen der Wandfläche ein, die Sie entfernen möchten.'):
+        if st.button('Entfernen', help= 'Geben Sie den Namen der Wand ein, die Sie entfernen möchten.'):
             if wall_name in st.session_state.main_walls and len(st.session_state.main_walls) > 1:
                 ind = st.session_state.main_walls.index(wall_name)
                 #Removing specific Mainwall
@@ -188,7 +188,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
             if 'add_persons' not in st.session_state:
                 st.session_state['add_persons'] = numPeople
             #button to add more person types
-            if st.button('Add Personen', key ='button_add_persons'):
+            if st.button('Personengruppe hinzufügen', key ='button_add_persons'):
                 st.session_state['add_persons'] += 1
 
             #if person type has been removed on last runthrough, display one less
@@ -209,7 +209,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     #input of amount of persons per person type
                     with col_11:
                         numberOfPeople.append(st.number_input(
-                                f"Anzahl an Personen im Raum", step = 1, key = f'people{num}', value=init_data['amount'][num], on_change = write_json, kwargs = {"json_data": json_data, "state": state, "num":num}))
+                                f"Anzahl der Personen", step = 1, key = f'people{num}', value=init_data['amount'][num], on_change = write_json, kwargs = {"json_data": json_data, "state": state, "num":num}))
                         
                     #put amount of people of type in json file
                     json_data['person_type' + str(num+1)]['amount'] = numberOfPeople[num]
@@ -225,7 +225,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
 
                     
             #removal button for person types
-            if st.button('Remove Personen', key='remove_button_persons'):
+            if st.button('Personengruppe entfernen', key='remove_button_persons'):
                 if st.session_state['add_persons'] > 1 and len(peopleDescription) > 0:
                     st.session_state['add_persons'] -= 1
                     peopleDescription.pop()
