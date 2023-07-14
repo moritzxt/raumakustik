@@ -119,7 +119,7 @@ class pdfprotocol(FPDF):
             self.pdf.set_font(self.font, '', 9)
             
 
-            self.pdf.cell(0, 5, f'Fläche: {self.wall_variables(index)[1]}', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+            self.pdf.cell(0, 5, f'Fläche: {self.wall_variables(index)[1]} m²', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
             self.pdf.cell(0, 5, f'Kategorie: {self.wall_variables(index)[2]}', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
             self.pdf.multi_cell(0, 5, f'Material: {self.wall_variables(index)[3]}', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
             self.pdf.ln(1)
@@ -129,7 +129,7 @@ class pdfprotocol(FPDF):
                 self.pdf.cell(0, 5, f'Subwand {subindex + 1}:', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
 
                 self.pdf.cell(5, 5, '')
-                self.pdf.cell(0, 5, f'Fläche: {self.subwall_variables(index, subindex)[0]}', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+                self.pdf.cell(0, 5, f'Fläche: {self.subwall_variables(index, subindex)[0]} m²', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
                 self.pdf.cell(5, 5, '')
                 self.pdf.cell(0, 5, f'Kategorie: {self.subwall_variables(index, subindex)[1]}', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
                 self.pdf.cell(5, 5, '')
