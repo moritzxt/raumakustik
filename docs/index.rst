@@ -1,3 +1,8 @@
+.. image:: _images/vergleichMitSoll.jpg
+   :width: 400
+   :align: right
+
+
 Raumakustik App
 ===============
 
