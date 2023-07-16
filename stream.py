@@ -454,19 +454,8 @@ json_file.close()
 
 pdf1 = pdfprotocol(state, variables, fig_reverberationTime ,fig_reverberationTime_ratio)
 if st.button('Erstellen der PDF'):
+    st.info('PDF wird erstellt, sobald der Download verfügbar ist erscheint eine "Download PDF" Schaltfläche.')
     pdf1.protocol()
     with open("pdf_test.pdf", "rb") as pdf_file:
         PDFbyte = pdf_file.read()
     st.download_button('Download PDF', PDFbyte, 'Raumakustikprotokoll.pdf')
-
-
-    # c_path =  os.getcwd()
-    # pdf_path = c_path + "/pdf_test.pdf"  # Replace with the local path to your PDF file
-
-    # # Generate the HTML anchor tag with the download attribute
-    # href = f'<a href="file://{pdf_path}" download>Download PDF</a>'
-    # st.markdown(href, unsafe_allow_html=True)
-
-# with open("pdf_test.pdf", "rb") as pdf_file:
-#     PDFbyte = pdf_file.read()
-# st.download_button('Download PDF', PDFbyte, 'Raumakustikprotokoll.pdf')
