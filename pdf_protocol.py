@@ -5,22 +5,23 @@ import plotly.io as pio
 
 class pdfprotocol(FPDF):
 
-    def __init__(self, filename, plot_reverberationTime, plot_reverberationTimeRatio):
+    def __init__(self, filename, variables, plot_reverberationTime, plot_reverberationTimeRatio):
         self.pdf = FPDF('P', 'mm', 'A4')
         self.filename = filename
+        self.variables = variables 
         self.plot_reverberationTime = plot_reverberationTime
         self.plot_reverberationTimeRatio = plot_reverberationTimeRatio
-        self.font = 'arial'
+        self.font = 'helvetica'
 
-    def load_variables(self):
-        '''
-        Function to laod the variables out of the session file 
-        '''
-        json_file = open(self.filename)
-        variables = json.load(json_file)
-        json_file.close()
+    # def load_variables(self):
+    #     '''
+    #     Function to laod the variables out of the session file 
+    #     '''
+    #     json_file = open(self.filename)
+    #     variables = json.load(json_file)
+    #     json_file.close()
 
-        return variables
+    #     return variables
     
     def header(self):
         '''
@@ -35,13 +36,13 @@ class pdfprotocol(FPDF):
         '''
         Function to read the variables, that are not in another dictionary within the .json session file
         '''
-        use = self.load_variables()['usecase']
-        volume = self.load_variables()['volume']
-        number_walls = self.load_variables()['number_walls']
-        persons = self.load_variables()['persons'] # True or False 7
+        use = self.variables['usecase']
+        volume = self.variables['volume']
+        number_walls = self.variables['number_walls']
+        persons = self.variables['persons'] # True or False 7
 
         if persons == True: 
-            number_people = self.load_variables()['number_people']
+            number_people = self.variables['number_people']
             return use, volume, number_walls, persons, number_people
         else: 
             return use, volume, number_walls, persons
@@ -50,11 +51,11 @@ class pdfprotocol(FPDF):
         '''
         Function to read variables of walls
         '''
-        name = self.load_variables()['wall' + f'{index + 1}']['name']
-        area = self.load_variables()['wall' + f'{index + 1}']['area']
-        category = self.load_variables()['wall' + f'{index + 1}']['category']
-        material = self.load_variables()['wall' + f'{index + 1}']['material']
-        number_subareas = self.load_variables()['wall' + f'{index + 1}']['number_subareas']
+        name = self.variables['wall' + f'{index + 1}']['name']
+        area = self.variables['wall' + f'{index + 1}']['area']
+        category = self.variables['wall' + f'{index + 1}']['category']
+        material = self.variables['wall' + f'{index + 1}']['material']
+        number_subareas = self.variables['wall' + f'{index + 1}']['number_subareas']
 
         return name, area, category, material, number_subareas
 
@@ -62,9 +63,9 @@ class pdfprotocol(FPDF):
         '''
         Function to read variables of subwalls
         '''
-        area = self.load_variables()['wall' + f'{index + 1}']['subarea' + f'{subindex + 1}']['area']
-        category = self.load_variables()['wall' + f'{index + 1}']['subarea' + f'{subindex + 1}']['category']
-        material = self.load_variables()['wall' + f'{index + 1}']['subarea' + f'{subindex + 1}']['material']
+        area = self.variables['wall' + f'{index + 1}']['subarea' + f'{subindex + 1}']['area']
+        category = self.variables['wall' + f'{index + 1}']['subarea' + f'{subindex + 1}']['category']
+        material = self.variables['wall' + f'{index + 1}']['subarea' + f'{subindex + 1}']['material']
 
         return area, category, material
     
@@ -72,8 +73,8 @@ class pdfprotocol(FPDF):
         '''
         Function to read the people variables 
         '''
-        amount = self.load_variables()['person_type' + f'{index + 1}']['amount']
-        people_type = self.load_variables()['person_type' + f'{index + 1}']['type']
+        amount = self.variables['person_type' + f'{index + 1}']['amount']
+        people_type = self.variables['person_type' + f'{index + 1}']['type']
 
         return amount, people_type
     
