@@ -20,7 +20,7 @@ class pdfprotocol(FPDF):
         '''
         self.pdf.set_font(self.font, 'B', 16)
         self.pdf.set_fill_color(211, 211, 211)
-        self.pdf.cell(0, 10 ,'Raumakustik Protokoll', fill = True, new_x=XPos.LMARGIN, new_y=YPos.NEXT , align = 'C')
+        self.pdf.cell(0, 10 ,'Protokoll Nachhallzeitenanalyse', fill = True, new_x=XPos.LMARGIN, new_y=YPos.NEXT , align = 'C')
         self.pdf.ln(5)
 
     def basic_variables(self):
