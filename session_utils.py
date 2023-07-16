@@ -21,6 +21,18 @@ def load_session_file(state):
                     with open(state, 'w') as init:
                         json.dump(last_session, init)
 
+def upload_session_file(upload_file, state):
+    if os.path.isfile('session_key.json'):
+        with open('session_key.json', 'r') as file:
+            last_session_keyy = json.load(file)
+            last_session_key = last_session_keyy['key']
+            if os.path.isfile(last_session_key + '.json'):
+                last_session = json.load(upload_file)
+                with open(state, 'w') as init:
+                    json.dump(last_session, init)
+
+
+
 def write_session_key(session):
     with open('session_key.json', 'w') as init:
         json.dump({'key': session}, init)
@@ -227,9 +239,11 @@ def negate_checkbox(json_data, state):
     json_data['persons'] = not json_data['persons']
     with open(state,'w') as jsonkey:
         json.dump(json_data, jsonkey)
+        jsonkey.close()
 
 def write_json(json_data,state,num):
     #used so that person inputs work properly with json
     json_data['person_type' + str(num+1)]['amount'] = st.session_state[f'people{num}']
     with open(state,'w') as jsonkey:
         json.dump(json_data, jsonkey)
+        jsonkey.close()

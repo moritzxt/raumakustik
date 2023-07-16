@@ -5,10 +5,14 @@ import streamlit as st
 from room_calc import room
 from utils import basic_dict , read_db, basic_dict_2, add_row, usecase, sub_alpha_dict, flatten_dict
 import os
+import glob
 import json
 from streamlit.runtime.scriptrunner.script_run_context import add_script_run_ctx
-from session_utils import write_session_file, load_session_file, write_session_key, init_starting_values, sync_session, load_session, negate_checkbox, write_json#, subArea_subst
+from session_utils import write_session_file, load_session_file, write_session_key, init_starting_values, sync_session, load_session, negate_checkbox, write_json, upload_session_file#, subArea_subst
 from pdf_protocol import pdfprotocol
+from datetime import datetime
+
+today = datetime.today().strftime('%Y%m%d')
 
 #setup of  page data:
 # sessionObj = open('session.obj', 'rb')
@@ -17,6 +21,7 @@ from pdf_protocol import pdfprotocol
 
 st.set_page_config(page_title= 'Tool für Raumakustik', layout='wide',
                     initial_sidebar_state='collapsed')
+
 
 # """Eingabe der Parameter"""
 tabs_list = []
@@ -53,10 +58,11 @@ write_session_key(session)
 #load data from current session
 with open(state) as jsonkey:
     json_data = json.load(jsonkey)
+    jsonkey.close()
 
 load_session(state)
 #read starting positions of input elements from last session... 
-init_data = init_starting_values(json_data,material_dict,person_dict)
+#init_data = init_starting_values(json_data,material_dict,person_dict)
 
 # #create a json file with session id as file name
 # state = add_script_run_ctx().streamlit_script_run_ctx.session_id +'.json'
@@ -73,6 +79,7 @@ write_session_key(session)
 #load data from current session
 with open(state) as jsonkey:
     json_data = json.load(jsonkey)
+    jsonkey.close()
 
 load_session(state)
 #read starting positions of input elements from last session... 
@@ -81,8 +88,23 @@ init_data = init_starting_values(json_data,material_dict,person_dict)
 with st.container():
     st.title('Web-App für Nachhallzeitenanalyse')
     st.divider()
-    st.header('Eingabeparameter')
+    old_session = None
+    old_session = st.file_uploader('Session-Datei hochladen', help = 'Lade eine ".json" Datei von einer bestehenden Session hoch.', )
+    if old_session != None:
+        upload_session_file(old_session, state)
+        init_data = init_starting_values(json_data,material_dict,person_dict)
+        if st.button('Session aktualisieren'):
+            st.experimental_rerun()
+    if st.button('Neue Session initialisieren'):
+        json_file_list = glob.glob('./session/*.json')
+        for file in json_file_list:
+            os.remove(file)
+        st.experimental_rerun()
 
+
+    st.divider()
+    st.header('Eingabeparameter')
+    
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
@@ -136,7 +158,7 @@ with st.container():
                 else:
                     st.session_state.main_walls.append(wall_name)
         if st.button('Entfernen', help= 'Geben Sie den Namen der Grundfläche ein, die Sie entfernen möchten.'):
-            if wall_name in st.session_state.main_walls and len(st.session_state.main_walls) > 1:
+            if wall_name in st.session_state.main_walls:
                 ind = st.session_state.main_walls.index(wall_name)
                 #Removing specific Mainwall
                 st.session_state.main_walls.pop(ind)
@@ -350,57 +372,57 @@ for tab, name in zip(tabs, st.session_state.main_walls):
     #Initialisierung des Dictionaries für die Absorptionsgrade
     alpha = basic_dict_2()
 
-with st.container():
-    col_1, col_2 = st.columns(2)
-    with col_1:
-        #create a save as button that unlocks a text input space
-        if "save_as_name" not in st.session_state:
-            st.session_state["save_as_name"] = ""
+#with st.container():
+    # col_1, col_2 = st.columns(2)
+    # with col_1:
+    #     #create a save as button that unlocks a text input space
+    #     if "save_as_name" not in st.session_state:
+    #         st.session_state["save_as_name"] = ""
 
-        if "save_as" not in st.session_state:
-            st.session_state["save_as"] = False
+    #     if "save_as" not in st.session_state:
+    #         st.session_state["save_as"] = False
 
-        if st.button("Speichern"):
-            st.session_state["save_as"] = not st.session_state["save_as"]
+    #     if st.button("Speichern"):
+    #         st.session_state["save_as"] = not st.session_state["save_as"]
 
-        key_file_name_save = " "
+    #     key_file_name_save = " "
 
-        if st.session_state["save_as"]:
-            #space to input file name
-            save_as_file_name = st.text_input("Dateiname", key=key_file_name_save)
-            st.session_state["save_as_name"] = st.session_state[key_file_name_save]
-            #saves the json file as the input file name
-            if st.button("Speichern"):
-                name = st.session_state[key_file_name_save]
-                st.write(save_as_file_name + "Session wurde gespeichert" )               #should prolly only display if save was successful, should disappear after a while
-                with open(name + ".json", "w") as file:
-                    with open(state, "r") as open_json:
-                        file.write(open_json.read())
+    #     if st.session_state["save_as"]:
+    #         #space to input file name
+    #         save_as_file_name = st.text_input("Dateiname", key=key_file_name_save)
+    #         st.session_state["save_as_name"] = st.session_state[key_file_name_save]
+    #         #saves the json file as the input file name
+    #         if st.button("Speichern"):
+    #             name = st.session_state[key_file_name_save]
+    #             st.write(save_as_file_name + "Session wurde gespeichert" )               #should prolly only display if save was successful, should disappear after a while
+    #             with open(name + ".json", "w") as file:
+    #                 with open(state, "r") as open_json:
+    #                     file.write(open_json.read())
 
-    with col_2:
-        #create an open file button that unlocks a text input space
-        if "open_file_name" not in st.session_state:
-            st.session_state["open_file_name"] = ""
+    # with col_2:
+    #     #create an open file button that unlocks a text input space
+    #     if "open_file_name" not in st.session_state:
+    #         st.session_state["open_file_name"] = ""
 
-        if "open_file" not in st.session_state:
-            st.session_state["open_file"] = False
+    #     if "open_file" not in st.session_state:
+    #         st.session_state["open_file"] = False
 
-        if st.button("Datei öffnen"):
-            st.session_state["open_file"] = not st.session_state["open_file"]
+    #     if st.button("Datei öffnen"):
+    #         st.session_state["open_file"] = not st.session_state["open_file"]
 
-        key_file_name_open = ""
-        if st.session_state["open_file"]:
-            #space to input file name
-            save_as_file_name = st.text_input("file name (if file doesn't load properly, try refreshing the page)", key=key_file_name_open)
-            st.session_state["open_file_name"] = st.session_state[key_file_name_open]
-            #put the contents of the opened file in current session json and relaod page
-            if st.button("open"):
-                name = st.session_state[key_file_name_open]
-                #save contents of file in session file
-                with open(name + ".json", "r") as file:                 #needs an exception if file does not exist
-                    with open(state, "w") as open_json:
-                        open_json.write(file.read())
-                st.experimental_rerun()
+    #     key_file_name_open = ""
+    #     if st.session_state["open_file"]:
+    #         #space to input file name
+    #         save_as_file_name = st.text_input("file name (if file doesn't load properly, try refreshing the page)", key=key_file_name_open)
+    #         st.session_state["open_file_name"] = st.session_state[key_file_name_open]
+    #         #put the contents of the opened file in current session json and relaod page
+    #         if st.button("open"):
+    #             name = st.session_state[key_file_name_open]
+    #             #save contents of file in session file
+    #             with open(name + ".json", "r") as file:                 #needs an exception if file does not exist
+    #                 with open(state, "w") as open_json:
+    #                     open_json.write(file.read())
+    #             st.experimental_rerun()
 
 
 #Befuellen des dicts mit den Absorptionsgeraden fuer die jeweiligen Oktavbaender und 
@@ -452,12 +474,19 @@ json_file = open(state)
 variables = json.load(json_file)
 json_file.close()
 
+
 pdf1 = pdfprotocol(state, variables, fig_reverberationTime ,fig_reverberationTime_ratio)
-if st.button('Erstellen der PDF'):
-    st.write('PDF wird erstellt, sobald der Download verfügbar ist erscheint eine "Download PDF" Schaltfläche.')
+
+if st.button('Erstellen der PDF und der Session-Datei'):
+    st.write('Dateien werden erstellt...')
     pdf1.protocol()
     with open("pdf_test.pdf", "rb") as pdf_file:
         PDFbyte = pdf_file.read()
-    st.download_button('Download PDF', PDFbyte, 'Raumakustikprotokoll.pdf')
+        pdf_file.close()
+    with open(state, 'rb') as json_dict:
+        session_json = json_dict.read()
+        json_dict.close()
+    st.download_button('PDF herunterladen', PDFbyte, 'Protokoll_Nachhallzeitanalyse.pdf')
+    st.download_button('Session Datei herunterladen', session_json, f'Session_Datei_{today}')
 
 
