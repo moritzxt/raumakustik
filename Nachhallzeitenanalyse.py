@@ -69,7 +69,6 @@ load_session_file(state)
 
 #write current session id in session_key.json
 session = add_script_run_ctx().streamlit_script_run_ctx.session_id
-session = './session/' + session  
 write_session_key(session)
 
 #load data from current session
@@ -92,11 +91,7 @@ with st.container():
         if st.button('Session aktualisieren'):
             st.experimental_rerun()
     st.divider()
-    if st.button('Neue Session starten'):
-        json_file_list = glob.glob('./session/*.json')
-        json_data = {}
-        for file in json_file_list:
-            os.remove(file)
+
         #st.experimental_rerun()
 
 
@@ -447,3 +442,11 @@ if st.button('Erstellen der PDF und der Session-Datei'):
     st.download_button('Session Datei herunterladen', session_json, f'Session_Datei_{today}')
 
 
+
+if st.button('Neue Session starten'):
+    json_file_list = glob.glob('./session/*.json')
+    json_data = {}
+    st.cache_data.clear()
+    for file in json_file_list:
+        os.remove(file)
+    init_data = init_starting_values(json_data,material_dict,person_dict)
