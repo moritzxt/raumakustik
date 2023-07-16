@@ -62,20 +62,21 @@ init_data = init_starting_values(json_data,material_dict,person_dict)
 # state = add_script_run_ctx().streamlit_script_run_ctx.session_id +'.json'
 # write_session_file(state)
 
-# #load the last session into session json file
-# load_session_file(state)
+#load the last session into session json file
+load_session_file(state)
 
-# #write current session id in session_key.json
-# session = add_script_run_ctx().streamlit_script_run_ctx.session_id
-# write_session_key(session)
+#write current session id in session_key.json
+session = add_script_run_ctx().streamlit_script_run_ctx.session_id
+session = './session/' + session  
+write_session_key(session)
 
-# #load data from current session
-# with open(state) as jsonkey:
-#     json_data = json.load(jsonkey)
+#load data from current session
+with open(state) as jsonkey:
+    json_data = json.load(jsonkey)
 
-# load_session(state)
-# #read starting positions of input elements from last session... 
-# init_data = init_starting_values(json_data,material_dict,person_dict)
+load_session(state)
+#read starting positions of input elements from last session... 
+init_data = init_starting_values(json_data,material_dict,person_dict)
 
 with st.container():
     st.title('Web-App für Nachhallzeitenanalyse')
