@@ -114,6 +114,7 @@ with st.container():
         json_data['usecase'] = use
         with open(state,'w') as jsonkey:
             json.dump(json_data, jsonkey)
+            jsonkey.close()
 
         #set boundaries of volume for usecase
         min_lim =  min(usecase[use])
@@ -141,6 +142,7 @@ with st.container():
         json_data['volume'] = vol
         with open(state,'w') as jsonkey:
             json.dump(json_data, jsonkey)
+            jsonkey.close()
 
         
     with col3:
@@ -170,6 +172,7 @@ with st.container():
             json_data['number_walls'] = len(st.session_state.main_walls)
         with open(state,'w') as jsonkey:
             json.dump(json_data, jsonkey)
+            jsonkey.close()
         
 
     with col4:
@@ -230,6 +233,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     json_data['person_type' + str(i+1)] = {}
             with open(state,'w') as jsonkey:
                 json.dump(json_data, jsonkey)
+                jsonkey.close()
 
             for num in range(0, numPeople):
                     #input of amount of persons per person type
@@ -248,6 +252,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     json_data['person_type' + str(num+1)]['type'] = peopleDescription[num]
                     with open(state,'w') as jsonkey:
                         json.dump(json_data, jsonkey)
+                        jsonkey.close()
 
                     
             #removal button for person types
@@ -256,11 +261,12 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     st.session_state['add_persons'] -= 1
                     peopleDescription.pop()
                     numberOfPeople.pop()
-                    json_data.pop('person_type' + str(st.session_state.add_persons+1))
+                    json_data.pop('person_type' + str(st.session_state.add_persons+1)) #funktioniert das?
                     #sync amount of person types with json file
                     json_data['number_people'] = st.session_state[f'add_persons']
                     with open(state,'w') as jsonkey:
                         json.dump(json_data, jsonkey)  
+                        jsonkey.close()
      
 
         else:
@@ -276,6 +282,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                 json_data['wall' + str(number+1)]['name'] = name
                 with open(state,'w') as jsonkey:
                     json.dump(json_data, jsonkey)
+                    jsonkey.close()
 
 
                 if f'subAreas{name}' not in st.session_state:
@@ -304,6 +311,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     json_data['wall' + str(number+1)]['material'] = main_materials[number]
                     with open(state,'w') as jsonkey:
                         json.dump(json_data, jsonkey)
+                        jsonkey.close()
                 
 
                 with con_2:
@@ -325,6 +333,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     json_data['wall' + str(number+1)]['number_subareas'] = subAreas  
                     with open(state,'w') as jsonkey:
                         json.dump(json_data, jsonkey)     
+                        jsonkey.close()
                             
                     for num in range(0, subAreas):
                         #write corresponding data for subareas into json file 
@@ -336,6 +345,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
 
                         with open(state,'w') as jsonkey:
                             json.dump(json_data, jsonkey)   
+                            jsonkey.close()
                         #input for area for each subarea
                         with col_1:
                             sub_surfaces[name].append(st.number_input(f"Fläche für Subfläche {num +1 }",
@@ -354,7 +364,8 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                         json_data['wall' + str(number+1)]['subarea' + str(num+1)]['category'] = category
                         json_data['wall' + str(number+1)]['subarea' + str(num+1)]['material'] = sub_materials[name][num]
                         with open(state,'w') as jsonkey:
-                            json.dump(json_data, jsonkey)     
+                            json.dump(json_data, jsonkey)    
+                            jsonkey.close() 
 
                     #removal button for subareas           
                     if st.button('Subfläche entfernen', key=f'remove Subfläche von {name}') and len(sub_materials[name]) > 0:
@@ -367,65 +378,13 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     json_data['wall' + str(number+1)]['number_subareas'] = st.session_state[f'subAreas{name}']
                     with open(state,'w') as jsonkey:
                         json.dump(json_data, jsonkey)  
+                        jsonkey.close()
     
 
     #Initialisierung des Dictionaries für die Absorptionsgrade
     alpha = basic_dict_2()
 
-#with st.container():
-    # col_1, col_2 = st.columns(2)
-    # with col_1:
-    #     #create a save as button that unlocks a text input space
-    #     if "save_as_name" not in st.session_state:
-    #         st.session_state["save_as_name"] = ""
 
-    #     if "save_as" not in st.session_state:
-    #         st.session_state["save_as"] = False
-
-    #     if st.button("Speichern"):
-    #         st.session_state["save_as"] = not st.session_state["save_as"]
-
-    #     key_file_name_save = " "
-
-    #     if st.session_state["save_as"]:
-    #         #space to input file name
-    #         save_as_file_name = st.text_input("Dateiname", key=key_file_name_save)
-    #         st.session_state["save_as_name"] = st.session_state[key_file_name_save]
-    #         #saves the json file as the input file name
-    #         if st.button("Speichern"):
-    #             name = st.session_state[key_file_name_save]
-    #             st.write(save_as_file_name + "Session wurde gespeichert" )               #should prolly only display if save was successful, should disappear after a while
-    #             with open(name + ".json", "w") as file:
-    #                 with open(state, "r") as open_json:
-    #                     file.write(open_json.read())
-
-    # with col_2:
-    #     #create an open file button that unlocks a text input space
-    #     if "open_file_name" not in st.session_state:
-    #         st.session_state["open_file_name"] = ""
-
-    #     if "open_file" not in st.session_state:
-    #         st.session_state["open_file"] = False
-
-    #     if st.button("Datei öffnen"):
-    #         st.session_state["open_file"] = not st.session_state["open_file"]
-
-    #     key_file_name_open = ""
-    #     if st.session_state["open_file"]:
-    #         #space to input file name
-    #         save_as_file_name = st.text_input("file name (if file doesn't load properly, try refreshing the page)", key=key_file_name_open)
-    #         st.session_state["open_file_name"] = st.session_state[key_file_name_open]
-    #         #put the contents of the opened file in current session json and relaod page
-    #         if st.button("open"):
-    #             name = st.session_state[key_file_name_open]
-    #             #save contents of file in session file
-    #             with open(name + ".json", "r") as file:                 #needs an exception if file does not exist
-    #                 with open(state, "w") as open_json:
-    #                     open_json.write(file.read())
-    #             st.experimental_rerun()
-
-
-#Befuellen des dicts mit den Absorptionsgeraden fuer die jeweiligen Oktavbaender und 
 for ind, octaveBand in enumerate(alpha):
     for material in main_materials:
         try:
