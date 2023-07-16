@@ -5,7 +5,8 @@ from utils import usecase
 #from session_utils import load_session, add_script_run_ctx, write_json, write_session_file, load_session_file, write_session_key
 from stream import sub_materials
 import pickle
-
+from streamlit.runtime.scriptrunner.script_run_context import add_script_run_ctx
+from session_utils import write_session_file, load_session_file, write_session_key
 fileObj = open('raum.obj', 'rb')
 raum_fine = pickle.load(fileObj)
 fileObj.close()
@@ -85,3 +86,20 @@ with tab2:
     with col_1:
         fig2 = raum_fine.plot_reverberationTime_ratio()
         st.plotly_chart(fig2)
+
+
+
+state = add_script_run_ctx().streamlit_script_run_ctx.session_id +'.json'
+state = './session/' + state  
+load_session_file(state)
+
+#write current session id in session_key.json
+session = add_script_run_ctx().streamlit_script_run_ctx.session_id
+write_session_key(session)
+
+#load data from current session
+with open(state) as jsonkey:
+    json_data = json.load(jsonkey)
+
+#area = self.load_variables()['wall' + f'{index + 1}']['subarea' + f'{subindex + 1}']['area']
+json_data['wall' + str(number+1)]['subarea' + str(num+1)]['area'] = sub_surfaces[name][num]

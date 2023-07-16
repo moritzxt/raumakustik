@@ -31,7 +31,7 @@ sub_materials = {}
 numberOfPeople = []
 peopleDescription = []
 main_walls = []
-default_area = 'Default'
+default_area = 'default'
 
 if 'main_walls' not in st.session_state:
     #'''creating List for main_walls in current session, so it can be updated by add button'''
@@ -40,6 +40,7 @@ if 'main_walls' not in st.session_state:
 
 #create a json file with session id as file name
 state = add_script_run_ctx().streamlit_script_run_ctx.session_id +'.json'
+state = './session/' + state  
 write_session_file(state)
 
 #load the last session into session json file
@@ -57,24 +58,24 @@ load_session(state)
 #read starting positions of input elements from last session... 
 init_data = init_starting_values(json_data,material_dict,person_dict)
 
-#create a json file with session id as file name
-state = add_script_run_ctx().streamlit_script_run_ctx.session_id +'.json'
-write_session_file(state)
+# #create a json file with session id as file name
+# state = add_script_run_ctx().streamlit_script_run_ctx.session_id +'.json'
+# write_session_file(state)
 
-#load the last session into session json file
-load_session_file(state)
+# #load the last session into session json file
+# load_session_file(state)
 
-#write current session id in session_key.json
-session = add_script_run_ctx().streamlit_script_run_ctx.session_id
-write_session_key(session)
+# #write current session id in session_key.json
+# session = add_script_run_ctx().streamlit_script_run_ctx.session_id
+# write_session_key(session)
 
-#load data from current session
-with open(state) as jsonkey:
-    json_data = json.load(jsonkey)
+# #load data from current session
+# with open(state) as jsonkey:
+#     json_data = json.load(jsonkey)
 
-load_session(state)
-#read starting positions of input elements from last session... 
-init_data = init_starting_values(json_data,material_dict,person_dict)
+# load_session(state)
+# #read starting positions of input elements from last session... 
+# init_data = init_starting_values(json_data,material_dict,person_dict)
 
 with st.container():
     st.title('Web-App für Nachhallzeitenanalyse')
@@ -433,20 +434,23 @@ tab1, tab2 = st.tabs(['Nachhallzeit', 'Nachhallzeitenvergleich'])
 
 with tab1:
     
-    fig1 = raum.plot_reverberationTime()
-    st.plotly_chart(fig1)
+    fig_reverberationTime = raum.plot_reverberationTime()
+    st.plotly_chart(fig_reverberationTime)
 
 with tab2:
-    fig2 = raum.plot_reverberationTime_ratio()
-    st.plotly_chart(fig2)
+    fig_reverberationTime_ratio = raum.plot_reverberationTime_ratio()
+    st.plotly_chart(fig_reverberationTime_ratio)
 
 #Exporting the results as PDF with pdfprotocol class and download the pdf
 
 st.divider()
 st.subheader('Exportieren der Ergebnisse als PDF')
 #creating the pdf
-pdf1 = pdfprotocol('save_test.json', raum.plot_reverberationTime(), raum.plot_reverberationTimeRatio())
-st.button('Erstellen der PDF', on_click=pdf1.protocol())
+pdf1 = pdfprotocol(state ,fig_reverberationTime ,fig_reverberationTime_ratio)
+if st.button('Erstellen der PDF'):
+    pdf1.protocol()
 
-st.download_button('pdf_test.pdf')
+with open("pdf_test.pdf", "rb") as pdf_file:
+    PDFbyte = pdf_file.read()
+st.download_button('Download PDF', PDFbyte, 'Raumakustikprotokoll.pdf')
 
