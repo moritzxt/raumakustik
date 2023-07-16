@@ -37,7 +37,7 @@ def slider_for_surface(raum_fine, key = 1):
                 sum(raum_fine.sub_surface[wall]))
         raum_fine.sub_surface[wall][sub_wall_ind] = st.slider(
             label='Fläche der Subwandfläche', min_value=.0, max_value=max_area, key=f'SubAreaSlider{sub_wall_ind}{key}', step=0.1)
-        sub_wall_material = sub_materials[wall][sub_wall_ind]
+        sub_wall_material = sub_materials[f'{wall}'][sub_wall_ind]
         st.write(sub_wall_material)
 
 st.set_page_config(page_title='Feinauslegung', layout='wide')
@@ -50,6 +50,7 @@ col1, col2, col3 = st.columns(3)
 with col1:
     wall = st.selectbox('Wähle die zu bearbeitende Hauptfläche aus',
                         options=main_walls)
+    wall_ind =  main_walls.index(wall)
 
 with col2:
     sub_surface_count = len(raum_fine.sub_surface[wall])
@@ -102,4 +103,5 @@ with open(state) as jsonkey:
     json_data = json.load(jsonkey)
 
 #area = self.load_variables()['wall' + f'{index + 1}']['subarea' + f'{subindex + 1}']['area']
-json_data['wall' + str(number+1)]['subarea' + str(num+1)]['area'] = sub_surfaces[name][num]
+if st.button('Übernehmen', help = 'Übernehme die Änderung und fahre auf der Hauptseite fort'):
+    json_data['wall' + str(wall_ind+1)]['subarea' + str(sub_wall_ind+1)]['area'] = raum_fine.sub_surface[wall][sub_wall_ind]
