@@ -3,7 +3,7 @@ import copy
 import json
 from utils import usecase
 #from session_utils import load_session, add_script_run_ctx, write_json, write_session_file, load_session_file, write_session_key
-from stream import sub_materials
+from Nachhallzeitenanalyse import sub_materials
 import pickle
 from streamlit.runtime.scriptrunner.script_run_context import add_script_run_ctx
 from session_utils import write_session_file, load_session_file, write_session_key
@@ -101,6 +101,7 @@ write_session_key(session)
 #load data from current session
 with open(state) as jsonkey:
     json_data = json.load(jsonkey)
+    jsonkey.close()
 
 #area = self.load_variables()['wall' + f'{index + 1}']['subarea' + f'{subindex + 1}']['area']
 if st.button('Übernehmen', help = 'Übernehme die Änderung und fahre auf der Hauptseite fort'):
