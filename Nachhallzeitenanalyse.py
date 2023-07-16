@@ -15,10 +15,6 @@ from datetime import datetime
 today = datetime.today().strftime('%Y%m%d')
 
 #setup of  page data:
-# sessionObj = open('session.obj', 'rb')
-# st.session_state = pickle.load(sessionObj)
-# sessionObj.close()
-
 st.set_page_config(page_title= 'Tool für Raumakustik', layout='wide',
                     initial_sidebar_state='collapsed')
 
@@ -95,11 +91,13 @@ with st.container():
         init_data = init_starting_values(json_data,material_dict,person_dict)
         if st.button('Session aktualisieren'):
             st.experimental_rerun()
-    if st.button('Neue Session initialisieren'):
+    st.divider()
+    if st.button('Neue Session starten'):
         json_file_list = glob.glob('./session/*.json')
+        json_data = {}
         for file in json_file_list:
             os.remove(file)
-        st.experimental_rerun()
+        #st.experimental_rerun()
 
 
     st.divider()
