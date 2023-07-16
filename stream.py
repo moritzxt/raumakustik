@@ -442,11 +442,16 @@ with tab2:
     st.plotly_chart(fig_reverberationTime_ratio)
 
 #Exporting the results as PDF with pdfprotocol class and download the pdf
-
 st.divider()
 st.subheader('Exportieren der Ergebnisse als PDF')
+
 #creating the pdf
-pdf1 = pdfprotocol(state ,fig_reverberationTime ,fig_reverberationTime_ratio)
+#reading the variables out of the json file 
+json_file = open(state)
+variables = json.load(json_file)
+json_file.close()
+
+pdf1 = pdfprotocol(state, variables, fig_reverberationTime ,fig_reverberationTime_ratio)
 if st.button('Erstellen der PDF'):
     pdf1.protocol()
 
