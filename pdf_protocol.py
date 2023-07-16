@@ -1,6 +1,7 @@
 from fpdf import FPDF
-from fpdf.enum import XPos, YPos
+from fpdf.enums import XPos, YPos
 import json
+import os
 import plotly.io as pio
 
 class pdfprotocol(FPDF):
@@ -138,8 +139,14 @@ class pdfprotocol(FPDF):
             self.pdf.ln(2)
 
         # write plots
-        pio.write_image(self.plot_reverberationTime, 'plot_reverberationTime', format = 'png')
-        pio.write_image(self.plot_reverberationTimeRatio, 'plot_reverberationTimeRatio', format = 'png')
+        # get wd
+        c_path =  os.getcwd()
+        path_reverbereationTime = c_path + '/images/plot_reverberationTime.png'
+        path_reverbereationTimeRatio = c_path + '/images/plot_reverberationTimeRatio.png'
+        #pio.kaleido.scope.chromium_args = tuple([arg for arg in pio.kaleido.scope.chromium_args if arg != "--disable-dev-shm-usage"])
+
+        pio.write_image(self.plot_reverberationTime, path_reverbereationTime, format = 'png', engine='orca')
+        pio.write_image(self.plot_reverberationTimeRatio, path_reverbereationTimeRatio, format = 'png', engine='orca')
 
         # show plots
         self.pdf.add_page()
