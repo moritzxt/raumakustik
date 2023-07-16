@@ -5,8 +5,8 @@ from utils import read_db, add_row
 
 material_dict = read_db('Datenbank_DIN18041.csv')
 dataframe =  pd.read_csv('Datenbank_DIN18041.csv',sep = ';')
-st.set_page_config(page_title= 'Database', layout='wide')
-st.title('Materialdatenbank')
+st.set_page_config(page_title= 'Datenbank', layout='wide')
+st.title('Datenbank')
 st.divider()
 st.dataframe(dataframe, use_container_width= True)
 

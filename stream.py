@@ -8,6 +8,7 @@ import os
 import json
 from streamlit.runtime.scriptrunner.script_run_context import add_script_run_ctx
 from session_utils import write_session_file, load_session_file, write_session_key, init_starting_values, sync_session, load_session, negate_checkbox, write_json#, subArea_subst
+from pdf_protocol import pdfprotocol
 
 #setup of  page data:
 # sessionObj = open('session.obj', 'rb')
@@ -30,10 +31,11 @@ sub_materials = {}
 numberOfPeople = []
 peopleDescription = []
 main_walls = []
+default_area = 'Default'
 
 if 'main_walls' not in st.session_state:
     #'''creating List for main_walls in current session, so it can be updated by add button'''
-    st.session_state.main_walls = ['Grundfläche 1']
+    st.session_state.main_walls = [default_area]
 
 
 #create a json file with session id as file name
@@ -75,16 +77,15 @@ load_session(state)
 init_data = init_starting_values(json_data,material_dict,person_dict)
 
 with st.container():
-    st.title('WebApp for Roomacoustics')
+    st.title('Web-App für Nachhallzeitenanalyse')
     st.divider()
-    st.header('Benötigt werden das Raumvolumen, die Anzahl'
-        ' der Wände, deren Fläche, sowie das Material der Wandoberfläche')
+    st.header('Eingabeparameter')
 
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
         #selection of usecase
-        use = st.selectbox('Usecase nach DIN 18041', options=usecase.keys(), index=init_data['usecase_index'],)
+        use = st.selectbox('Nutzungsart nach DIN 18041', options=usecase.keys(), index=init_data['usecase_index'],)
         #on change save current usecase into json
         json_data['usecase'] = use
         with open(state,'w') as jsonkey:
@@ -125,14 +126,14 @@ with st.container():
         #check if wall name exists already, if yes, tell user
         if st.button('Hinzufügen'):
             if wall_name in st.session_state.main_walls:
-                st.write("Diese Wand existiert bereits")
+                st.write("Diese Grundfläche existiert bereits")
             else:
             #if not, create new wall
-                if 'Grundfläche 1' in st.session_state.main_walls:
+                if default_area in st.session_state.main_walls:
                     st.session_state.main_walls = [wall_name]
                 else:
                     st.session_state.main_walls.append(wall_name)
-        if st.button('Entfernen', help= 'Geben Sie den Namen der Wandfläche ein, die Sie entfernen möchten.'):
+        if st.button('Entfernen', help= 'Geben Sie den Namen der Grundfläche ein, die Sie entfernen möchten.'):
             if wall_name in st.session_state.main_walls and len(st.session_state.main_walls) > 1:
                 ind = st.session_state.main_walls.index(wall_name)
                 #Removing specific Mainwall
@@ -180,7 +181,7 @@ tabs = st.tabs(st.session_state.main_walls)
 # Personen
 
 for tab, name in zip(tabs, st.session_state.main_walls):
-    print(name)
+
     with tab:
         if name == 'Personen':
             col_11, col_12 = st.columns(2)
@@ -189,7 +190,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
             if 'add_persons' not in st.session_state:
                 st.session_state['add_persons'] = numPeople
             #button to add more person types
-            if st.button('Add Personen', key ='button_add_persons'):
+            if st.button('Personengruppe hinzufügen', key ='button_add_persons'):
                 st.session_state['add_persons'] += 1
 
             #if person type has been removed on last runthrough, display one less
@@ -210,7 +211,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     #input of amount of persons per person type
                     with col_11:
                         numberOfPeople.append(st.number_input(
-                                f"Anzahl an Personen im Raum", step = 1, key = f'people{num}', value=init_data['amount'][num], on_change = write_json, kwargs = {"json_data": json_data, "state": state, "num":num}))
+                                f"Anzahl der Personen", step = 1, key = f'people{num}', value=init_data['amount'][num], on_change = write_json, kwargs = {"json_data": json_data, "state": state, "num":num}))
                         
                     #put amount of people of type in json file
                     json_data['person_type' + str(num+1)]['amount'] = numberOfPeople[num]
@@ -226,7 +227,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
 
                     
             #removal button for person types
-            if st.button('Remove Personen', key='remove_button_persons'):
+            if st.button('Personengruppe entfernen', key='remove_button_persons'):
                 if st.session_state['add_persons'] > 1 and len(peopleDescription) > 0:
                     st.session_state['add_persons'] -= 1
                     peopleDescription.pop()
@@ -266,11 +267,11 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                             f"Fläche für {name}", value=init_data['area'][number], min_value=0))
                     #category for each subarea
                     with col_2:
-                        category = st.selectbox(label='Bitte wählen Sie die Kategorie des Materials aus',
+                        category = st.selectbox(label='Materialkategorie',
                                                 key=f'{name}' ,options=material_dict.keys(), index=init_data['category'][number])
                     #material for every subarea
                     with col_3:
-                        main_materials.append(st.selectbox(label =  f'Bitte wählen Sie das Material der {name} aus.',
+                        main_materials.append(st.selectbox(label =  f'Material von {name}',
                                                         options=material_dict[f'{category}'].keys(), index=init_data['material'][number]))
 
                     #save currenty wall area, category and type in json
@@ -288,9 +289,9 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     #get initial data for number of subareas
                     subAreas = init_data['number_subareas'][number]
                     #button for adding subareas
-                    if st.button('Add Subwandfläche', key = f'Button subArea{subAreas} {name}'):
+                    if st.button('Subfläche hinzufügen', key = f'Button subArea{subAreas} {name}'):
                         st.session_state[f'subAreas{name}'] += 1
-                    #check if "remove subwandfläche"-button has been hit last runthrough, in that case, display one less subarea
+                    #check if "remove subfläche"-button has been hit last runthrough, in that case, display one less subarea
                     if f'remove Subfläche von {name}' in st.session_state:
                         if st.session_state[f'remove Subfläche von {name}'] == True:
                             subAreas = st.session_state[f'subAreas{name}'] -1
@@ -313,7 +314,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                             json.dump(json_data, jsonkey)   
                         #input for area for each subarea
                         with col_1:
-                            sub_surfaces[name].append(st.number_input(f"Fläche für Subwandfläche {num +1 }",
+                            sub_surfaces[name].append(st.number_input(f"Fläche für Subfläche {num +1 }",
                                                                     value=init_data['sub_area'][number][num] , key = f'Fläche subArea{num} {name}',min_value=0, max_value=int((main_surfaces[name] - sum(sub_surfaces[name])))))
                         #input for category for each subarea
                         with col_2:
@@ -332,7 +333,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                             json.dump(json_data, jsonkey)     
 
                     #removal button for subareas           
-                    if st.button('Remove Subwandfläche', key=f'remove Subfläche von {name}') and len(sub_materials[name]) > 0:
+                    if st.button('Subfläche entfernen', key=f'remove Subfläche von {name}') and len(sub_materials[name]) > 0:
                         if st.session_state[f'subAreas{name}'] > 0:
                             st.session_state[f'subAreas{name}'] -= 1
                             sub_materials[name].pop()
@@ -357,7 +358,7 @@ with st.container():
         if "save_as" not in st.session_state:
             st.session_state["save_as"] = False
 
-        if st.button("save as"):
+        if st.button("Speichern"):
             st.session_state["save_as"] = not st.session_state["save_as"]
 
         key_file_name_save = " "
@@ -382,7 +383,7 @@ with st.container():
         if "open_file" not in st.session_state:
             st.session_state["open_file"] = False
 
-        if st.button("open file"):
+        if st.button("Datei öffnen"):
             st.session_state["open_file"] = not st.session_state["open_file"]
 
         key_file_name_open = ""
@@ -428,7 +429,7 @@ fileObj.close()
 st.divider()
 st.subheader('Ergebnisse')
 st.divider()
-tab1, tab2 = st.tabs(['Nachhallzeit', 'Vergleich der Nachhallzeit'])
+tab1, tab2 = st.tabs(['Nachhallzeit', 'Nachhallzeitenvergleich'])
 
 with tab1:
     
@@ -439,6 +440,13 @@ with tab2:
     fig2 = raum.plot_reverberationTime_ratio()
     st.plotly_chart(fig2)
 
-# sessionObj = open('session.obj', 'wb')
-# pickle.dump(st.session_state, sessionObj)
-# sessionObj.close()
+#Exporting the results as PDF with pdfprotocol class and download the pdf
+
+st.divider()
+st.subheader('Exportieren der Ergebnisse als PDF')
+#creating the pdf
+pdf1 = pdfprotocol('save_test.json', raum.plot_reverberationTime(), raum.plot_reverberationTimeRatio())
+st.button('Erstellen der PDF', on_click=pdf1.protocol())
+
+st.download_button('pdf_test.pdf')
+

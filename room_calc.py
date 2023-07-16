@@ -171,17 +171,19 @@ class room:
 
         trace1 = go.Bar(x = freq, 
                         y = list(reverberationTimeSeconds.values()), 
-                        name = 'bar', 
-                        marker_color = 'blue', 
-                        showlegend= True, 
-                        width=.2)
+                        name = 'Nachhallzeit', 
+                        marker_color = 'rgba(28, 122, 255, 1)', 
+                        showlegend= False, 
+                        width=.2,
+                        hovertemplate = 'Oktavband: %{x} Hz<br>Nachhallzeit: %{y:.2f}<extra></extra>')
         
         fig.add_trace(trace1)
 
         fig.update_layout(xaxis_title = 'Frequenz [Hz]', 
                           yaxis_title = 'Nachhallzeit [s]', 
                           width = 1000, 
-                          height = 600)
+                          height = 600,
+                          hoverlabel = dict(bgcolor = 'rgba(28, 122, 255, .4)'))
         
         fig.update_xaxes(type='category')
 
@@ -206,7 +208,7 @@ class room:
 
         trace1 = go.Scatter(x = frequencies, 
                             y = ReverberationTime_lowerlimit, 
-                            name = 'Grenzen', 
+                            name = 'Fehlergrenzen', 
                             marker_color = 'green', 
                             mode = 'lines', 
                             legendgroup = 'boundaries',
@@ -238,7 +240,6 @@ class room:
                           yaxis_title = 'T / T_soll', 
                           width = 1000, 
                           height = 600, 
-                        #   legend={'traceorder':'normal'},
                           hoverlabel = dict(bgcolor = 'rgba(28, 122, 255, .4)')
                           )
         
