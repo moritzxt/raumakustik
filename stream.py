@@ -3,7 +3,7 @@ import pickle
 import streamlit as st
 #import streamlit_tags as sttags
 from room_calc import room
-from utils import basic_dict , read_db, basic_dict_2, add_row, usecase, sub_alpha_dict, flatten_dict
+from utils import basic_dict , read_db, basic_dict_2, add_row, usecase, sub_alpha_dict, flatten_dict, create_download_pdf
 import os
 import json
 from streamlit.runtime.scriptrunner.script_run_context import add_script_run_ctx
@@ -453,9 +453,5 @@ json_file.close()
 
 pdf1 = pdfprotocol(state, variables, fig_reverberationTime ,fig_reverberationTime_ratio)
 if st.button('Erstellen der PDF'):
-    pdf1.protocol()
-
-with open("pdf_test.pdf", "rb") as pdf_file:
-    PDFbyte = pdf_file.read()
-st.download_button('Download PDF', PDFbyte, 'Raumakustikprotokoll.pdf')
+    create_download_pdf()
 

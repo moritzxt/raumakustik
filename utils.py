@@ -73,3 +73,11 @@ def flatten_dict(dict):
 # Sport: 30000 m^2, as it is the biggest room volume applicable with DIN 18041 (see page 5)
 usecase = {'Musik': [30, 1000], 'Sprache/Vortrag': [50, 5000], 'Sprache/Vortrag inklusiv': [30, 5000],
            'Unterricht/Kommunikation': [30, 1000],'Unterricht/Kommunikation inklusiv': [30, 500], 'Sport': [200, 30000]} 
+
+
+def create_download_pdf():
+    # create PDF protocol
+    pdf1.protocol()
+    with open("pdf_test.pdf", "rb") as pdf_file:
+        PDFbyte = pdf_file.read()
+    st.download_button('Download PDF', PDFbyte, 'Raumakustikprotokoll.pdf')
