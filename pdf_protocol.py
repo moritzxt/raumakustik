@@ -13,16 +13,6 @@ class pdfprotocol(FPDF):
         self.plot_reverberationTime = plot_reverberationTime
         self.plot_reverberationTimeRatio = plot_reverberationTimeRatio
         self.font = 'helvetica'
-
-    # def load_variables(self):
-    #     '''
-    #     Function to laod the variables out of the session file 
-    #     '''
-    #     json_file = open(self.filename)
-    #     variables = json.load(json_file)
-    #     json_file.close()
-
-    #     return variables
     
     def header(self):
         '''
