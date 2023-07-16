@@ -367,12 +367,12 @@ with st.container():
 
         if st.session_state["save_as"]:
             #space to input file name
-            save_as_file_name = st.text_input("file name", key=key_file_name_save)
+            save_as_file_name = st.text_input("Dateiname", key=key_file_name_save)
             st.session_state["save_as_name"] = st.session_state[key_file_name_save]
             #saves the json file as the input file name
-            if st.button("save"):
+            if st.button("Speichern"):
                 name = st.session_state[key_file_name_save]
-                st.write(save_as_file_name + ".json saved successfully" )               #should prolly only display if save was successful, should disappear after a while
+                st.write(save_as_file_name + "Session wurde gespeichert" )               #should prolly only display if save was successful, should disappear after a while
                 with open(name + ".json", "w") as file:
                     with open(state, "r") as open_json:
                         file.write(open_json.read())
@@ -454,7 +454,7 @@ json_file.close()
 
 pdf1 = pdfprotocol(state, variables, fig_reverberationTime ,fig_reverberationTime_ratio)
 if st.button('Erstellen der PDF'):
-    st.info('PDF wird erstellt, sobald der Download verfügbar ist erscheint eine "Download PDF" Schaltfläche.')
+    st.write('PDF wird erstellt, sobald der Download verfügbar ist erscheint eine "Download PDF" Schaltfläche.')
     pdf1.protocol()
     with open("pdf_test.pdf", "rb") as pdf_file:
         PDFbyte = pdf_file.read()
