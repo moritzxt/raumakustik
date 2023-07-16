@@ -9,33 +9,41 @@ def write_session_file(state):
         #refactor all 2.WebApp.json to 2.WebApp variable
         with open(state, 'w') as init:
             json.dump({}, init)
+            init.close()
 
 def load_session_file(state):
     if os.path.isfile('session_key.json'):
         with open('session_key.json', 'r') as file:
             last_session_keyy = json.load(file)
             last_session_key = last_session_keyy['key']
+            file.close()
             if os.path.isfile(last_session_key + '.json'):
                 with open(last_session_key + '.json', 'r') as file:
                     last_session = json.load(file)
+                    file.close()
                     with open(state, 'w') as init:
                         json.dump(last_session, init)
+                        init.close()
+
 
 def upload_session_file(upload_file, state):
     if os.path.isfile('session_key.json'):
         with open('session_key.json', 'r') as file:
             last_session_keyy = json.load(file)
             last_session_key = last_session_keyy['key']
+            file.close()
             if os.path.isfile(last_session_key + '.json'):
                 last_session = json.load(upload_file)
                 with open(state, 'w') as init:
                     json.dump(last_session, init)
+                    init.close()
 
 
 
 def write_session_key(session):
     with open('session_key.json', 'w') as init:
         json.dump({'key': session}, init)
+        init.close()
 
 def init_starting_values(json_data,material_dict,person_dict):
         #initialize usecase init data. if it doesnt exist yet, set to default
@@ -200,16 +208,19 @@ def sync_session(state):
     #used to sync the session states to json file
     with open(state) as jsonkey:
         json_data = json.load(jsonkey)
+        jsonkey.close()
     json_data['usecase'] = st.session_state['usecase']
     json_data['volume'] = st.session_state['volume']
     with open(state,'w') as jsonkey:
         json.dump(json_data, jsonkey)
+        jsonkey.close()
 
 def load_session(state):
     #used to set necessary session states to starting values
     #read contents of session file
     with open(state) as jsonkey:
         json_data = json.load(jsonkey)
+        jsonkey.close()
     #set session states to file content
     for keys in json_data:
         st.session_state[keys] = json_data[keys]
