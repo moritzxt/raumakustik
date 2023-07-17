@@ -32,7 +32,25 @@ for name in main_walls:
 
 def subwall_variables(json_data, index, subindex):
     '''
-    Function to read variables of subwalls
+        Returns the variables for a specific subwall given by the index
+
+        :param json_data: Session file
+        :type json_data: dict
+
+        :param index: Index of the main wall on which the subwall lies
+        :type index: int
+
+        :param subindex: Index of the subwall for which the subwall variables shall be retreived
+        :type subindex: int
+
+        :rturn area: Area of the subwall
+        :rtype area: float
+
+        :rturn category: Category of the subwall
+        :rtype category: str
+
+        :rturn material: Material of the subwall
+        :rtype material: str
     '''
     area = json_data[f'wall{index + 1}'][f'subarea{subindex + 1}']['area']
     category = json_data[f'wall{index + 1}'][f'subarea{subindex + 1}']['category']
@@ -59,8 +77,6 @@ with col1:
     wall = st.selectbox('Wähle die zu bearbeitende Grundfläche aus',
                         options=main_walls)
     wall_ind =  main_walls.index(wall)
-
-
 
 with col2:
     sub_surface_count = len(raum_fine.sub_surface[wall])

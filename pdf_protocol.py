@@ -91,11 +91,11 @@ class pdfprotocol(FPDF):
         :rturn number_subareas: Number of the subareas that are on the given main wall
         :rtype number_subareas: float
         '''
-        name = self.variables['wall' + f'{index + 1}']['name']
-        area = self.variables['wall' + f'{index + 1}']['area']
-        category = self.variables['wall' + f'{index + 1}']['category']
-        material = self.variables['wall' + f'{index + 1}']['material']
-        number_subareas = self.variables['wall' + f'{index + 1}']['number_subareas']
+        name = self.variables[f'wall{index + 1}']['name']
+        area = self.variables[f'wall{index + 1}']['area']
+        category = self.variables[f'wall{index + 1}']['category']
+        material = self.variables[f'wall{index + 1}']['material']
+        number_subareas = self.variables[f'wall{index + 1}']['number_subareas']
 
         return name, area, category, material, number_subareas
 
@@ -118,9 +118,9 @@ class pdfprotocol(FPDF):
         :rturn material: Material of the subwall
         :rtype material: str
         '''
-        area = self.variables['wall' + f'{index + 1}']['subarea' + f'{subindex + 1}']['area']
-        category = self.variables['wall' + f'{index + 1}']['subarea' + f'{subindex + 1}']['category']
-        material = self.variables['wall' + f'{index + 1}']['subarea' + f'{subindex + 1}']['material']
+        area = self.variables[f'wall{index + 1}'][f'subarea{subindex + 1}']['area']
+        category = self.variables[f'wall{index + 1}'][f'subarea{subindex + 1}']['category']
+        material = self.variables[f'wall{index + 1}'][f'subarea{subindex + 1}']['material']
 
         return area, category, material
     
@@ -137,8 +137,8 @@ class pdfprotocol(FPDF):
         :rturn people_type: Description of people as given in Table A.1 in DIN 18041 
         :rtype people_type: str
         '''
-        amount = self.variables['person_type' + f'{index + 1}']['amount']
-        people_type = self.variables['person_type' + f'{index + 1}']['type']
+        amount = self.variables[f'person_type{index + 1}']['amount']
+        people_type = self.variables[f'person_type{index + 1}']['type']
 
         return amount, people_type
     
@@ -179,7 +179,7 @@ class pdfprotocol(FPDF):
 
                 # If there is more than one group of people write group 1, group 2... 
                 if self.basic_variables()[4] != 1:
-                    self.pdf.cell(0, 5, f'Personengruppe ' + f'{index + 1}:', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+                    self.pdf.cell(0, 5, f'Personengruppe {index + 1}:', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
                     self.pdf.cell(5, 5, '')
                     self.pdf.cell(0, 5, f'Beschreibung: {self.people_variables(index)[1]}', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
                     self.pdf.cell(5, 5, '')
