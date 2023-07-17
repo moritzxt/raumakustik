@@ -405,7 +405,7 @@ fileObj.close()
 
 st.divider()
 st.subheader('Ergebnisse')
-st.divider()
+# st.divider()
 tab1, tab2 = st.tabs(['Nachhallzeit', 'Nachhallzeitenvergleich'])
 
 with tab1:
@@ -432,7 +432,7 @@ pdf1 = pdfprotocol(state, variables, fig_reverberationTime ,fig_reverberationTim
 import zipfile
 
 if st.button('Erstellen der PDF und der Session-Datei'):
-    st.write('Dateien werden erstellt...')
+    st.caption('Dateien werden erstellt...')
     pdf1.protocol()
 
     with open("pdf_test.pdf", "rb") as pdf_file:

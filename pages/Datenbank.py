@@ -29,24 +29,24 @@ def valuesAreValid(values):
 #  als Dezimaltrennzeichen verwenden'''
 
 with st.container():
-    st.caption('Updaten der Datenbank mit Benutzerdefinierten Werten. '
-            'Bitte Werte mit Komma von einander trennen und einen Punkt '
-            'als Dezimaltrennzeichen verwenden.'
-            'Neuer Eintrag wird erst angezeitgt,'
-            ' nachdem die Seite einmale neu geladen wurde.')
     st.divider()
+    st.write('Updaten der Datenbank mit Benutzerdefinierten Werten.')
+    st.caption('Bitte Werte mit einem Komma von einander trennen und einen Punkt '
+            'als Dezimaltrennzeichen verwenden.'
+            ' Neuer Eintrag wird erst angezeigt,'
+            ' nachdem die Seite neu geladen wurde.')
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        key_add = st.text_input("Key")
+        key_add = st.text_input("Material")
 
     with col2:
         category = st.selectbox(label= 'Kategorie', options=material_dict.keys())
 
     with col3:
-        value_add = st.text_input("Value")
+        value_add = st.text_input("Absorptionsgrade")
 
-    button = st.button("Add")
+    button = st.button("Eintrag hinzufügen")
     if button:
         if key_add and value_add:
             try:
@@ -60,22 +60,23 @@ with st.container():
                     add_row(list_add)
                     # RELOAD
                     # automatischer reload --> kommt mit neuen requirements und ungetestet
-                    #streamlit_js_eval(js_expressions="parent.window.location.reload()")
+                    # streamlit_js_eval(js_expressions="parent.window.location.reload()")
                     # reruns the script -> st.error get displayed gain
-                    #st.experimental_rerun()
+                    # st.experimental_rerun()
 
                 else:
                     st.error('Das Material konnte der Datenbank nicht hinzugefügt werden.'
-                             'Bitte Werte für die sechs Oktavbänder von 125Hz bis 4kHZ eingeben ' 
+                             ' Bitte Werte für die sechs Oktavbänder von 125Hz bis 4kHZ eingeben ' 
                              'und diese mit Komma von einander trennen sowie einen Punkt '
                              'als Dezimaltrennzeichen verwenden. '
                              'Bsp.: 0.1, 0.3, 0.1, 0.02, 0.5, 0.3')
             except:
                 st.error('Das Material konnte der Datenbank nicht hinzugefügt werden.'
-                         'Bitte Werte für die sechs Oktavbänder von 125Hz bis 4kHZ eingeben ' 
+                         ' Bitte Werte für die sechs Oktavbänder von 125Hz bis 4kHZ eingeben ' 
                          'und diese mit Komma von einander trennen sowie einen Punkt '
                          'als Dezimaltrennzeichen verwenden. '
                          'Bsp.: 0.1, 0.3, 0.1, 0.02, 0.5, 0.3')
+            
             
             
 
