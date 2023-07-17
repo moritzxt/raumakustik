@@ -438,6 +438,8 @@ if st.button('Erstellen der PDF und der Session-Datei'):
     with open(state, 'rb') as json_dict:
         session_json = json_dict.read()
         json_dict.close()
+
+        
     st.download_button('PDF herunterladen', PDFbyte, 'Protokoll_Nachhallzeitanalyse.pdf')
     st.download_button('Session Datei herunterladen', session_json, f'Session_Datei_{today}')
 
