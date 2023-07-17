@@ -2,7 +2,7 @@
 import pickle
 import streamlit as st
 from room_calc import room
-from utils import read_db, basic_dict_list, usecase, sub_alpha_dict, flatten_dict
+from utils import read_db, basic_dict_list, usecase, sub_alpha_dict, flatten_dict, remove_last_session
 import os
 import glob
 import json
@@ -296,6 +296,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     # Button for adding subareas
                     if st.button('Subfläche hinzufügen', key = f'Button subArea{subAreas} {name}'):
                         st.session_state[f'subAreas{name}'] += 1
+
                     # Check if "remove subfläche"-button has been hit last runthrough, in that case, display one less subarea
                     if f'remove Subfläche von {name}' in st.session_state:
                         if st.session_state[f'remove Subfläche von {name}'] == True:
@@ -425,3 +426,6 @@ if st.button('Erstellen der PDF und der Session-Datei'):
 
     # Provide the zip file as a download button
     st.download_button('Download', zip_content, f'Ergebnisse_Nachhallzeitenanalyse_{today}.zip')
+
+# removing not necessary sessionfiles
+remove_last_session()

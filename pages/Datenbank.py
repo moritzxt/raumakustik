@@ -27,7 +27,7 @@ dataframe =  pd.read_csv('database/Datenbank_DIN18041.csv',sep = ';')
 
 # Page setup
 st.set_page_config(page_title= 'Datenbank', layout='wide')
-st.title('Datenbank')
+st.header('Datenbank')
 st.divider()
 st.dataframe(dataframe, use_container_width= True)
 
@@ -35,9 +35,7 @@ with st.container():
     st.divider()
     st.write('Updaten der Datenbank mit Benutzerdefinierten Werten.')
     st.caption('Bitte Werte mit einem Komma von einander trennen und einen Punkt '
-            'als Dezimaltrennzeichen verwenden.'
-            ' Neuer Eintrag wird erst angezeigt,'
-            ' nachdem die Seite neu geladen wurde.')
+            'als Dezimaltrennzeichen verwenden.')
     col1, col2, col3 = st.columns(3)
 
     # Generating input fields
@@ -79,8 +77,7 @@ with st.container():
                          'und diese mit Komma von einander trennen sowie einen Punkt '
                          'als Dezimaltrennzeichen verwenden. '
                          'Bsp.: 0.1, 0.3, 0.1, 0.02, 0.5, 0.3')
-            
-            
+            st.experimental_rerun()            
             
 
 
