@@ -12,6 +12,7 @@ from session_utils import *
 from pdf_protocol import pdfprotocol
 from datetime import datetime
 import zipfile
+import copy
 
 # Retreive date for file export
 today = datetime.today().strftime('%Y%m%d')
@@ -139,13 +140,12 @@ with st.container():
                 else:
                     st.session_state.main_walls.append(wall_name)
                 print(st.session_state.main_walls)
-        if st.button('Entfernen', help= 'Geben Sie den Namen der Grundfläche ein, die Sie entfernen möchten.'):
-            if wall_name in st.session_state.main_walls and len(st.session_state.main_walls) > 1:
-                ind = st.session_state.main_walls.index(wall_name)
-                # Removing specific Mainwall
-                st.session_state.main_walls.pop(ind)
-                json_data.pop('wall' + str(ind))
-                print(st.session_state.main_walls)
+        if st.button('Entfernen', help= 'Entferne die letzte Wandfläche'):
+            if len(st.session_state.main_walls) > 1:
+                # Removing Mainwall                
+                st.session_state.main_walls.pop()
+                json_data.popitem()
+
 
                 #st.experimental_rerun()
         # Save amount of walls in json file
@@ -171,9 +171,9 @@ with st.container():
         else:
             if 'Personen' in st.session_state.main_walls:
                 # Delete Personstab if it is deactivated
-
-                st.session_state.main_walls.pop(0)
-                print(st.session_state.main_walls)
+                new_list = [element for element in st.session_state.main_walls]
+                new_list.pop(0)
+                st.session_state.main_walls = new_list
 
 subAreas = 0
 
@@ -333,7 +333,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                         # Input for area for each subarea
                         with col_1:
                             sub_surfaces[name].append(st.number_input(f"Fläche für Subfläche {num +1 }",
-                                                                    value=init_data['sub_area'][number][num] , key = f'Fläche subArea{num} {name}',min_value=0, max_value=int((main_surfaces[name] - sum(sub_surfaces[name])))))
+                                                                    value=float(init_data['sub_area'][number][num]) , key = f'Fläche subArea{num} {name}',min_value=0., max_value=float((main_surfaces[name] - sum(sub_surfaces[name])))))
                         # Input for category for each subarea
                         with col_2:
                             category = st.selectbox(label='Bitte wählen Sie die Kategorie des Materials aus',
@@ -406,6 +406,8 @@ with tab1:
 with tab2:
     fig_reverberationTime_ratio = raum.plot_reverberationTime_ratio()
     st.plotly_chart(fig_reverberationTime_ratio)
+
+    st.write(raum.reverberationTime_ratio()[1])
 
 # Exporting the results as PDF with pdfprotocol class and download the pdf
 st.divider()
