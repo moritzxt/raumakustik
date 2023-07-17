@@ -62,6 +62,10 @@ load_session(state)
 # Read starting positions of input elements from last session... 
 init_data = init_starting_values(json_data,material_dict,person_dict)
 
+if 'usecase' not in st.session_state:
+    #Bugfix uscase not defined
+    st.session_state['usecase'] = 'Musik'
+
 with st.container():
     st.title('Web-app für Nachhallzeitenanalyse')
     st.divider()
