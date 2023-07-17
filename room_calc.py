@@ -1,7 +1,7 @@
 import math 
 import numpy as np
 import plotly.graph_objects as go
-from utils import basic_dict, basic_dict_2, read_db
+from utils import basic_dict, basic_dict_list, read_db
 
 class room: 
     '''
@@ -41,7 +41,7 @@ class room:
         equivalentAbsorptionSurface_walls = basic_dict()
 
         wall_index = 0
-        # equivalent absorption surface for main walls 
+        # Esquivalent absorption surface for main walls 
         for octaveBands in self.alpha:
             alphaList = self.alpha[octaveBands]
 
@@ -50,7 +50,7 @@ class room:
                 wall_index = wall_index + 1
             wall_index = 0
 
-        # adding equivalent absorption surface for sub walls
+        # Adding equivalent absorption surface for sub walls
         for octaveBands in self.sub_alpha.keys():
             sub_alphaDict = self.sub_alpha[octaveBands]
             for sub_walls in self.sub_surface.keys():
@@ -99,7 +99,7 @@ class room:
         '''
         Function to add the equivalentAbsorptionSurface 
         '''
-        equivalentAbsorptionSurface = basic_dict_2()
+        equivalentAbsorptionSurface = basic_dict_list()
 
         for octaveBands in equivalentAbsorptionSurface:
             equivalentAbsorptionSurface[octaveBands] = self.equivalentAbsorptionSurface_walls()[octaveBands] + self.equivalentAbsorptionSurface_people()[octaveBands] + self.equivalentAbsorptionSurface_air()[octaveBands]
