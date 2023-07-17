@@ -267,9 +267,13 @@ class room:
         # Bars will be red, when conditions are not met
         color_condition_high = np.array(reverberationTime_ratio) < np.array(ReverberationTime_upperlimit) 
         color_condition_low = np.array(reverberationTime_ratio) > np.array(ReverberationTime_lowerlimit)
-
         color_condition = color_condition_high & color_condition_low
-        color_condition[0] = True
+        
+        # Legend color is red, when no octaveband meets the requirements
+        if np.sum(color_condition) != 0:
+            color_condition[0] = True 
+        else:
+             color_condition[0] = False
 
         bar_colors = ['rgba(28, 122, 255, 1)' if condition else 'rgba(207, 7, 7, 0.88)' for condition in color_condition]
         
