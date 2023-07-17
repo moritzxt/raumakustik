@@ -1,9 +1,11 @@
 import streamlit as st
 import base64
 
+# Page to display and download user guide
 st.set_page_config(page_title= 'User guide', layout='wide')
 st.subheader('PDF user guide')
 
+# Open user guide in streamlit
 with open("pages/user_guide.pdf", "rb") as f:
     pdf_bytes = f.read()
 
