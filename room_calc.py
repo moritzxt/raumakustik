@@ -13,13 +13,13 @@ class room:
         Constructor for room object.
 
         :param volume: Volume of the room in cubic meters
-        :type volume: number
+        :type volume: int
         
         :param surface: Dictionary with the names of the main surfaces as keys and their areas in square meters as values
-        :type surface: dict of str: number
+        :type surface: dict of str: int
         
         :param sub_surface: Dictionary with the names of the main surfaces as keys and lists of their subsurface areas in square meters as values
-        :type sub_surface: dict of str: list of number
+        :type sub_surface: dict of str: list of int
         
         :param alpha: Dictionary with octave bands as keys and lists of absorption coefficients of main surfaces as values
         :type alpha: dict of str: list of float
@@ -30,8 +30,8 @@ class room:
         :param peopleDescription: List of descriptions of people in the room based on DIN18041
         :type peopleDescription: list of str
         
-        :param numberOfPeople: List of numbers for different kind of people in the room
-        :type numberOfPeople: list of number
+        :param numberOfPeople: List of int for different kind of people in the room
+        :type numberOfPeople: list of int
         
         :param use: Usecase for the room based on DIN18041
         :type use: str
@@ -55,7 +55,7 @@ class room:
         Returns the critical distance, at which energy densities of the direct and reflected soundfield are equal. 
         Makes use of an approximate formula based on statistical acoustics in a diffuse soundfield. 
 
-        :return: critical distance in meters
+        :return: Critical distance in meters
         :rtype: float
         """
         # '''
@@ -142,7 +142,7 @@ class room:
         '''
         Returns sum of all equivalent absorption surfaces (walls, people, air).
         
-        :return: sum of equivalent absorption surfaces in square meters
+        :return: Sum of equivalent absorption surfaces in square meters
         :rtype: float
         '''
         equivalentAbsorptionSurface = basic_dict_list()
