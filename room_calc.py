@@ -220,10 +220,10 @@ class room:
         :return: plot of reverberation time
         :rtype: plotly figure
         '''
-
         freq = np.array([125,250,500,1000,2000,4000])
         reverberationTimeSeconds = self.reverberationTime() 
 
+        # Creation of figure
         fig = go.Figure()
 
         trace1 = go.Bar(x = freq, 
@@ -257,13 +257,23 @@ class room:
         
         frequencies = [63,125,250,500,1000,2000,4000,8000]
         
-        ReverberationTime_upperlimit = [1.7,1.45, 1.2, 1.2, 1.2, 1.2, 1.2,1.2]
-        ReverberationTime_lowerlimit = [0.5,0.65, 0.8, 0.8, 0.8, 0.8, 0.65,0.5]
+        ReverberationTime_upperlimit = [1.7,1.45, 1.2, 1.2, 1.2, 1.2, 1.2, 1.2]
+        ReverberationTime_lowerlimit = [0.5,0.65, 0.8, 0.8, 0.8, 0.8, 0.65, 0.5]
 
         reverberationTime_ratio = list(self.reverberationTime_ratio()[0].values())
         reverberationTime_ratio.insert(0,0)
         reverberationTime_ratio.append(0)
+        
+        # Bars will be red, when conditions are not met
+        color_condition_high = np.array(reverberationTime_ratio) < np.array(ReverberationTime_upperlimit) 
+        color_condition_low = np.array(reverberationTime_ratio) > np.array(ReverberationTime_lowerlimit)
 
+        color_condition = color_condition_high & color_condition_low
+        color_condition[0] = True
+
+        bar_colors = ['rgba(28, 122, 255, 1)' if condition else 'rgba(207, 7, 7, 0.88)' for condition in color_condition]
+        
+        # Creation of figure
         fig = go.Figure()
 
         trace1 = go.Scatter(x = frequencies, 
@@ -290,7 +300,7 @@ class room:
                         y = reverberationTime_ratio, 
                         name = 'Nachhallzeitenvergleich',
                         width = .2,
-                        marker_color = 'rgba(28, 122, 255, 1)',
+                        marker_color = bar_colors,
                         hovertemplate = 'Oktavband: %{x} Hz<br>Nachhallzeitenvergleich: %{y:.2f} s<extra></extra>'
                         )
         
