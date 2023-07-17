@@ -4,6 +4,9 @@ import json
 from streamlit.runtime.scriptrunner.script_run_context import add_script_run_ctx
 from utils import usecase
 
+def get_current_session_key():
+    
+
 def write_session_file(state):
     if not os.path.isfile(state):
         #refactor all 2.WebApp.json to 2.WebApp variable

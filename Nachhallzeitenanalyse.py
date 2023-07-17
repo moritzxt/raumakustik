@@ -73,16 +73,14 @@ with st.container():
     old_session = None
     old_session = st.file_uploader('Session-Datei hochladen', help = 'Lade eine ".json" Datei von einer bestehenden Session hoch.', )
     if old_session != None:
-        upload_session_file(old_session, state)
-        init_data = init_starting_values(json_data,material_dict,person_dict)
+        
+
+        old_session_dict = json.load(old_session)
+
+
         if st.button('Session aktualisieren'):
-            st.experimental_rerun()
-    st.divider()
-
-        #st.experimental_rerun()
 
 
-    st.divider()
     st.header('Eingabeparameter')
     
     col1, col2, col3, col4 = st.columns(4)
