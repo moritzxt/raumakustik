@@ -54,7 +54,7 @@ with col1:
 
 with col2:
     sub_surface_count = len(raum_fine.sub_surface[wall])
-    sub_wall_list = [f'Subflaeche {i+1}' for i in range(sub_surface_count)]
+    sub_wall_list = [f'Subfläche {i+1}' for i in range(sub_surface_count)]
     sub_wall = st.selectbox(
         'Wähle die Subwandfläche aus', options=sub_wall_list)
     sub_wall_ind = sub_wall_list.index(sub_wall)
