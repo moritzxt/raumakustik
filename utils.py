@@ -14,7 +14,7 @@ def basic_dict():
     return dictionary
 
 
-def basic_dict_2():
+def basic_dict_list():
     """
     Returns a dictionary with the octavebands from 125 Hz to 4 kHz as keys. Values are initialized with empty lists.
     

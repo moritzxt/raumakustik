@@ -1,7 +1,7 @@
 import math 
 import numpy as np
 import plotly.graph_objects as go
-from utils import basic_dict, basic_dict_2, read_db
+from utils import basic_dict, basic_dict_list, read_db
 
 class room:
 
@@ -14,13 +14,14 @@ class room:
         Constructor for room object.
 
         :param volume: Volume of the room in cubic meters
-        :type volume: number
+        :type volume: int
         
         :param surface: Dictionary with the names of the main surfaces as keys and their areas in square meters as values
-        :type surface: dict of str: number
+        :type surface: dict of str: int
         
         :param sub_surface: Dictionary with the names of the main surfaces as keys and lists of their subsurface areas in square meters as values
-        :type sub_surface: dict of str: list of number
+        :type sub_surface: dict of str: list of int
+
         
         :param alpha: Dictionary with octave bands as keys and lists of absorption coefficients of main surfaces as values
         :type alpha: dict of str: list of float
@@ -31,8 +32,9 @@ class room:
         :param peopleDescription: List of descriptions of people in the room based on DIN18041
         :type peopleDescription: list of str
         
-        :param numberOfPeople: List of numbers for different kind of people in the room
-        :type numberOfPeople: list of number
+        :param numberOfPeople: List of int for different kind of people in the room
+        :type numberOfPeople: list of int
+
         
         :param use: Usecase for the room based on DIN18041
         :type use: str
@@ -79,7 +81,7 @@ class room:
         equivalentAbsorptionSurface_walls = basic_dict()
 
         wall_index = 0
-        # equivalent absorption surface for main walls 
+        # Equivalent absorption surface for main walls 
         for octaveBands in self.alpha:
             alphaList = self.alpha[octaveBands]
 
@@ -88,7 +90,7 @@ class room:
                 wall_index = wall_index + 1
             wall_index = 0
 
-        # adding equivalent absorption surface for sub walls
+        # Adding equivalent absorption surface for sub walls
         for octaveBands in self.sub_alpha.keys():
             sub_alphaDict = self.sub_alpha[octaveBands]
             for sub_walls in self.sub_surface.keys():
@@ -105,11 +107,10 @@ class room:
         '''
         Returns equivalent absorption surface for the people in the room based on the number of people and their specification regarding age and position (e.g. standing, sitting).
         Data retrieved from Table A.1 in DIN 18041.
-        
+
         :return: equivalent absorption surface of the people in the room in square meters
         :rtype: float 
         '''
-
         equivalentAbsorptionSurface_people = basic_dict()
 
         people_db = read_db('equivalentAbsorptionSurface_people_data.csv')
@@ -129,7 +130,6 @@ class room:
         :return: equivalent absorption surface of the air in square meters
         :rtype: float
         '''
-
         equivalentAbsorptionSurface_air = basic_dict()
 
         dampening = [0.1, 0.3, 0.6, 1, 1.9, 5.8]
@@ -146,7 +146,7 @@ class room:
         :return: sum of equivalent absorption surfaces in square meters
         :rtype: float
         '''
-        equivalentAbsorptionSurface = basic_dict_2()
+        equivalentAbsorptionSurface = basic_dict_list()
 
         for octaveBands in equivalentAbsorptionSurface:
             equivalentAbsorptionSurface[octaveBands] = self.equivalentAbsorptionSurface_walls()[octaveBands] + self.equivalentAbsorptionSurface_people()[octaveBands] + self.equivalentAbsorptionSurface_air()[octaveBands]
@@ -174,8 +174,8 @@ class room:
         '''
         Returns the ratio of calculated reverberation time to wanted reverberation time. Wanted reverberation time is based on the rooms use case and its volume.
         
-        :return: ratio calculated to wanted reverberation time
-        :rtype: float
+        :return: Ratio calculated to wanted reverberation time, Error message (when reverberation time is not inside the given boundaries)
+        :rtype: float, list
         '''
 
         reverberationTime_ratio = basic_dict()
@@ -221,25 +221,27 @@ class room:
         :return: plot of reverberation time
         :rtype: plotly figure
         '''
-
         freq = np.array([125,250,500,1000,2000,4000])
         reverberationTimeSeconds = self.reverberationTime() 
 
+        # Creation of figure
         fig = go.Figure()
 
         trace1 = go.Bar(x = freq, 
                         y = list(reverberationTimeSeconds.values()), 
-                        name = 'bar', 
-                        marker_color = 'blue', 
-                        showlegend= True, 
-                        width=.2)
+                        name = 'Nachhallzeit', 
+                        marker_color = 'rgba(28, 122, 255, 1)', 
+                        showlegend= False, 
+                        width=.2,
+                        hovertemplate = 'Oktavband: %{x} Hz<br>Nachhallzeit: %{y:.2f} s<extra></extra>')
         
         fig.add_trace(trace1)
 
         fig.update_layout(xaxis_title = 'Frequenz [Hz]', 
                           yaxis_title = 'Nachhallzeit [s]', 
                           width = 1000, 
-                          height = 600)
+                          height = 600,
+                          hoverlabel = dict(bgcolor = 'rgba(28, 122, 255, .4)'))
         
         fig.update_xaxes(type='category')
 
@@ -251,23 +253,38 @@ class room:
         
         :return: plot comparing calculated and wanted reverberation time
         :rtype: plotly figure
+=======
+>>>>>>> main
         
         '''
-        
         frequencies = [63,125,250,500,1000,2000,4000,8000]
         
-        ReverberationTime_upperlimit = [1.7,1.45, 1.2, 1.2, 1.2, 1.2, 1.2,1.2]
-        ReverberationTime_lowerlimit = [0.5,0.65, 0.8, 0.8, 0.8, 0.8, 0.65,0.5]
+        ReverberationTime_upperlimit = [1.7,1.45, 1.2, 1.2, 1.2, 1.2, 1.2, 1.2]
+        ReverberationTime_lowerlimit = [0.5,0.65, 0.8, 0.8, 0.8, 0.8, 0.65, 0.5]
 
         reverberationTime_ratio = list(self.reverberationTime_ratio()[0].values())
         reverberationTime_ratio.insert(0,0)
         reverberationTime_ratio.append(0)
+        
+        # Bars will be red, when conditions are not met
+        color_condition_high = np.array(reverberationTime_ratio) < np.array(ReverberationTime_upperlimit) 
+        color_condition_low = np.array(reverberationTime_ratio) > np.array(ReverberationTime_lowerlimit)
+        color_condition = color_condition_high & color_condition_low
+        
+        # Legend color is red, when no octaveband meets the requirements
+        if np.sum(color_condition) != 0:
+            color_condition[0] = True 
+        else:
+             color_condition[0] = False
 
+        bar_colors = ['rgba(28, 122, 255, 1)' if condition else 'rgba(207, 7, 7, 0.88)' for condition in color_condition]
+        
+        # Creation of figure
         fig = go.Figure()
 
         trace1 = go.Scatter(x = frequencies, 
                             y = ReverberationTime_lowerlimit, 
-                            name = 'Grenzen', 
+                            name = 'Fehlergrenzen', 
                             marker_color = 'green', 
                             mode = 'lines', 
                             legendgroup = 'boundaries',
@@ -289,8 +306,8 @@ class room:
                         y = reverberationTime_ratio, 
                         name = 'Nachhallzeitenvergleich',
                         width = .2,
-                        marker_color = 'rgba(28, 122, 255, 1)',
-                        hovertemplate = 'Oktavband: %{x} Hz<br>Nachhallzeitenvergleich: %{y:.2f}<extra></extra>'
+                        marker_color = bar_colors,
+                        hovertemplate = 'Oktavband: %{x} Hz<br>Nachhallzeitenvergleich: %{y:.2f} s<extra></extra>'
                         )
         
         fig.update_xaxes(type = 'category')       
@@ -299,7 +316,6 @@ class room:
                           yaxis_title = 'T / T_soll', 
                           width = 1000, 
                           height = 600, 
-                        #   legend={'traceorder':'normal'},
                           hoverlabel = dict(bgcolor = 'rgba(28, 122, 255, .4)')
                           )
         

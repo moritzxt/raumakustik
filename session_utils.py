@@ -4,6 +4,38 @@ import json
 from streamlit.runtime.scriptrunner.script_run_context import add_script_run_ctx
 from utils import usecase
 
+def get_current_session_key():
+    '''
+    Function to get current session_key to update current session
+
+    :return session_key: The session_key
+    :rtype session_key: str
+
+    '''
+    if os.path.isfile('session_key.json'):
+        with open('session_key.json', 'r') as file:
+            dict_file = json.load(file)
+            session_key = dict_file['key']
+            file.close()
+    return session_key
+
+def upload_file(file):
+    '''
+    Function to write uploaded json file from upload button to current session state
+
+    :param file: User uploaded json file 
+    :type file: json 
+    '''
+    session_key = get_current_session_key()
+    with open(f'session/{session_key}.json','w') as session:                 #needs an exception if file does not exist
+        json_dict = json.load(file)
+        json.dump(json_dict, session)
+        session.close()
+        st.experimental_rerun()
+
+
+
+
 def write_session_file(state):
     """
     Dumps session state into json file.
@@ -15,6 +47,7 @@ def write_session_file(state):
         #refactor all 2.WebApp.json to 2.WebApp variable
         with open(state, 'w') as init:
             json.dump({}, init)
+            init.close()
 
 def load_session_file(state):
     """
@@ -27,11 +60,15 @@ def load_session_file(state):
         with open('session_key.json', 'r') as file:
             last_session_keyy = json.load(file)
             last_session_key = last_session_keyy['key']
+            file.close()
             if os.path.isfile(last_session_key + '.json'):
                 with open(last_session_key + '.json', 'r') as file:
                     last_session = json.load(file)
+                    file.close()
                     with open(state, 'w') as init:
                         json.dump(last_session, init)
+                        init.close()
+
 
 def write_session_key(session):
     """
@@ -42,6 +79,7 @@ def write_session_key(session):
     """
     with open('session_key.json', 'w') as init:
         json.dump({'key': session}, init)
+        init.close()
 
 def init_starting_values(json_data,material_dict,person_dict):
     """
@@ -228,10 +266,12 @@ def sync_session(state):
     #used to sync the session states to json file
     with open(state) as jsonkey:
         json_data = json.load(jsonkey)
+        jsonkey.close()
     json_data['usecase'] = st.session_state['usecase']
     json_data['volume'] = st.session_state['volume']
     with open(state,'w') as jsonkey:
         json.dump(json_data, jsonkey)
+        jsonkey.close()
 
 def load_session(state):
     """
@@ -244,6 +284,7 @@ def load_session(state):
     #read contents of session file
     with open(state) as jsonkey:
         json_data = json.load(jsonkey)
+        jsonkey.close()
     #set session states to file content
     for keys in json_data:
         st.session_state[keys] = json_data[keys]
@@ -282,6 +323,7 @@ def negate_checkbox(json_data, state):
     json_data['persons'] = not json_data['persons']
     with open(state,'w') as jsonkey:
         json.dump(json_data, jsonkey)
+        jsonkey.close()
 
 def write_json(json_data,state,num):
     """
@@ -301,3 +343,10 @@ def write_json(json_data,state,num):
     json_data['person_type' + str(num+1)]['amount'] = st.session_state[f'people{num}']
     with open(state,'w') as jsonkey:
         json.dump(json_data, jsonkey)
+        jsonkey.close()
+
+def write_session_data_to_json(json_data,state):
+    #used so that person inputs work properly with json
+    with open(state,'w') as jsonkey:
+        json.dump(json_data, jsonkey)
+        jsonkey.close()
