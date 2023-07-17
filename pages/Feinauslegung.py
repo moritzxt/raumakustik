@@ -42,7 +42,7 @@ def slider_for_surface(raum_fine, key = 1):
 
 st.set_page_config(page_title='Feinauslegung', layout='wide')
 with st.container():
-    st.title('Tool für die Feinauslegung der Nachhallzeit')
+    st.title('Feinauslegung der Nachhallzeit')
     st.text('Variieren des Flächeninhalts einer Subfläche')
     st.divider()
 
@@ -67,7 +67,7 @@ with col2:
 #     sub_wall_material = sub_materials[wall][sub_wall_ind]
 #     st.write(sub_wall_material)
 
-tab1, tab2 = st.tabs(['Nachhallzeit', 'Vergleich der Nachhallzeit'])
+tab1, tab2 = st.tabs(['Nachhallzeit', 'Nachhallzeitenvergleich'])
 
 with tab1:
     col_1, col_2 = st.columns(2)
