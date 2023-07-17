@@ -32,7 +32,7 @@ fileObj.close()
 # init_data = init_starting_values(json_data,material_dict,person_dict)
 main_walls = [element for element in st.session_state['main_walls'] if element != 'Personen']
 
-def slider_for_surface(raum_fine, key = 1):
+def slider_for_surface(raum_fine,wall, key = 1):
         max_area = float(raum_fine.surface[wall] -
                 sum(raum_fine.sub_surface[wall]))
         raum_fine.sub_surface[wall][sub_wall_ind] = st.slider(
@@ -54,9 +54,9 @@ with col1:
 
 with col2:
     sub_surface_count = len(raum_fine.sub_surface[wall])
-    sub_wall_list = [f'Subflaeche {i+1}' for i in range(sub_surface_count)]
+    sub_wall_list = [f'Subfläche {i+1}' for i in range(sub_surface_count)]
     sub_wall = st.selectbox(
-        'Wähle die Subwandfläche aus', options=sub_wall_list)
+        'Wähle die Subfläche aus', options=sub_wall_list)
     sub_wall_ind = sub_wall_list.index(sub_wall)
 
 # with col3:
@@ -73,7 +73,7 @@ with tab1:
     col_1, col_2 = st.columns(2)
 
     with col_2:
-        slider_for_surface(raum_fine, 1)
+        slider_for_surface(raum_fine, key=1, wall = wall)
     with col_1:
         fig1 = raum_fine.plot_reverberationTime()
         st.plotly_chart(fig1)
@@ -83,7 +83,7 @@ with tab2:
     col_1, col_2 = st.columns(2)
 
     with col_2:
-        slider_for_surface(raum_fine, 2)
+        slider_for_surface(raum_fine, key = 2, wall = wall)
     with col_1:
         fig2 = raum_fine.plot_reverberationTime_ratio()
         st.plotly_chart(fig2)

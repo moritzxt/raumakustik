@@ -21,6 +21,7 @@ st.set_page_config(page_title= 'Tool für Raumakustik', layout='wide',
                     initial_sidebar_state='collapsed')
 
 
+
 # Initializing parameters
 tabs_list = []
 main_surfaces = {} 
@@ -154,7 +155,7 @@ with st.container():
                 else:
                     st.session_state.main_walls.append(wall_name)
         if st.button('Entfernen', help= 'Geben Sie den Namen der Grundfläche ein, die Sie entfernen möchten.'):
-            if wall_name in st.session_state.main_walls:
+            if wall_name in st.session_state.main_walls and len(st.session_state.main_walls) > 1:
                 ind = st.session_state.main_walls.index(wall_name)
                 # Removing specific Mainwall
                 st.session_state.main_walls.pop(ind)
