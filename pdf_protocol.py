@@ -1,6 +1,5 @@
 from fpdf import FPDF
 from fpdf.enums import XPos, YPos
-import json
 import os
 import plotly.io as pio
 
@@ -163,4 +162,4 @@ class pdfprotocol(FPDF):
         self.pdf.image(path_reverbereationTimeRatio, w = 180)
 
         # output PDF file
-        self.pdf.output('pdf_test.pdf')
+        self.pdf.output('pdf_protocol.pdf')

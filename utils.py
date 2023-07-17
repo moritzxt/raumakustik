@@ -8,7 +8,7 @@ def basic_dict():
     return dictionary
 
 
-def basic_dict_2():
+def basic_dict_list():
     dictionary = {'125 Hz': [], '250 Hz': [], '500 Hz': [],
                   '1 kHz': [], '2 kHz': [], '4 kHz': []}
     return dictionary
