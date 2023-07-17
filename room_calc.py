@@ -110,7 +110,7 @@ class room:
         '''
         equivalentAbsorptionSurface_people = basic_dict()
 
-        people_db = read_db('equivalentAbsorptionSurface_people_data.csv')
+        people_db = read_db('database/equivalentAbsorptionSurface_people_data.csv')
         
         for index in range(len(self.peopleDescription)):
             equivalentAbsorptionSurface_people_list =  people_db[self.peopleDescription[index]]

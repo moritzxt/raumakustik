@@ -54,7 +54,7 @@ def read_db(filename):
 
 def add_row(list):
     """Funktion um Daten der Datenbank hinzuzufügen"""
-    with open('Datenbank_DIN18041.csv', mode='a', newline='\n', encoding='utf-8') as file:
+    with open('database/Datenbank_DIN18041.csv', mode='a', newline='\n', encoding='utf-8') as file:
         writer_object = csv.writer(file, delimiter=';')
         writer_object.writerow(list)
         file.close()

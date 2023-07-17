@@ -59,13 +59,13 @@ def slider_for_surface(room_feinauslegung,wall,sub_wall_ind,sub_material, key = 
     '''
     max_area = float(room_feinauslegung.surface[wall] - sum(room_feinauslegung.sub_surface[wall]))
     room_feinauslegung.sub_surface[wall][sub_wall_ind] = st.slider(
-        label='Fläche der Subwandfläche', min_value=0., max_value=max_area, key=f'SubAreaSlider{sub_wall_ind}{key}', step=1)
+        label='Fläche der Subwandfläche', min_value=0., max_value=max_area, key=f'SubAreaSlider{sub_wall_ind}{key}', step=.1, format = '%.1f')
     st.write(sub_material)
 
     return room_feinauslegung.sub_surface[wall][sub_wall_ind]
 
 # Initializing the room_feinauslegung object from main page of web-app
-fileObj = open('raum.obj', 'rb')
+fileObj = open('src/raum.obj', 'rb')
 room_feinauslegung = pickle.load(fileObj)
 fileObj.close()
 

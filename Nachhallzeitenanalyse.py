@@ -1,7 +1,6 @@
 
 import pickle
 import streamlit as st
-#import streamlit_tags as sttags
 from room_calc import room
 from utils import read_db, basic_dict_list, usecase, sub_alpha_dict, flatten_dict
 import os
@@ -12,7 +11,6 @@ from session_utils import *
 from pdf_protocol import pdfprotocol
 from datetime import datetime
 import zipfile
-import copy
 
 # Retreive date for file export
 today = datetime.today().strftime('%Y%m%d')
@@ -27,10 +25,10 @@ st.set_page_config(page_title= 'Tool für Raumakustik', layout='wide',
 tabs_list = []
 main_surfaces = {} 
 main_materials = [] 
-material_dict = read_db('Datenbank_DIN18041.csv')
+material_dict = read_db('database/Datenbank_DIN18041.csv')
 material_dict_flattened = flatten_dict(material_dict)
 
-person_dict = read_db('equivalentAbsorptionSurface_people_data.csv')
+person_dict = read_db('database/equivalentAbsorptionSurface_people_data.csv')
 sub_surfaces = {}
 sub_materials = {}
 numberOfPeople = []
@@ -379,7 +377,7 @@ for ind, octaveBand in enumerate(sub_alpha):
 raum = room(volume=vol, surface=main_surfaces, sub_surface=sub_surfaces, alpha=alpha, 
             sub_alpha=sub_alpha, use=use, peopleDescription=peopleDescription, numberOfPeople=numberOfPeople)
 # Plots erstellen
-fileObj = open('raum.obj', 'wb')
+fileObj = open('src/raum.obj', 'wb')
 pickle.dump(raum, fileObj)
 fileObj.close()
 
@@ -397,7 +395,6 @@ with tab2:
     fig_reverberationTime_ratio = raum.plot_reverberationTime_ratio()
     st.plotly_chart(fig_reverberationTime_ratio)
 
-    st.write(raum.reverberationTime_ratio()[1])
 
 # Exporting the results as PDF with pdfprotocol class and download the pdf
 st.divider()
@@ -415,40 +412,16 @@ if st.button('Erstellen der PDF und der Session-Datei'):
     st.caption('Dateien werden erstellt...')
     pdf1.protocol()
 
-    with open("pdf_test.pdf", "rb") as pdf_file:
-        PDFbyte = pdf_file.read()
-        pdf_file.close()
-
-    with open(state, 'rb') as json_dict:
-        session_json = json_dict.read()
-        json_dict.close()
-
-    # Save PDF byte content to a file
-    with open("pdf_test.pdf", "wb") as pdf_file:
-        pdf_file.write(PDFbyte)
-
-    # Save session file
-    with open(state, 'wb') as json_file:
-        json_file.write(session_json)
-
     # Create a zip file
-    with zipfile.ZipFile("files.zip", "w") as zip_file:
+    with zipfile.ZipFile("src/files.zip", "w") as zip_file:
         # Add the PDF to the zip file
-        zip_file.write("pdf_protocol.pdf", f"Protokoll_Nachhallzeitanalyse_{today}.pdf")
+        zip_file.write("src/pdf_protocol.pdf", f"Protokoll_Nachhallzeitanalyse_{today}.pdf")
         # Add the session file to the zip file
         zip_file.write(state, f"Session_Datei_{today}.json")
 
     # Read the contents of the zip file
-    with open("files.zip", "rb") as zip_file:
+    with open("src/files.zip", "rb") as zip_file:
         zip_content = zip_file.read()
 
     # Provide the zip file as a download button
     st.download_button('Download', zip_content, f'Ergebnisse_Nachhallzeitenanalyse_{today}.zip')
-
-if st.button('Neue Session starten'):
-    json_file_list = glob.glob('./session/*.json')
-    json_data = {}
-    st.cache_data.clear()
-    for file in json_file_list:
-        os.remove(file)
-    init_data = init_starting_values(json_data,material_dict,person_dict)

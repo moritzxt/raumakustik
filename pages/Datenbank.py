@@ -22,8 +22,8 @@ def valuesAreValid(values):
     return True
 
 # Read database and initialize dataframe
-material_dict = read_db('Datenbank_DIN18041.csv')
-dataframe =  pd.read_csv('Datenbank_DIN18041.csv',sep = ';')
+material_dict = read_db('database/Datenbank_DIN18041.csv')
+dataframe =  pd.read_csv('database/Datenbank_DIN18041.csv',sep = ';')
 
 # Page setup
 st.set_page_config(page_title= 'Datenbank', layout='wide')
