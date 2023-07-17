@@ -99,15 +99,19 @@ with st.container():
 # Setup of page appearence 
 col1, col2, col3 = st.columns(3)
 with col1:
+    # Selecting mainwall
     wall = st.selectbox('Wähle die zu bearbeitende Grundfläche aus',
                         options=main_walls)
+    # Index for main wall for lists
     wall_ind =  main_walls.index(wall)
 
 with col2:
     sub_surface_count = len(room_feinauslegung.sub_surface[wall])
+    # Selecting subwall
     sub_wall = st.selectbox(
         'Wähle die Subfläche aus', options=sub_walls)
     sub_wall_ind = sub_walls.index(sub_wall)
+    # Getting material of corresponding subwall
     sub_material = subwall_variables(json_data, wall_ind, sub_wall_ind)[2]
 
 with col1:
@@ -117,17 +121,17 @@ tab1, tab2 = st.tabs(['Nachhallzeit', 'Nachhallzeitenvergleich'])
 
 
 with tab1:
-
-
+    # Plotting revernerationtime
     fig1 = room_feinauslegung.plot_reverberationTime()
     st.plotly_chart(fig1)
 
 with tab2:
+    #plotting revernerationtime ratio
 
     fig2 = room_feinauslegung.plot_reverberationTime_ratio()
     st.plotly_chart(fig2)
 
-
+# Session Path for adding values to current session
 
 state = add_script_run_ctx().streamlit_script_run_ctx.session_id +'.json'
 state = './session/' + state  
@@ -143,6 +147,7 @@ with open(state) as jsonkey:
     jsonkey.close()
 
 if st.button('Übernehmen', help = 'Übernehme die Änderung und fahre auf der Hauptseite fort'):
+    # Overwrite button to save data in current sessoion_state so it can be used in the main page
     json_data['wall' + str(wall_ind+1)]['subarea' + str(sub_wall_ind+1)]['area'] = area
     write_session_data_to_json(json_data, state)
     load_session(state)
