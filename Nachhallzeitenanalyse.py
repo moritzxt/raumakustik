@@ -21,6 +21,7 @@ st.set_page_config(page_title= 'Tool für Raumakustik', layout='wide',
                     initial_sidebar_state='collapsed')
 
 
+
 # Initializing parameters
 tabs_list = []
 main_surfaces = {} 
@@ -58,28 +59,12 @@ with open(state) as jsonkey:
     jsonkey.close()
 
 load_session(state)
-#read starting positions of input elements from last session... 
-#init_data = init_starting_values(json_data,material_dict,person_dict)
-
-# #create a json file with session id as file name
-# state = add_script_run_ctx().streamlit_script_run_ctx.session_id +'.json'
-# write_session_file(state)
-
-# Load the last session into session json file
-load_session_file(state)
-
-# Write current session id in session_key.json
-session = add_script_run_ctx().streamlit_script_run_ctx.session_id
-write_session_key(session)
-
-# Load data from current session
-with open(state) as jsonkey:
-    json_data = json.load(jsonkey)
-    jsonkey.close()
-
-load_session(state)
 # Read starting positions of input elements from last session... 
 init_data = init_starting_values(json_data,material_dict,person_dict)
+
+if 'usecase' not in st.session_state:
+    #Bugfix uscase not defined
+    st.session_state['usecase'] = 'Musik'
 
 with st.container():
     st.title('Web-app für Nachhallzeitenanalyse')
@@ -154,7 +139,7 @@ with st.container():
                 else:
                     st.session_state.main_walls.append(wall_name)
         if st.button('Entfernen', help= 'Geben Sie den Namen der Grundfläche ein, die Sie entfernen möchten.'):
-            if wall_name in st.session_state.main_walls:
+            if wall_name in st.session_state.main_walls and len(st.session_state.main_walls) > 1:
                 ind = st.session_state.main_walls.index(wall_name)
                 # Removing specific Mainwall
                 st.session_state.main_walls.pop(ind)

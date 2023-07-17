@@ -258,3 +258,9 @@ def write_json(json_data,state,num):
     with open(state,'w') as jsonkey:
         json.dump(json_data, jsonkey)
         jsonkey.close()
+
+def write_session_data_to_json(json_data,state):
+    #used so that person inputs work properly with json
+    with open(state,'w') as jsonkey:
+        json.dump(json_data, jsonkey)
+        jsonkey.close()

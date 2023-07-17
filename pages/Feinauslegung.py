@@ -6,39 +6,47 @@ from utils import usecase
 from Nachhallzeitenanalyse import sub_materials
 import pickle
 from streamlit.runtime.scriptrunner.script_run_context import add_script_run_ctx
-from session_utils import write_session_file, load_session_file, write_session_key
+from session_utils import write_session_file, load_session_file, write_session_key, sync_session, write_json, write_session_data_to_json, load_session
 fileObj = open('raum.obj', 'rb')
 raum_fine = pickle.load(fileObj)
 fileObj.close()
 
-# #create a json file with session id as file name
-# state = add_script_run_ctx().streamlit_script_run_ctx.session_id +'.json'
-# write_session_file(state)
+state = add_script_run_ctx().streamlit_script_run_ctx.session_id +'.json'
+state = './session/' + state  
+load_session_file(state)
 
-# #load the last session into session json file
-# load_session_file(state)
+#write current session id in session_key.json
+session = add_script_run_ctx().streamlit_script_run_ctx.session_id
+write_session_key(session)
 
-# #write current session id in session_key.json
-# session = add_script_run_ctx().streamlit_script_run_ctx.session_id
-# write_session_key(session)
+#load data from current session
+with open(state) as jsonkey:
+    json_data = json.load(jsonkey)
+    jsonkey.close()
 
-# #load data from current session
-# with open(state) as jsonkey:
-#     json_data = json.load(jsonkey)
 
-# load_session(state)
-
-#read starting positions of input elements from last session... 
-# init_data = init_starting_values(json_data,material_dict,person_dict)
 main_walls = [element for element in st.session_state['main_walls'] if element != 'Personen']
+sub_walls = []
+for name in main_walls:
+    sub_walls.append(st.session_state[f'subAreas{name}'])
 
-def slider_for_surface(raum_fine, key = 1):
-        max_area = float(raum_fine.surface[wall] -
-                sum(raum_fine.sub_surface[wall]))
+def subwall_variables(json_data, index, subindex):
+    '''
+    Function to read variables of subwalls
+    '''
+    area = json_data[f'wall{index + 1}'][f'subarea{subindex + 1}']['area']
+    category = json_data[f'wall{index + 1}'][f'subarea{subindex + 1}']['category']
+    material = json_data[f'wall{index + 1}'][f'subarea{subindex + 1}']['material']
+
+    return area, category, material
+
+def slider_for_surface(raum_fine,wall,sub_wall_ind,sub_material, key = 1):
+
+        max_area = int(raum_fine.surface[wall] - sum(raum_fine.sub_surface[wall]))
         raum_fine.sub_surface[wall][sub_wall_ind] = st.slider(
-            label='Fläche der Subwandfläche', min_value=.0, max_value=max_area, key=f'SubAreaSlider{sub_wall_ind}{key}', step=0.1)
-        sub_wall_material = sub_materials[f'{wall}'][sub_wall_ind]
-        st.write(sub_wall_material)
+            label='Fläche der Subwandfläche', min_value=0, max_value=max_area, key=f'SubAreaSlider{sub_wall_ind}{key}', step=1)
+        st.write(sub_material)
+        return raum_fine.sub_surface[wall][sub_wall_ind]
 
 st.set_page_config(page_title='Feinauslegung', layout='wide')
 with st.container():
@@ -52,20 +60,18 @@ with col1:
                         options=main_walls)
     wall_ind =  main_walls.index(wall)
 
+
+
 with col2:
     sub_surface_count = len(raum_fine.sub_surface[wall])
-    sub_wall_list = [f'Subfläche {i+1}' for i in range(sub_surface_count)]
     sub_wall = st.selectbox(
-        'Wähle die Subwandfläche aus', options=sub_wall_list)
-    sub_wall_ind = sub_wall_list.index(sub_wall)
+        'Wähle die Subfläche aus', options=sub_walls)
+    sub_wall_ind = sub_walls.index(sub_wall)
+    sub_material = subwall_variables(json_data, wall_ind, sub_wall_ind)[2]
 
-# with col3:
-#     max_area = float(raum_fine.surface[wall] -
-#                      sum(raum_fine.sub_surface[wall]))
-#     raum_fine.sub_surface[wall][sub_wall_ind] = st.slider(
-#         label='Fläche der Subwandfläche', min_value=.0, max_value=max_area, key=f'SubAreaSlider{sub_wall_ind}', step=0.1)
-#     sub_wall_material = sub_materials[wall][sub_wall_ind]
-#     st.write(sub_wall_material)
+with col1:
+    area = slider_for_surface(raum_fine,wall,sub_wall_ind, sub_material, key=sub_wall_ind)
+
 
 tab1, tab2 = st.tabs(['Nachhallzeit', 'Nachhallzeitenvergleich'])
 
@@ -121,4 +127,7 @@ with open(state) as jsonkey:
 
 #area = self.load_variables()['wall' + f'{index + 1}']['subarea' + f'{subindex + 1}']['area']
 if st.button('Übernehmen', help = 'Übernehme die Änderung und fahre auf der Hauptseite fort'):
-    json_data['wall' + str(wall_ind+1)]['subarea' + str(sub_wall_ind+1)]['area'] = raum_fine.sub_surface[wall][sub_wall_ind]
+    json_data['wall' + str(wall_ind+1)]['subarea' + str(sub_wall_ind+1)]['area'] = area
+    write_session_data_to_json(json_data, state)
+    #load_session_file(state)
+    load_session(state)

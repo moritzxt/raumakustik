@@ -1,4 +1,5 @@
 __pycache__/.
+session/.
 __pycache__/room_calc.cpython-310.pyc
 __pychache__/cpython-310.pyc
 __pycache__/room_calc.cpython-311.pyc
@@ -12,3 +13,4 @@ Berechnungen_Notebook.ipynb
 __pycache__/utils.cpython-311.pyc
 raum.obj
 raum.obj
+session_key.json
