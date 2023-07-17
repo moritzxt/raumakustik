@@ -175,7 +175,7 @@ class room:
                         marker_color = 'rgba(28, 122, 255, 1)', 
                         showlegend= False, 
                         width=.2,
-                        hovertemplate = 'Oktavband: %{x} Hz<br>Nachhallzeit: %{y:.2f}<extra></extra>')
+                        hovertemplate = 'Oktavband: %{x} Hz<br>Nachhallzeit: %{y:.2f} s<extra></extra>')
         
         fig.add_trace(trace1)
 
@@ -231,7 +231,7 @@ class room:
                         name = 'Nachhallzeitenvergleich',
                         width = .2,
                         marker_color = 'rgba(28, 122, 255, 1)',
-                        hovertemplate = 'Oktavband: %{x} Hz<br>Nachhallzeitenvergleich: %{y:.2f}<extra></extra>'
+                        hovertemplate = 'Oktavband: %{x} Hz<br>Nachhallzeitenvergleich: %{y:.2f} s<extra></extra>'
                         )
         
         fig.update_xaxes(type = 'category')       
