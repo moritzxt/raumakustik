@@ -42,13 +42,13 @@ def slider_for_surface(raum_fine, key = 1):
 
 st.set_page_config(page_title='Feinauslegung', layout='wide')
 with st.container():
-    st.title('Tool für die Feinauslegung einer Wandfläche Raums')
-    st.text('Variieren der Fläche einer Subfläche')
+    st.title('Tool für die Feinauslegung der Nachhallzeit')
+    st.text('Variieren des Flächeninhalts einer Subfläche')
     st.divider()
 
 col1, col2, col3 = st.columns(3)
 with col1:
-    wall = st.selectbox('Wähle die zu bearbeitende Hauptfläche aus',
+    wall = st.selectbox('Wähle die zu bearbeitende Grundfläche aus',
                         options=main_walls)
     wall_ind =  main_walls.index(wall)
 
@@ -75,6 +75,14 @@ with tab1:
     with col_2:
         slider_for_surface(raum_fine, 1)
     with col_1:
+        st.write('')
+        st.write('')
+        st.write('')
+        st.write('')
+        st.write('')
+        st.write('')
+        st.write('')
+        st.write('')
         fig1 = raum_fine.plot_reverberationTime()
         st.plotly_chart(fig1)
 
@@ -85,6 +93,14 @@ with tab2:
     with col_2:
         slider_for_surface(raum_fine, 2)
     with col_1:
+        st.write('')
+        st.write('')
+        st.write('')
+        st.write('')
+        st.write('')
+        st.write('')
+        st.write('')
+        st.write('')
         fig2 = raum_fine.plot_reverberationTime_ratio()
         st.plotly_chart(fig2)
 
