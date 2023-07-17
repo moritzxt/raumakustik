@@ -398,7 +398,7 @@ with tab2:
 
 # Exporting the results as PDF with pdfprotocol class and download the pdf
 st.divider()
-st.subheader('Exportieren der Ergebnisse als PDF')
+st.subheader('Exportieren der Ergebnisse')
 
 # Creating the pdf
 # Reading the variables out of the json file 
