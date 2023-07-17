@@ -11,17 +11,41 @@ fileObj = open('raum.obj', 'rb')
 raum_fine = pickle.load(fileObj)
 fileObj.close()
 
+state = add_script_run_ctx().streamlit_script_run_ctx.session_id +'.json'
+state = './session/' + state  
+load_session_file(state)
+
+#write current session id in session_key.json
+session = add_script_run_ctx().streamlit_script_run_ctx.session_id
+write_session_key(session)
+
+#load data from current session
+with open(state) as jsonkey:
+    json_data = json.load(jsonkey)
+    jsonkey.close()
+
+
 main_walls = [element for element in st.session_state['main_walls'] if element != 'Personen']
+sub_walls = []
+for name in main_walls:
+    sub_walls.append(st.session_state[f'subAreas{name}'])
 
-def slider_for_surface(raum_fine,wall,sub_materials, key = 1):
-        main_walls = [element for element in st.session_state['main_walls'] if element != 'Personen']
+def subwall_variables(json_data, index, subindex):
+    '''
+    Function to read variables of subwalls
+    '''
+    area = json_data[f'wall{index + 1}'][f'subarea{subindex + 1}']['area']
+    category = json_data[f'wall{index + 1}'][f'subarea{subindex + 1}']['category']
+    material = json_data[f'wall{index + 1}'][f'subarea{subindex + 1}']['material']
 
-        max_area = int(raum_fine.surface[wall] -
-                sum(raum_fine.sub_surface[wall]))
+    return area, category, material
+
+def slider_for_surface(raum_fine,wall,sub_wall_ind,sub_material, key = 1):
+
+        max_area = int(raum_fine.surface[wall] - sum(raum_fine.sub_surface[wall]))
         raum_fine.sub_surface[wall][sub_wall_ind] = st.slider(
             label='Fläche der Subwandfläche', min_value=0, max_value=max_area, key=f'SubAreaSlider{sub_wall_ind}{key}', step=1)
-        sub_wall_material = sub_materials[f'{wall}'][sub_wall_ind]
-        st.write(sub_wall_material)
+        st.write(sub_material)
         return raum_fine.sub_surface[wall][sub_wall_ind]
 
 st.set_page_config(page_title='Feinauslegung', layout='wide')
@@ -36,41 +60,28 @@ with col1:
                         options=main_walls)
     wall_ind =  main_walls.index(wall)
 
+
+
 with col2:
     sub_surface_count = len(raum_fine.sub_surface[wall])
-    sub_wall_list = [f'Subfläche {i+1}' for i in range(sub_surface_count)]
     sub_wall = st.selectbox(
-        'Wähle die Subfläche aus', options=sub_wall_list)
-    sub_wall_ind = sub_wall_list.index(sub_wall)
+        'Wähle die Subfläche aus', options=sub_walls)
+    sub_wall_ind = sub_walls.index(sub_wall)
+    sub_material = subwall_variables(json_data, wall_ind, sub_wall_ind)[2]
 
-# with col3:
-#     max_area = float(raum_fine.surface[wall] -
-#                      sum(raum_fine.sub_surface[wall]))
-#     raum_fine.sub_surface[wall][sub_wall_ind] = st.slider(
-#         label='Fläche der Subwandfläche', min_value=.0, max_value=max_area, key=f'SubAreaSlider{sub_wall_ind}', step=0.1)
-#     sub_wall_material = sub_materials[wall][sub_wall_ind]
-#     st.write(sub_wall_material)
+with col1:
+    area = slider_for_surface(raum_fine,wall,sub_wall_ind, sub_material, key=sub_wall_ind)
+
 
 tab1, tab2 = st.tabs(['Nachhallzeit', 'Vergleich der Nachhallzeit'])
 
 with tab1:
-    col_1, col_2 = st.columns(2)
-
-    with col_2:
-        area = slider_for_surface(raum_fine,wall, sub_materials, key=sub_wall_ind,)
-    with col_1:
-        fig1 = raum_fine.plot_reverberationTime()
-        st.plotly_chart(fig1)
+    fig1 = raum_fine.plot_reverberationTime()
+    st.plotly_chart(fig1)
 
 with tab2:
-
-    col_1, col_2 = st.columns(2)
-
-    with col_2:
-        area = slider_for_surface(raum_fine, wall, sub_materials, key = f'{sub_wall_ind + 1}')
-    with col_1:
-        fig2 = raum_fine.plot_reverberationTime_ratio()
-        st.plotly_chart(fig2)
+    fig2 = raum_fine.plot_reverberationTime_ratio()
+    st.plotly_chart(fig2)
 
 
 
