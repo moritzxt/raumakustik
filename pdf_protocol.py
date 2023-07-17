@@ -238,4 +238,4 @@ class pdfprotocol(FPDF):
         self.pdf.image(path_reverbereationTimeRatio, w = 180)
 
         # Output PDF file
-        self.pdf.output('pdf_protocol.pdf')
+        self.pdf.output('src/pdf_protocol.pdf')
