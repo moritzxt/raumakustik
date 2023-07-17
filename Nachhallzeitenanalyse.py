@@ -349,11 +349,11 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                             sub_surfaces[name].pop()
                             json_data['wall' + str(number+1)].pop('subarea' + str(subAreas+1))
                     # Sync number of subareas with json file
-                    json_data['wall' + str(number+1)]['number_subareas'] = st.session_state[f'subAreas{name}']
-                    with open(state,'w') as jsonkey:
-                        json.dump(json_data, jsonkey)  
-                        jsonkey.close()
-    
+                            json_data['wall' + str(number+1)]['number_subareas'] = st.session_state[f'subAreas{name}']
+                            with open(state,'w') as jsonkey:
+                                json.dump(json_data, jsonkey)  
+                                jsonkey.close()
+            
 
     # Initializing the absorption coefficient dictionary
     alpha = basic_dict_list()
