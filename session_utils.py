@@ -5,7 +5,36 @@ from streamlit.runtime.scriptrunner.script_run_context import add_script_run_ctx
 from utils import usecase
 
 def get_current_session_key():
-    
+    '''
+    Function to get current session_key to update current session
+
+    :return session_key: The session_key
+    :rtype session_key: str
+
+    '''
+    if os.path.isfile('session_key.json'):
+        with open('session_key.json', 'r') as file:
+            dict_file = json.load(file)
+            session_key = dict_file['key']
+            file.close()
+    return session_key
+
+def upload_file(file):
+    '''
+    Function to write uploaded json file from upload button to current session state
+
+    :param file: User uploaded json file 
+    :type file: json 
+    '''
+    session_key = get_current_session_key()
+    with open(f'session/{session_key}.json','w') as session:                 #needs an exception if file does not exist
+        json_dict = json.load(file)
+        json.dump(json_dict, session)
+        session.close()
+        st.experimental_rerun()
+
+
+
 
 def write_session_file(state):
     if not os.path.isfile(state):
@@ -27,20 +56,6 @@ def load_session_file(state):
                     with open(state, 'w') as init:
                         json.dump(last_session, init)
                         init.close()
-
-
-def upload_session_file(upload_file, state):
-    if os.path.isfile('session_key.json'):
-        with open('session_key.json', 'r') as file:
-            last_session_keyy = json.load(file)
-            last_session_key = last_session_keyy['key']
-            file.close()
-            if os.path.isfile(last_session_key + '.json'):
-                last_session = json.load(upload_file)
-                with open(state, 'w') as init:
-                    json.dump(last_session, init)
-                    init.close()
-
 
 
 def write_session_key(session):

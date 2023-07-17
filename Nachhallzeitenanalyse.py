@@ -73,13 +73,8 @@ with st.container():
     old_session = None
     old_session = st.file_uploader('Session-Datei hochladen', help = 'Lade eine ".json" Datei von einer bestehenden Session hoch.', )
     if old_session != None:
-        
-
-        old_session_dict = json.load(old_session)
-
-
         if st.button('Session aktualisieren'):
-
+            upload_file(old_session)
 
     st.header('Eingabeparameter')
     
@@ -137,7 +132,6 @@ with st.container():
                     st.session_state.main_walls = [wall_name]
                 else:
                     st.session_state.main_walls.append(wall_name)
-                print(st.session_state.main_walls)
         if st.button('Entfernen', help= 'Entferne die letzte Wandfläche'):
             if len(st.session_state.main_walls) > 1:
                 # Removing Mainwall                
@@ -165,7 +159,6 @@ with st.container():
             if 'Personen' not in st.session_state.main_walls:
                 # Check if Personen already exist, otherwise there are more personen tabs
                 st.session_state.main_walls.insert(0,'Personen')
-                print(st.session_state.main_walls)
         else:
             if 'Personen' in st.session_state.main_walls:
                 # Delete Personstab if it is deactivated
@@ -373,7 +366,6 @@ for ind, octaveBand in enumerate(alpha):
             alpha[octaveBand].append(material_dict_flattened[material][ind])
         except:
             alpha[octaveBand].append(None)
-            print('Appended None')
 walls = [i for i in st.session_state.main_walls if 'Personen' not in i]
 
 sub_alpha = sub_alpha_dict(walls)
