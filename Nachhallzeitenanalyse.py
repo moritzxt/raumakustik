@@ -138,12 +138,16 @@ with st.container():
                     st.session_state.main_walls = [wall_name]
                 else:
                     st.session_state.main_walls.append(wall_name)
+                print(st.session_state.main_walls)
         if st.button('Entfernen', help= 'Geben Sie den Namen der Grundfläche ein, die Sie entfernen möchten.'):
             if wall_name in st.session_state.main_walls and len(st.session_state.main_walls) > 1:
                 ind = st.session_state.main_walls.index(wall_name)
                 # Removing specific Mainwall
                 st.session_state.main_walls.pop(ind)
-                json_data.pop('wall' + str(ind+1))
+                json_data.pop('wall' + str(ind))
+                print(st.session_state.main_walls)
+
+                #st.experimental_rerun()
         # Save amount of walls in json file
         if 'Personen' in st.session_state.main_walls:
             json_data['number_walls'] = len(st.session_state.main_walls)-1
@@ -152,7 +156,6 @@ with st.container():
         with open(state,'w') as jsonkey:
             json.dump(json_data, jsonkey)
             jsonkey.close()
-        
 
     with col4:
         st.empty()
@@ -160,14 +163,17 @@ with st.container():
         json_data['persons'] = init_data['persons']
         # Checkbox if persons are displayed or not
         if st.checkbox(label='Personen', key='personen', label_visibility='visible', on_change = negate_checkbox, kwargs = {"json_data": json_data, "state": state}):
-            tabs_list = ['Personen']
+
             if 'Personen' not in st.session_state.main_walls:
                 # Check if Personen already exist, otherwise there are more personen tabs
-                st.session_state.main_walls.insert(0, 'Personen')
+                st.session_state.main_walls.insert(0,'Personen')
+                print(st.session_state.main_walls)
         else:
             if 'Personen' in st.session_state.main_walls:
                 # Delete Personstab if it is deactivated
+
                 st.session_state.main_walls.pop(0)
+                print(st.session_state.main_walls)
 
 subAreas = 0
 
@@ -273,7 +279,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     # Area for every subarea
                     with col_1:
                         main_surfaces[name] = (st.number_input(
-                            f"Fläche für {name}", value=init_data['area'][number], min_value=0))
+                            f"Fläche für {name}", value=init_data['area'][number], min_value=0 ))
                     # Category for each subarea
                     with col_2:
                         category = st.selectbox(label='Materialkategorie',
