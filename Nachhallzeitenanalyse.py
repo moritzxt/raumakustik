@@ -16,7 +16,7 @@ import zipfile
 today = datetime.today().strftime('%Y%m%d')
 
 # Setup of page data:
-st.set_page_config(page_title= 'Tool für Raumakustik', layout='wide',
+st.set_page_config(page_title= 'Nachhallzeitenanalyse', layout='wide',
                     initial_sidebar_state='collapsed')
 
 
@@ -66,15 +66,15 @@ if 'usecase' not in st.session_state:
     st.session_state['usecase'] = 'Musik'
 
 with st.container():
-    st.title('Web-app für Nachhallzeitenanalyse')
+    st.header('Nachhallzeitenanalyse')
     st.divider()
     old_session = None
     old_session = st.file_uploader('Session-Datei hochladen', help = 'Lade eine ".json" Datei von einer bestehenden Session hoch.', )
     if old_session != None:
         if st.button('Session aktualisieren'):
             upload_file(old_session)
-
-    st.header('Eingabeparameter')
+    st.divider()
+    st.subheader('Eingabeparameter')
     
     col1, col2, col3, col4 = st.columns(4)
 

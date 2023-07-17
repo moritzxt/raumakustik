@@ -92,7 +92,7 @@ for name in main_walls:
 # Setup of page data
 st.set_page_config(page_title='Feinauslegung', layout='wide')
 with st.container():
-    st.title('Feinauslegung der Nachhallzeit')
+    st.header('Feinauslegung der Nachhallzeit')
     st.text('Variieren des Flächeninhalts einer Subfläche')
     st.divider()
 
