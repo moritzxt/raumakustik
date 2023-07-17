@@ -8,7 +8,7 @@ Open a console navigate to the raumakustik directory:
 
 .. code-block:: console
 
-	streamlit run stream.py
+	streamlit run Nachhallzeitenanalyse.py
 
 Enter room properties
 ---------------------

@@ -285,13 +285,17 @@ def negate_checkbox(json_data, state):
 
 def write_json(json_data,state,num):
     """
-    Formats user_input of person input, writes it into json_data and dumps json_data as json file.
+    Formats user_input number of persons, writes it into json_data and dumps json_data as json file.
     
     :param json_data:
     :type json_data:
         
     :param state:
     :type state:
+        
+    :param num: number of persons in the room 
+    :type num: int
+        
     """
     #used so that person inputs work properly with json
     json_data['person_type' + str(num+1)]['amount'] = st.session_state[f'people{num}']

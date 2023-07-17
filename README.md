@@ -24,13 +24,14 @@ Setup of the virtual environment:
 python3 -m venv venv
 source venv/bin/activate        # Activation for Linux / MacOS
 venv\Scripts\Activate.ps1       # Activation for Windows (PowerShell)
+venv\Scripts\Activate.bat       # Activation for Windows (CommandLine)
 pip install -r requirements.txt
 ```
 
 ## Run Application
 Open a console and navigate to the raumakustik directory:
 ```
-streamlit run stream.py
+streamlit run Nachhallzeitenanalyse.py
 ```
 
 For more information see the [Documentation](link){:target="_blank"}
