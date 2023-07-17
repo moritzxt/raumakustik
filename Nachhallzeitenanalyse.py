@@ -11,6 +11,7 @@ from streamlit.runtime.scriptrunner.script_run_context import add_script_run_ctx
 from session_utils import write_session_file, load_session_file, write_session_key, init_starting_values, sync_session, load_session, negate_checkbox, write_json, upload_session_file#, subArea_subst
 from pdf_protocol import pdfprotocol
 from datetime import datetime
+import zipfile
 
 today = datetime.today().strftime('%Y%m%d')
 
@@ -81,7 +82,7 @@ load_session(state)
 init_data = init_starting_values(json_data,material_dict,person_dict)
 
 with st.container():
-    st.title('Web-App für Nachhallzeitenanalyse')
+    st.title('Web-app für Nachhallzeitenanalyse')
     st.divider()
     old_session = None
     old_session = st.file_uploader('Session-Datei hochladen', help = 'Lade eine ".json" Datei von einer bestehenden Session hoch.', )
@@ -428,20 +429,41 @@ json_file.close()
 
 
 pdf1 = pdfprotocol(state, variables, fig_reverberationTime ,fig_reverberationTime_ratio)
+import zipfile
 
 if st.button('Erstellen der PDF und der Session-Datei'):
     st.write('Dateien werden erstellt...')
     pdf1.protocol()
+
     with open("pdf_test.pdf", "rb") as pdf_file:
         PDFbyte = pdf_file.read()
         pdf_file.close()
+
     with open(state, 'rb') as json_dict:
         session_json = json_dict.read()
         json_dict.close()
-    st.download_button('PDF herunterladen', PDFbyte, 'Protokoll_Nachhallzeitanalyse.pdf')
-    st.download_button('Session Datei herunterladen', session_json, f'Session_Datei_{today}')
 
+    # Save PDF byte content to a file
+    with open("pdf_test.pdf", "wb") as pdf_file:
+        pdf_file.write(PDFbyte)
 
+    # Save session file
+    with open(state, 'wb') as json_file:
+        json_file.write(session_json)
+
+    # Create a zip file
+    with zipfile.ZipFile("files.zip", "w") as zip_file:
+        # Add the PDF to the zip file
+        zip_file.write("pdf_test.pdf", f"Protokoll_Nachhallzeitanalyse_{today}.pdf")
+        # Add the session file to the zip file
+        zip_file.write(state, f"Session_Datei_{today}.json")
+
+    # Read the contents of the zip file
+    with open("files.zip", "rb") as zip_file:
+        zip_content = zip_file.read()
+
+    # Provide the zip file as a download button
+    st.download_button('Download', zip_content, f'Ergebnisse_Nachhallzeitenanalyse_{today}.zip')
 
 if st.button('Neue Session starten'):
     json_file_list = glob.glob('./session/*.json')
