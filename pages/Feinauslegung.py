@@ -117,39 +117,15 @@ tab1, tab2 = st.tabs(['Nachhallzeit', 'Nachhallzeitenvergleich'])
 
 
 with tab1:
-    col_1, col_2 = st.columns(2)
 
-    with col_2:
-        slider_for_surface(room_feinauslegung, 1)
-    with col_1:
-        st.write('')
-        st.write('')
-        st.write('')
-        st.write('')
-        st.write('')
-        st.write('')
-        st.write('')
-        st.write('')
-        fig1 = room_feinauslegung.plot_reverberationTime()
-        st.plotly_chart(fig1)
+
+    fig1 = room_feinauslegung.plot_reverberationTime()
+    st.plotly_chart(fig1)
 
 with tab2:
 
-    col_1, col_2 = st.columns(2)
-
-    with col_2:
-        slider_for_surface(room_feinauslegung, 2)
-    with col_1:
-        st.write('')
-        st.write('')
-        st.write('')
-        st.write('')
-        st.write('')
-        st.write('')
-        st.write('')
-        st.write('')
-        fig2 = room_feinauslegung.plot_reverberationTime_ratio()
-        st.plotly_chart(fig2)
+    fig2 = room_feinauslegung.plot_reverberationTime_ratio()
+    st.plotly_chart(fig2)
 
 
 
