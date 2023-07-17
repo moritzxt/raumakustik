@@ -59,26 +59,6 @@ with open(state) as jsonkey:
     jsonkey.close()
 
 load_session(state)
-#read starting positions of input elements from last session... 
-#init_data = init_starting_values(json_data,material_dict,person_dict)
-
-# #create a json file with session id as file name
-# state = add_script_run_ctx().streamlit_script_run_ctx.session_id +'.json'
-# write_session_file(state)
-
-# Load the last session into session json file
-load_session_file(state)
-
-# Write current session id in session_key.json
-session = add_script_run_ctx().streamlit_script_run_ctx.session_id
-write_session_key(session)
-
-# Load data from current session
-with open(state) as jsonkey:
-    json_data = json.load(jsonkey)
-    jsonkey.close()
-
-load_session(state)
 # Read starting positions of input elements from last session... 
 init_data = init_starting_values(json_data,material_dict,person_dict)
 
