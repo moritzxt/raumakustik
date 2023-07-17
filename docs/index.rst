@@ -18,23 +18,25 @@ Content
 
 .. toctree::
    :maxdepth: 1
-   :caption: Main:
+   :caption: Main
 
    self
 
 .. toctree::
    :maxdepth: 1
-   :caption: Getting Started:
+   :caption: Getting Started
 
    setup
    usage
 
 .. toctree::
-   :maxdepth: 1
-   :caption: Module:
+   :maxdepth: 4
+   :caption: Module
 
    room_calc
    utils
+   session_utils
+   pdf_protocol
 
 .. toctree::
    :maxdepth: 1

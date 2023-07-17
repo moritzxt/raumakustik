@@ -1,5 +1,5 @@
-Room class
+pdf_protocol
 =================================
 
-.. automodule:: room_calc
+.. automodule:: pdf_protocol
    :members:

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pdf_protocol &mdash; RaumakustikApp 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="User Guide" href="user_guide.html" />
+    <link rel="prev" title="session_utils" href="session_utils.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> RaumakustikApp
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Main</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Raumakustik App</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Module</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="room_calc.html">room_calc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="session_utils.html">session_utils</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">pdf_protocol</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide (German)</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html">User Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">RaumakustikApp</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">pdf_protocol</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pdf_protocol.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pdf_protocol">
+<span id="pdf-protocol"></span><h1>pdf_protocol<a class="headerlink" href="#module-pdf_protocol" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pdf_protocol.pdfprotocol">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pdf_protocol.</span></span><span class="sig-name descname"><span class="pre">pdfprotocol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_reverberationTime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_reverberationTimeRatio</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pdf_protocol.pdfprotocol" title="Permalink to this definition"></a></dt>
+<dd><p>Class to retreive parameters out of .json session file and to create pdf protocol</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pdf_protocol.pdfprotocol.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_reverberationTime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_reverberationTimeRatio</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pdf_protocol.pdfprotocol.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Constructor for pdf object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>volume</strong> (<em>int</em>) – Volume of the room in cubic meters</p></li>
+<li><p><strong>variables</strong> (<em>dict</em>) – Dictionary with json session parameters</p></li>
+<li><p><strong>plot_reverberationTime</strong> (<em>plotly figure</em>) – Plotly figure of the reverberation time</p></li>
+<li><p><strong>plot_reverberationTime_ratio</strong> (<em>Plotly figure</em>) – Plotly figure of the reverberation time ratio
+The ratio of calculated reverberation time to wanted reverberation time. 
+Wanted reverberation time is based on the rooms use case and its volume.</p></li>
+<li><p><strong>font</strong> (<em>str</em>) – Sets the font for the PDF file</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>pdfprotocol instance, which handles the PDF protocol</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>class: pdfprotocol</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pdf_protocol.pdfprotocol.basic_variables">
+<span class="sig-name descname"><span class="pre">basic_variables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pdf_protocol.pdfprotocol.basic_variables" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the variables, that are not in another dictionary within the .json session file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>usecase for the room, 
+volume of the room,
+number of main walls,
+are people in the room,
+number of people in the room</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str, int, int, boolean, int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pdf_protocol.pdfprotocol.wall_variables">
+<span class="sig-name descname"><span class="pre">wall_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pdf_protocol.pdfprotocol.wall_variables" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the variables for a specific main wall given by the index</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) – Index of the main wall for which the wall variables shall be retreived</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>name, area, material category, material, number of subareas (of given main wall)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str, float, str, str, int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pdf_protocol.pdfprotocol.subwall_variables">
+<span class="sig-name descname"><span class="pre">subwall_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subindex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pdf_protocol.pdfprotocol.subwall_variables" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the variables for a specific subwall given by the index</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em>) – Index of the main wall on which the subwall lies</p></li>
+<li><p><strong>subindex</strong> (<em>int</em>) – Index of the subwall for which the subwall variables shall be retreived</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>area, category, material (of given subwall)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float, str, str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pdf_protocol.pdfprotocol.people_variables">
+<span class="sig-name descname"><span class="pre">people_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pdf_protocol.pdfprotocol.people_variables" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the variables regarding people in the room for a given group</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) – Index of the group of people as set in the web-app</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>amount of people, description of people</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int, str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pdf_protocol.pdfprotocol.protocol">
+<span class="sig-name descname"><span class="pre">protocol</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pdf_protocol.pdfprotocol.protocol" title="Permalink to this definition"></a></dt>
+<dd><p>Creates the PDF file out of the .json session variables</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="session_utils.html" class="btn btn-neutral float-left" title="session_utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="user_guide.html" class="btn btn-neutral float-right" title="User Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Noah Jens, Moritz Thömen, Flora Henning, Malte Cohrt​.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

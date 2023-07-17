@@ -29,7 +29,7 @@ class pdfprotocol(FPDF):
         :param font: Sets the font for the PDF file
         :type font: str       
 
-        :return: Returns a pdfprotocol instance, which handles the PDF protocol 
+        :return: pdfprotocol instance, which handles the PDF protocol 
         :rtype: class: pdfprotocol
         '''
         self.pdf = FPDF('P', 'mm', 'A4')
@@ -42,21 +42,15 @@ class pdfprotocol(FPDF):
     def basic_variables(self):
         '''
         Returns the variables, that are not in another dictionary within the .json session file
+        
+        :return: usecase for the room, 
+                 volume of the room,
+                 number of main walls,
+                 are people in the room,
+                 number of people in the room
+        
+        :rtype: str, int, int, boolean, int
 
-        :rturn use: Usecase of the room
-        :rtype use: str
-
-        :rturn volume: Volume of the room
-        :rtype volume: int
-
-        :rturn number_walls: Number of main walls
-        :rtype number_walls: int
-
-        :rturn people: True, if there are people in the room
-        :rtype people: boolean 
-
-        :rturn number_people: Number of people will be returned, if there are people in the room
-        :rtype number_people: int
         '''
         use = self.variables['usecase']
         volume = self.variables['volume']
@@ -76,20 +70,8 @@ class pdfprotocol(FPDF):
         :param index: Index of the main wall for which the wall variables shall be retreived
         :type index: int
 
-        :rturn name: Name of the main wall, as defined in the web-app
-        :rtype name: str
-
-        :rturn area: Area of the main wall 
-        :rtype area: float
-
-        :rturn category: Material category of the main wall
-        :rtype category: str
-
-        :rturn material: Material of the main wall
-        :rtype material: str
-
-        :rturn number_subareas: Number of the subareas that are on the given main wall
-        :rtype number_subareas: float
+        :return: name, area, material category, material, number of subareas (of given main wall)
+        :rtype: str, float, str, str, int
         '''
         name = self.variables[f'wall{index + 1}']['name']
         area = self.variables[f'wall{index + 1}']['area']
@@ -109,14 +91,9 @@ class pdfprotocol(FPDF):
         :param subindex: Index of the subwall for which the subwall variables shall be retreived
         :type subindex: int
 
-        :rturn area: Area of the subwall
-        :rtype area: float
+        :return: area, category, material (of given subwall)
+        :rtype: float, str, str
 
-        :rturn category: Category of the subwall
-        :rtype category: str
-
-        :rturn material: Material of the subwall
-        :rtype material: str
         '''
         area = self.variables[f'wall{index + 1}'][f'subarea{subindex + 1}']['area']
         category = self.variables[f'wall{index + 1}'][f'subarea{subindex + 1}']['category']
@@ -130,12 +107,10 @@ class pdfprotocol(FPDF):
 
         :param index: Index of the group of people as set in the web-app
         :type index: int
+        
+        :return: amount of people, description of people
+        :rtype: int, str
 
-        :rturn amount: Amount of people in the given group
-        :rtype amount: int
-
-        :rturn people_type: Description of people as given in Table A.1 in DIN 18041 
-        :rtype people_type: str
         '''
         amount = self.variables[f'person_type{index + 1}']['amount']
         people_type = self.variables[f'person_type{index + 1}']['type']
@@ -144,7 +119,7 @@ class pdfprotocol(FPDF):
     
     def protocol(self):  
         '''
-        Function that creates the PDF file out of the .json session variables
+        Creates the PDF file out of the .json session variables
         '''      
 
         # Auto page break (margin: space from the bottom)

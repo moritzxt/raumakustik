@@ -1,5 +1,5 @@
-utils
+session_utils
 =================================
 
-.. automodule:: utils
+.. automodule:: session_utils
    :members:

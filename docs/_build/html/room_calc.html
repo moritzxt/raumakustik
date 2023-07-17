@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Room class &mdash; RaumakustikApp 0.1 documentation</title>
+  <title>room_calc &mdash; RaumakustikApp 0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,7 +18,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Utilitys" href="utils.html" />
+    <link rel="next" title="utils" href="utils.html" />
     <link rel="prev" title="Usage" href="usage.html" /> 
 </head>
 
@@ -37,19 +37,21 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Main:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Main</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Raumakustik App</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="setup.html">Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Module:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Module</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Room class</a></li>
-<li class="toctree-l1"><a class="reference internal" href="utils.html">Utilitys</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">room_calc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="session_utils.html">session_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdf_protocol.html">pdf_protocol</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">User Guide (German)</span></p>
 <ul>
@@ -70,7 +72,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a></li>
-      <li class="breadcrumb-item active">Room class</li>
+      <li class="breadcrumb-item active">room_calc</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/room_calc.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -81,7 +83,7 @@
            <div itemprop="articleBody">
              
   <section id="module-room_calc">
-<span id="room-class"></span><h1>Room class<a class="headerlink" href="#module-room_calc" title="Permalink to this headline"></a></h1>
+<span id="room-calc"></span><h1>room_calc<a class="headerlink" href="#module-room_calc" title="Permalink to this headline"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="room_calc.room">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">room_calc.</span></span><span class="sig-name descname"><span class="pre">room</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peopleDescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numberOfPeople</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room" title="Permalink to this definition"></a></dt>
@@ -93,13 +95,13 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>volume</strong> (<em>number</em>) – Volume of the room in cubic meters</p></li>
-<li><p><strong>surface</strong> (<em>dict of str: number</em>) – Dictionary with the names of the main surfaces as keys and their areas in square meters as values</p></li>
-<li><p><strong>sub_surface</strong> (<em>dict of str: list of number</em>) – Dictionary with the names of the main surfaces as keys and lists of their subsurface areas in square meters as values</p></li>
+<li><p><strong>volume</strong> (<em>int</em>) – Volume of the room in cubic meters</p></li>
+<li><p><strong>surface</strong> (<em>dict of str: int</em>) – Dictionary with the names of the main surfaces as keys and their areas in square meters as values</p></li>
+<li><p><strong>sub_surface</strong> (<em>dict of str: list of int</em>) – Dictionary with the names of the main surfaces as keys and lists of their subsurface areas in square meters as values</p></li>
 <li><p><strong>alpha</strong> (<em>dict of str: list of float</em>) – Dictionary with octave bands as keys and lists of absorption coefficients of main surfaces as values</p></li>
 <li><p><strong>sub_alpha</strong> (<em>dict of str: dict of str: list of float</em>) – Dictionary of Dictionarys. With octave bands as first keys, main surfaces as second keys and lists of absorption coefficients of sub surfaces as values</p></li>
 <li><p><strong>peopleDescription</strong> (<em>list of str</em>) – List of descriptions of people in the room based on DIN18041</p></li>
-<li><p><strong>numberOfPeople</strong> (<em>list of number</em>) – List of numbers for different kind of people in the room</p></li>
+<li><p><strong>numberOfPeople</strong> (<em>list of int</em>) – List of int for different kind of people in the room</p></li>
 <li><p><strong>use</strong> (<em>str</em>) – Usecase for the room based on DIN18041</p></li>
 </ul>
 </dd>
@@ -201,13 +203,14 @@ Data retrieved from Table A.1 in DIN 18041.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="room_calc.room.reverberationTime_ratio">
 <span class="sig-name descname"><span class="pre">reverberationTime_ratio</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.reverberationTime_ratio" title="Permalink to this definition"></a></dt>
-<dd><p>Returns the ratio of calculated reverberation time to wanted reverberation time. Wanted reverberation time is based on the rooms use case and its volume.</p>
+<dd><p>Returns the ratio of calculated reverberation time to wanted reverberation time. 
+Wanted reverberation time is based on the rooms use case and its volume.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>ratio calculated to wanted reverberation time</p>
+<dd class="field-odd"><p>Ratio calculated to wanted reverberation time, Error message (when reverberation time is not inside the given boundaries)</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>float</p>
+<dd class="field-even"><p>float, list</p>
 </dd>
 </dl>
 </dd></dl>
@@ -229,7 +232,8 @@ Data retrieved from Table A.1 in DIN 18041.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="room_calc.room.plot_reverberationTime_ratio">
 <span class="sig-name descname"><span class="pre">plot_reverberationTime_ratio</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.plot_reverberationTime_ratio" title="Permalink to this definition"></a></dt>
-<dd><p>Creates a plot presenting the calculated reverberation time in comparison to the wanted reverberation time, also showing the allowed deviations in octave bands using plotly.</p>
+<dd><p>Creates a plot presenting the calculated reverberation time in comparison to the wanted reverberation time.
+Also showing the allowed deviations in octave bands using plotly.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>plot comparing calculated and wanted reverberation time</p>
@@ -249,7 +253,7 @@ Data retrieved from Table A.1 in DIN 18041.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="usage.html" class="btn btn-neutral float-left" title="Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="utils.html" class="btn btn-neutral float-right" title="Utilitys" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="utils.html" class="btn btn-neutral float-right" title="utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -6,10 +6,10 @@ from utils import usecase
 
 def get_current_session_key():
     '''
-    Function to get current session_key to update current session
+    Gets current session_key to update current session
 
-    :return session_key: The session_key
-    :rtype session_key: str
+    :return: The session_key
+    :rtype: str
 
     '''
     if os.path.isfile('session_key.json'):
@@ -21,7 +21,7 @@ def get_current_session_key():
 
 def upload_file(file):
     '''
-    Function to write uploaded json file from upload button to current session state
+    Writes uploaded json file from upload button to current session state
 
     :param file: User uploaded json file 
     :type file: json 
@@ -40,8 +40,8 @@ def write_session_file(state):
     """
     Dumps session state into json file.
     
-    :param state: 
-    :type state: 
+    :param state: name of json file of current session (name of current session + '.json')
+    :type state: str
     """
     if not os.path.isfile(state):
         #refactor all 2.WebApp.json to 2.WebApp variable
@@ -53,8 +53,8 @@ def load_session_file(state):
     """
     Loads session state from json file.
     
-    :param state: 
-    :type state: 
+    :param state: name of json file of current session (name of current session + '.json')
+    :type state: str
     """
     if os.path.isfile('session_key.json'):
         with open('session_key.json', 'r') as file:
@@ -74,8 +74,8 @@ def write_session_key(session):
     """
     Dumps session key as json file.
 
-    :param session: 
-    :type session:
+    :param session: name of current session
+    :type session: str
     """
     with open('session_key.json', 'w') as init:
         json.dump({'key': session}, init)
@@ -85,17 +85,17 @@ def init_starting_values(json_data,material_dict,person_dict):
     """
     Returns init data. If no values are set for the specific key, the corresponding value is set to its default.
 
-    :param json_data:  
-    :rtype json data: 
+    :param json_data: copy of contents of json file of current session as variable, for use in code and modifying of file data 
+    :type json data: dict of str: int or float or str or dict of str: int or float or str 
         
-    :param material_dict: 
-    :rtype material_dict:
+    :param material_dict: dictionary with all the absorption materials as keys and their respective absorption coefficients over octave bands
+    :type material_dict: dict of str: list of float
         
-    :param person_dict: 
-    :rtype person_dict:
+    :param person_dict: dictionary with all the person types from DIN as keys and their respective absorption coefficients over octave bands 
+    :type person_dict: list of float
 
     :return: init data
-    :rtype: dict of str
+    :rtype: dict of str: int or float or str or dict of str: int or float or str 
 
     """
     #initialize usecase init data. if it doesnt exist yet, set to default
@@ -260,8 +260,8 @@ def sync_session(state):
     """
     Synchronizes session state and json file.
     
-    :param state: 
-    :type state:
+    :param state: name of json file of current session (name of current session + ".json")
+    :type state: str
     """
     #used to sync the session states to json file
     with open(state) as jsonkey:
@@ -277,8 +277,8 @@ def load_session(state):
     """
     Sets necessary session states to starting values and reads contents of session file.
  
-    :param state: 
-    :type state:
+    :param state: name of json file of current session (name of current session + ".json")
+    :type state: str
     """
     #used to set necessary session states to starting values
     #read contents of session file
@@ -313,11 +313,11 @@ def negate_checkbox(json_data, state):
     """
     Negates current state of json_data['persons']. Used on change of persons checkbox to update state. 
     
-    :param json_data:
-    :type json_data:
+    :param json_data: copy of contents of json file of current session as variable, for use in code and modifying of file data 
+    :type json data: dict of str: int or float or str or dict of str: int or float or str 
         
-    :param state:
-    :type state:
+    :param state: name of json file of current session (name of current session + ".json")
+    :type state: str
     """
     #used so that persons checkbox works properly
     json_data['persons'] = not json_data['persons']
@@ -329,11 +329,11 @@ def write_json(json_data,state,num):
     """
     Formats user_input number of persons, writes it into json_data and dumps json_data as json file.
     
-    :param json_data:
-    :type json_data:
+    :param json_data: copy of contents of json file of current session as variable, for use in code and modifying of file data 
+    :type json data: dict of str: int or float or str or dict of str: int or float or str 
         
-    :param state:
-    :type state:
+    :param state: name of json file of current session (name of current session + ".json")
+    :type state: str
         
     :param num: number of persons in the room 
     :type num: int
@@ -346,6 +346,16 @@ def write_json(json_data,state,num):
         jsonkey.close()
 
 def write_session_data_to_json(json_data,state):
+    """
+    Dumps session data to json file.
+    
+    :param json_data: copy of contents of json file of current session as variable, for use in code and modifying of file data 
+    :type json data: dict of str: int or float or str or dict of str: int or float or str 
+        
+    :param state: name of json file of current session (name of current session + ".json")
+    :type state: str
+
+    """
     #used so that person inputs work properly with json
     with open(state,'w') as jsonkey:
         json.dump(json_data, jsonkey)

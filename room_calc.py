@@ -172,10 +172,12 @@ class room:
     
     def reverberationTime_ratio(self):
         '''
-        Returns the ratio of calculated reverberation time to wanted reverberation time. Wanted reverberation time is based on the rooms use case and its volume.
+        Returns the ratio of calculated reverberation time to wanted reverberation time. 
+        Wanted reverberation time is based on the rooms use case and its volume.
         
         :return: Ratio calculated to wanted reverberation time, Error message (when reverberation time is not inside the given boundaries)
         :rtype: float, list
+        
         '''
 
         reverberationTime_ratio = basic_dict()
@@ -220,6 +222,7 @@ class room:
         
         :return: plot of reverberation time
         :rtype: plotly figure
+        
         '''
         freq = np.array([125,250,500,1000,2000,4000])
         reverberationTimeSeconds = self.reverberationTime() 
@@ -249,12 +252,11 @@ class room:
     
     def plot_reverberationTime_ratio(self):
         '''
-        Creates a plot presenting the calculated reverberation time in comparison to the wanted reverberation time, also showing the allowed deviations in octave bands using plotly.
+        Creates a plot presenting the calculated reverberation time in comparison to the wanted reverberation time.
+        Also showing the allowed deviations in octave bands using plotly.
         
         :return: plot comparing calculated and wanted reverberation time
         :rtype: plotly figure
-=======
->>>>>>> main
         
         '''
         frequencies = [63,125,250,500,1000,2000,4000,8000]

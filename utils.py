@@ -127,6 +127,7 @@ def displayPDF(filepath):
 
     # Displaying File
     st.markdown(pdf_display, unsafe_allow_html=True)
+    
 
 # Sport: 30000 m^2, as it is the biggest room volume applicable with DIN 18041 (see page 5)
 usecase = {'Musik': [30, 1000], 'Sprache/Vortrag': [50, 5000], 'Sprache/Vortrag inklusiv': [30, 5000],
