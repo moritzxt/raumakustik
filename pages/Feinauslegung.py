@@ -85,9 +85,11 @@ with open(state) as jsonkey:
 
 # Get list without 'Personen'
 main_walls = [element for element in st.session_state['main_walls'] if element != 'Personen']
-sub_walls = []
+sub_walls = {}
 for name in main_walls:
-    sub_walls.append(st.session_state[f'subAreas{name}'])
+    n_sub_walls = st.session_state[f'subAreas{name}']
+
+    sub_walls[name] = [f'Subfläche {element + 1}' for element in range(0, n_sub_walls)]
 
 # Setup of page data
 st.set_page_config(page_title='Feinauslegung', layout='wide')
@@ -109,8 +111,8 @@ with col2:
     sub_surface_count = len(room_feinauslegung.sub_surface[wall])
     # Selecting subwall
     sub_wall = st.selectbox(
-        'Wähle die Subfläche aus', options=sub_walls)
-    sub_wall_ind = sub_walls.index(sub_wall)
+        'Wähle die Subfläche aus', options=sub_walls[wall])
+    sub_wall_ind = sub_walls[wall].index(sub_wall)
     # Getting material of corresponding subwall
     sub_material = subwall_variables(json_data, wall_ind, sub_wall_ind)[2]
 
