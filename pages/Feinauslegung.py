@@ -85,24 +85,23 @@ try:
                                 options=walls_with_subwalls)
             # Index for main wall for lists
             wall_ind =  main_walls.index(wall)
-        
-        with col2:
-            tabs = st.tabs(sub_walls[wall])
-            for tab, name in zip(tabs, sub_walls[wall]):
-                with tab:
-
-                    sub_wall_ind = sub_walls[wall].index(name)
-                    max_area = float(room_feinauslegung.surface[wall] - sum(room_feinauslegung.sub_surface[wall]))
-                    max_area = max_area + room_feinauslegung.sub_surface[wall][sub_wall_ind]
-                    new_area = st.slider(label='Fläche der Subwandfläche', min_value=0., max_value=max_area, key={name}, step=.1, format = '%.1f')
-                    room_feinauslegung.sub_surface[wall][sub_wall_ind] = new_area
-
-            
-            
-            
         if (len(walls_with_subwalls) > 0):
-            with col1:
-                area = slider_for_surface(room_feinauslegung,wall,sub_wall_ind, sub_material, key=sub_wall_ind)
+            with col2:
+                tabs = st.tabs(sub_walls[wall])
+                for tab, name in zip(tabs, sub_walls[wall]):
+                    with tab:
+
+                        sub_wall_ind = sub_walls[wall].index(name)
+                        max_area = float(room_feinauslegung.surface[wall] - sum(room_feinauslegung.sub_surface[wall]))
+                        max_area = max_area + room_feinauslegung.sub_surface[wall][sub_wall_ind]
+                        new_area = st.slider(label='Fläche der Subwandfläche', min_value=0., max_value=max_area, key={name}, step=.1, format = '%.1f')
+                        room_feinauslegung.sub_surface[wall][sub_wall_ind] = new_area
+
+                
+                
+                
+
+
         else:
             print("keine subfläche vorhanden")
         
