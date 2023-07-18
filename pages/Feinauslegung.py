@@ -79,93 +79,95 @@ session = add_script_run_ctx().streamlit_script_run_ctx.session_id
 write_session_key(session)
 
 # Load data from current session
-with open(state) as jsonkey:
-    json_data = json.load(jsonkey)
-    jsonkey.close()
+try:
+    with open(state) as jsonkey:
+        json_data = json.load(jsonkey)
+        jsonkey.close()
+        
+    # Get list without 'Personen'
+    main_walls = [element for element in st.session_state['main_walls'] if element != 'Personen']
+    sub_walls = {}
+    for name in main_walls:
+        n_sub_walls = st.session_state[f'subAreas{name}']
 
-# Get list without 'Personen'
-main_walls = [element for element in st.session_state['main_walls'] if element != 'Personen']
-sub_walls = {}
-for name in main_walls:
-    n_sub_walls = st.session_state[f'subAreas{name}']
+        sub_walls[name] = [f'Subfläche {element + 1}' for element in range(0, n_sub_walls)]
 
-    sub_walls[name] = [f'Subfläche {element + 1}' for element in range(0, n_sub_walls)]
-
-# Setup of page data
-st.set_page_config(page_title='Feinauslegung', layout='wide')
-with st.container():
-    st.header('Feinauslegung der Nachhallzeit')
-    st.text('Variieren des Flächeninhalts einer Subfläche')
-    st.divider()
-
-# Setup of page appearence 
-col1, col2, col3 = st.columns(3)
-with col1:
-    # Selecting mainwall
-    wall = st.selectbox('Wähle die zu bearbeitende Grundfläche aus',
-                        options=main_walls)
-    # Index for main wall for lists
-    wall_ind =  main_walls.index(wall)
-
-with col2:
     # get walls that have subwalls
     walls_with_subwalls = []
     for key in sub_walls:
         if (len(sub_walls[key]) > 0):
             walls_with_subwalls.append(key)
-    print("walls with subwalls")
-    print(walls_with_subwalls)
     # if no wall with subwalls do something
-    if (len(walls_with_subwalls) > 0):
-
-        sub_surface_count = len(room_feinauslegung.sub_surface[wall])
-        # Selecting subwall
-        sub_wall = st.selectbox(
-            'Wähle die Subfläche aus', options=sub_walls[wall]) # wenn keine subfläche vorhanden -> exception
-        sub_wall_ind = sub_walls[wall].index(sub_wall)
-        # Getting material of corresponding subwall
-        sub_material = subwall_variables(json_data, wall_ind, sub_wall_ind)[2]
+    if (len(walls_with_subwalls) < 1):
+        st.error("Feinauslegung nicht möglich, da keine Subflächen definiert sind.")
     else:
-        st.error('Es sind keine Subflächen vorhanden für die eine Feinauslegung durchgeführt werden könnte.')
-    
-    
-if (len(walls_with_subwalls) > 0):
-    with col1:
-        area = slider_for_surface(room_feinauslegung,wall,sub_wall_ind, sub_material, key=sub_wall_ind)
-else:
-    print("keine subfläche vorhanden")
+        # Setup of page data
+        st.set_page_config(page_title='Feinauslegung', layout='wide')
+        with st.container():
+            st.header('Feinauslegung der Nachhallzeit')
+            st.text('Variieren des Flächeninhalts einer Subfläche')
+            st.divider()
+        
+        # Setup of page appearence 
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            # Selecting mainwall
+            wall = st.selectbox('Wähle die zu bearbeitende Grundfläche aus',
+                                options=walls_with_subwalls)
+            # Index for main wall for lists
+            wall_ind =  main_walls.index(wall)
+        
+        with col2:
+                sub_surface_count = len(room_feinauslegung.sub_surface[wall])
+                # Selecting subwall
+                sub_wall = st.selectbox(
+                    'Wähle die Subfläche aus', options=sub_walls[wall]) # wenn keine subfläche vorhanden -> exception
+                sub_wall_ind = sub_walls[wall].index(sub_wall)
+                # Getting material of corresponding subwall
+                sub_material = subwall_variables(json_data, wall_ind, sub_wall_ind)[2]
+            
+            
+        if (len(walls_with_subwalls) > 0):
+            with col1:
+                area = slider_for_surface(room_feinauslegung,wall,sub_wall_ind, sub_material, key=sub_wall_ind)
+        else:
+            print("keine subfläche vorhanden")
+        
+        tab1, tab2 = st.tabs(['Nachhallzeit', 'Nachhallzeitenvergleich'])
+        
+        
+        with tab1:
+            # Plotting revernerationtime
+            fig1 = room_feinauslegung.plot_reverberationTime()
+            st.plotly_chart(fig1)
+        
+        with tab2:
+            #plotting revernerationtime ratio
+        
+            fig2 = room_feinauslegung.plot_reverberationTime_ratio()
+            st.plotly_chart(fig2)
+        
+        # Session Path for adding values to current session
+        
+        state = add_script_run_ctx().streamlit_script_run_ctx.session_id +'.json'
+        state = './session/' + state  
+        load_session_file(state)
+        
+        # Write current session id in session_key.json
+        session = add_script_run_ctx().streamlit_script_run_ctx.session_id
+        write_session_key(session)
+        
+        # Load data from current session
+        with open(state) as jsonkey:
+            json_data = json.load(jsonkey)
+            jsonkey.close()
+        
+        if st.button('Übernehmen', help = 'Übernehme die Änderung und fahre auf der Hauptseite fort'):
+            # Overwrite button to save data in current sessoion_state so it can be used in the main page
+            json_data['wall' + str(wall_ind+1)]['subarea' + str(sub_wall_ind+1)]['area'] = area
+            write_session_data_to_json(json_data, state)
+            load_session(state)
+except:
+    st.error('Feinauslegung nicht möglich. Bitte zuerst Nachhallzeitenanalyse durchführen.')
 
-tab1, tab2 = st.tabs(['Nachhallzeit', 'Nachhallzeitenvergleich'])
 
-
-with tab1:
-    # Plotting revernerationtime
-    fig1 = room_feinauslegung.plot_reverberationTime()
-    st.plotly_chart(fig1)
-
-with tab2:
-    #plotting revernerationtime ratio
-
-    fig2 = room_feinauslegung.plot_reverberationTime_ratio()
-    st.plotly_chart(fig2)
-
-# Session Path for adding values to current session
-
-state = add_script_run_ctx().streamlit_script_run_ctx.session_id +'.json'
-state = './session/' + state  
-load_session_file(state)
-
-# Write current session id in session_key.json
-session = add_script_run_ctx().streamlit_script_run_ctx.session_id
-write_session_key(session)
-
-# Load data from current session
-with open(state) as jsonkey:
-    json_data = json.load(jsonkey)
-    jsonkey.close()
-
-if st.button('Übernehmen', help = 'Übernehme die Änderung und fahre auf der Hauptseite fort'):
-    # Overwrite button to save data in current sessoion_state so it can be used in the main page
-    json_data['wall' + str(wall_ind+1)]['subarea' + str(sub_wall_ind+1)]['area'] = area
-    write_session_data_to_json(json_data, state)
-    load_session(state)
