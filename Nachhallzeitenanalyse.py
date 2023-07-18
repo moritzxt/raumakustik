@@ -261,7 +261,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
 
                 if f'subAreas{name}' not in st.session_state:
                     st.session_state[f'subAreas{name}'] = init_data['number_subareas'][number]        
-                #subAreas = init_data['number_subareas'][number]
+                subAreas = init_data['number_subareas'][number]
 
                 con_1 = st.container()
                 con_2 = st.container()
@@ -354,18 +354,20 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     #     print(subAreas, 'test')
 
                     # Removal button for subareas           
-                    if st.button('Subfläche entfernen', key=f'remove Subfläche von {name}') and len(sub_materials[name]) > 0:
+                    if st.button('Subfläche entfernen', key=f'remove Subfläche von {name}'): # and len(sub_materials[name]) > 0:
                         if st.session_state[f'subAreas{name}'] > 0:
                             st.session_state[f'subAreas{name}'] -= 1
                             print( st.session_state[f'subAreas{name}'], ' remove')
                             sub_materials[name].pop()
                             sub_surfaces[name].pop()
                             json_data['wall' + str(number+1)].pop('subarea' + str(subAreas))
+                            
                     # Sync number of subareas with json file
                             json_data['wall' + str(number+1)]['number_subareas'] = st.session_state[f'subAreas{name}']
                             with open(state,'w') as jsonkey:
                                 json.dump(json_data, jsonkey)  
                                 jsonkey.close()
+                            st.experimental_rerun()
             
 
     # Initializing the absorption coefficient dictionary
