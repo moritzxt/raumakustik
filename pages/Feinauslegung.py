@@ -108,16 +108,32 @@ with col1:
     wall_ind =  main_walls.index(wall)
 
 with col2:
-    sub_surface_count = len(room_feinauslegung.sub_surface[wall])
-    # Selecting subwall
-    sub_wall = st.selectbox(
-        'Wähle die Subfläche aus', options=sub_walls[wall])
-    sub_wall_ind = sub_walls[wall].index(sub_wall)
-    # Getting material of corresponding subwall
-    sub_material = subwall_variables(json_data, wall_ind, sub_wall_ind)[2]
+    # get walls that have subwalls
+    walls_with_subwalls = []
+    for key in sub_walls:
+        if (len(sub_walls[key]) > 0):
+            walls_with_subwalls.append(key)
+    print("walls with subwalls")
+    print(walls_with_subwalls)
+    # if no wall with subwalls do something
+    if (len(walls_with_subwalls) > 0):
 
-with col1:
-    area = slider_for_surface(room_feinauslegung,wall,sub_wall_ind, sub_material, key=sub_wall_ind)
+        sub_surface_count = len(room_feinauslegung.sub_surface[wall])
+        # Selecting subwall
+        sub_wall = st.selectbox(
+            'Wähle die Subfläche aus', options=sub_walls[wall]) # wenn keine subfläche vorhanden -> exception
+        sub_wall_ind = sub_walls[wall].index(sub_wall)
+        # Getting material of corresponding subwall
+        sub_material = subwall_variables(json_data, wall_ind, sub_wall_ind)[2]
+    else:
+        st.error('Es sind keine Subflächen vorhanden für die eine Feinauslegung durchgeführt werden könnte.')
+    
+    
+if (len(walls_with_subwalls) > 0):
+    with col1:
+        area = slider_for_surface(room_feinauslegung,wall,sub_wall_ind, sub_material, key=sub_wall_ind)
+else:
+    print("keine subfläche vorhanden")
 
 tab1, tab2 = st.tabs(['Nachhallzeit', 'Nachhallzeitenvergleich'])
 
