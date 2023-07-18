@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>room_calc &mdash; RaumakustikApp 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="utils" href="utils.html" />
+    <link rel="prev" title="Usage" href="usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> RaumakustikApp
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Main</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Raumakustik App</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Module</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">room_calc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="session_utils.html">session_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdf_protocol.html">pdf_protocol</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide (German)</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html">User Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">RaumakustikApp</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">room_calc</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/room_calc.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-room_calc">
+<span id="room-calc"></span><h1>room_calc<a class="headerlink" href="#module-room_calc" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="room_calc.room">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">room_calc.</span></span><span class="sig-name descname"><span class="pre">room</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peopleDescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numberOfPeople</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room" title="Permalink to this definition"></a></dt>
+<dd><p>Class inheriting all characteristics of the room as well as calculation and plotting functionality.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="room_calc.room.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peopleDescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numberOfPeople</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Constructor for room object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>volume</strong> (<em>int</em>) – Volume of the room in cubic meters</p></li>
+<li><p><strong>surface</strong> (<em>dict of str: int</em>) – Dictionary with the names of the main surfaces as keys and their areas in square meters as values</p></li>
+<li><p><strong>sub_surface</strong> (<em>dict of str: list of int</em>) – Dictionary with the names of the main surfaces as keys and lists of their subsurface areas in square meters as values</p></li>
+<li><p><strong>alpha</strong> (<em>dict of str: list of float</em>) – Dictionary with octave bands as keys and lists of absorption coefficients of main surfaces as values</p></li>
+<li><p><strong>sub_alpha</strong> (<em>dict of str: dict of str: list of float</em>) – Dictionary of Dictionarys. With octave bands as first keys, main surfaces as second keys and lists of absorption coefficients of sub surfaces as values</p></li>
+<li><p><strong>peopleDescription</strong> (<em>list of str</em>) – List of descriptions of people in the room based on DIN18041</p></li>
+<li><p><strong>numberOfPeople</strong> (<em>list of int</em>) – List of int for different kind of people in the room</p></li>
+<li><p><strong>use</strong> (<em>str</em>) – Usecase for the room based on DIN18041</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns a room instance, which handles all calculations</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>class: room</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="room_calc.room.criticalDistance">
+<span class="sig-name descname"><span class="pre">criticalDistance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.criticalDistance" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the critical distance, at which energy densities of the direct and reflected soundfield are equal. 
+Makes use of an approximate formula based on statistical acoustics in a diffuse soundfield.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>critical distance in meters</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="room_calc.room.equivalentAbsorptionSurface_walls">
+<span class="sig-name descname"><span class="pre">equivalentAbsorptionSurface_walls</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.equivalentAbsorptionSurface_walls" title="Permalink to this definition"></a></dt>
+<dd><p>Returns equivalent absorption surface for the walls by calculating the equivalent absorption surface for every wall and summing them. People and air are not taken into account.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>equivalent absoprtion surface in square meters</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="room_calc.room.equivalentAbsorptionSurface_people">
+<span class="sig-name descname"><span class="pre">equivalentAbsorptionSurface_people</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.equivalentAbsorptionSurface_people" title="Permalink to this definition"></a></dt>
+<dd><p>Returns equivalent absorption surface for the people in the room based on the number of people and their specification regarding age and position (e.g. standing, sitting).
+Data retrieved from Table A.1 in DIN 18041.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>equivalent absorption surface of the people in the room in square meters</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="room_calc.room.equivalentAbsorptionSurface_air">
+<span class="sig-name descname"><span class="pre">equivalentAbsorptionSurface_air</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.equivalentAbsorptionSurface_air" title="Permalink to this definition"></a></dt>
+<dd><p>Returns equivalent absorption surface resulting from the dampening in air.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>equivalent absorption surface of the air in square meters</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="room_calc.room.equivalentAbsorptionSurface">
+<span class="sig-name descname"><span class="pre">equivalentAbsorptionSurface</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.equivalentAbsorptionSurface" title="Permalink to this definition"></a></dt>
+<dd><p>Returns sum of all equivalent absorption surfaces (walls, people, air).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>sum of equivalent absorption surfaces in square meters</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="room_calc.room.reverberationTime">
+<span class="sig-name descname"><span class="pre">reverberationTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.reverberationTime" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the reverberation time calculated by the formula of Sabine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>reverberation time in s</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="room_calc.room.reverberationTime_ratio">
+<span class="sig-name descname"><span class="pre">reverberationTime_ratio</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.reverberationTime_ratio" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the ratio of calculated reverberation time to wanted reverberation time. 
+Wanted reverberation time is based on the rooms use case and its volume.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Ratio calculated to wanted reverberation time, Error message (when reverberation time is not inside the given boundaries)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float, list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="room_calc.room.plot_reverberationTime">
+<span class="sig-name descname"><span class="pre">plot_reverberationTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.plot_reverberationTime" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a plot presenting the reverberation time in octave bands using plotly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>plot of reverberation time</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>plotly figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="room_calc.room.plot_reverberationTime_ratio">
+<span class="sig-name descname"><span class="pre">plot_reverberationTime_ratio</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#room_calc.room.plot_reverberationTime_ratio" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a plot presenting the calculated reverberation time in comparison to the wanted reverberation time.
+Also showing the allowed deviations in octave bands using plotly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>plot comparing calculated and wanted reverberation time</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>plotly figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="usage.html" class="btn btn-neutral float-left" title="Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="utils.html" class="btn btn-neutral float-right" title="utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Noah Jens, Moritz Thömen, Flora Henning, Malte Cohrt​.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
