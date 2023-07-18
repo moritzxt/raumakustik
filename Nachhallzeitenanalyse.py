@@ -258,8 +258,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     jsonkey.close()
 
 
-                if f'subAreas{name}' not in st.session_state:
-                    st.session_state[f'subAreas{name}'] = init_data['number_subareas'][number]
+
                 con_1 = st.container()
                 con_2 = st.container()
 
@@ -292,7 +291,9 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     col_1, col_2, col_3 = st.columns(3)
 
                     # Get initial data for number of subareas
-                    subAreas = init_data['number_subareas'][number]
+                    if f'subAreas{name}' not in st.session_state:
+                        st.session_state[f'subAreas{name}'] = init_data['number_subareas'][number]                    
+                    subAreas = st.session_state[f'subAreas{name}']
                     # Button for adding subareas
                     if st.button('Subfläche hinzufügen', key = f'Button subArea{subAreas} {name}'):
                         st.session_state[f'subAreas{name}'] += 1
