@@ -32,37 +32,6 @@ def subwall_variables(json_data, index, subindex):
 
     return area, category, material
 
-def slider_for_surface(room_feinauslegung,wall,sub_wall_ind,sub_material, key = 1):
-    '''
-    Returns the area, which the slider is set to 
-
-    :param room_feinauslegung: Object of class room 
-    :type room_feinauslegung: class: room 
-
-    :param wall: Name of the main wall as set in web-app
-    :type wall: str
-
-    :param sub_wall: Name of subwall as set in web-app
-    :type sub_wall: str
-
-    :param sub_wall_ind: Index of subwall for the slider 
-    :type sub_wall_ind: int
-
-    :param sub_material: Material of the subwall, which area shall be changed with the slider
-    :type sub_material: str
-
-    :param key: Widgte key, 1 by default
-    :type key: int 
-
-    :return room_feinauslegung.sub_surface[wall][sub_wall_ind]: Area of subwall, given by the slider
-    :rtype room_feinauslegung.sub_surface[wall][sub_wall_ind]: int
-    '''
-    max_area = float(room_feinauslegung.surface[wall] - sum(room_feinauslegung.sub_surface[wall]))
-    room_feinauslegung.sub_surface[wall][sub_wall_ind] = st.slider(
-        label='Fläche der Subwandfläche', min_value=0., max_value=max_area, key=f'SubAreaSlider{sub_wall_ind}{key}', step=.1, format = '%.1f')
-    st.write(sub_material)
-
-    return room_feinauslegung.sub_surface[wall][sub_wall_ind]
 
 # Initializing the room_feinauslegung object from main page of web-app
 fileObj = open('src/raum.obj', 'rb')
@@ -107,27 +76,29 @@ with col1:
     # Index for main wall for lists
     wall_ind =  main_walls.index(wall)
 
-with col2:
-    sub_surface_count = len(room_feinauslegung.sub_surface[wall])
-    # Selecting subwall
-    sub_wall = st.selectbox(
-        'Wähle die Subfläche aus', options=sub_walls[wall])
-    sub_wall_ind = sub_walls[wall].index(sub_wall)
-    # Getting material of corresponding subwall
-    sub_material = subwall_variables(json_data, wall_ind, sub_wall_ind)[2]
 
-with col1:
-    area = slider_for_surface(room_feinauslegung,wall,sub_wall_ind, sub_material, key=sub_wall_ind)
+with col2:
+    tabs = st.tabs(sub_walls[wall])
+    for tab, name in zip(tabs, sub_walls[wall]):
+        with tab:
+
+            sub_wall_ind = sub_walls[wall].index(name)
+            max_area = float(room_feinauslegung.surface[wall] - sum(room_feinauslegung.sub_surface[wall]))
+            max_area = max_area + room_feinauslegung.sub_surface[wall][sub_wall_ind]
+            new_area = st.slider(label='Fläche der Subwandfläche', min_value=0., max_value=max_area, key={name}, step=.1, format = '%.1f')
+            room_feinauslegung.sub_surface[wall][sub_wall_ind] = new_area
+
+    
 
 tab1, tab2 = st.tabs(['Nachhallzeit', 'Nachhallzeitenvergleich'])
 
 
-with tab1:
+with tab2:
     # Plotting revernerationtime
     fig1 = room_feinauslegung.plot_reverberationTime()
     st.plotly_chart(fig1)
 
-with tab2:
+with tab1:
     #plotting revernerationtime ratio
 
     fig2 = room_feinauslegung.plot_reverberationTime_ratio()
