@@ -232,9 +232,9 @@ class pdfprotocol(FPDF):
         self.pdf.ln(10)
         self.pdf.set_font(self.font, 'B', 14)
         self.pdf.cell(0, 5, 'Nachhallzeitenvergleich', align = 'C', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
-        self.pdf.image(path_reverbereationTime, w = 180)
-        self.pdf.ln(10)
         self.pdf.image(path_reverbereationTimeRatio, w = 180)
+        self.pdf.ln(10)
+        self.pdf.image(path_reverbereationTime, w = 180)
         self.pdf.cell(0, 5, 'Nachhallzeit', align = 'C', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
 
         # Output PDF file
