@@ -2,8 +2,8 @@ fpdf2==2.7.4
 kaleido==0.2.1
 numpy==1.25.1
 orca==1.8
-psutil 
-requests 
+psutil==5.9.5
+requests==2.29.0
 pandas==2.0.3
 plotly==5.15.0
 sphinx==4.4.0
