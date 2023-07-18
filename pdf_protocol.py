@@ -234,8 +234,8 @@ class pdfprotocol(FPDF):
         self.pdf.cell(0, 5, 'Nachhallzeitenvergleich', align = 'C', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
         self.pdf.image(path_reverbereationTimeRatio, w = 180)
         self.pdf.ln(10)
-        self.pdf.image(path_reverbereationTime, w = 180)
         self.pdf.cell(0, 5, 'Nachhallzeit', align = 'C', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
-
+        self.pdf.image(path_reverbereationTime, w = 180)
+       
         # Output PDF file
         self.pdf.output('src/pdf_protocol.pdf')
