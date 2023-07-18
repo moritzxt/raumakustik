@@ -90,19 +90,18 @@ with col2:
 
     
 
-tab1, tab2 = st.tabs(['Nachhallzeit', 'Nachhallzeitenvergleich'])
-
-
-with tab2:
-    # Plotting revernerationtime
-    fig1 = room_feinauslegung.plot_reverberationTime()
-    st.plotly_chart(fig1)
+tab1, tab2 = st.tabs(['Nachhallzeitenvergleich', 'Nachhallzeit'])
 
 with tab1:
     #plotting revernerationtime ratio
 
     fig2 = room_feinauslegung.plot_reverberationTime_ratio()
     st.plotly_chart(fig2)
+
+with tab2:
+    # Plotting revernerationtime
+    fig1 = room_feinauslegung.plot_reverberationTime()
+    st.plotly_chart(fig1)
 
 # Session Path for adding values to current session
 
