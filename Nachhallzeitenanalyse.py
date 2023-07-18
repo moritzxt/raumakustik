@@ -388,13 +388,12 @@ st.subheader('Ergebnisse')
 tab1, tab2 = st.tabs(['Nachhallzeit', 'Nachhallzeitenvergleich'])
 
 with tab1:
-    
-    fig_reverberationTime = raum.plot_reverberationTime()
-    st.plotly_chart(fig_reverberationTime)
-
-with tab2:
     fig_reverberationTime_ratio = raum.plot_reverberationTime_ratio()
     st.plotly_chart(fig_reverberationTime_ratio)
+
+with tab2:
+    fig_reverberationTime = raum.plot_reverberationTime()
+    st.plotly_chart(fig_reverberationTime)
 
 
 # Exporting the results as PDF with pdfprotocol class and download the pdf
