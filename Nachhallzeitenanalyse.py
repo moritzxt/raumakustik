@@ -261,6 +261,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
 
                 if f'subAreas{name}' not in st.session_state:
                     st.session_state[f'subAreas{name}'] = init_data['number_subareas'][number]        
+                #subAreas = init_data['number_subareas'][number]
 
                 con_1 = st.container()
                 con_2 = st.container()
@@ -295,9 +296,9 @@ for tab, name in zip(tabs, st.session_state.main_walls):
 
                     # Get initial data for number of subareas
             
-                    subAreas = init_data['number_subareas'][number]
+
                     # Button for adding subareas
-                    if st.button('Subfläche hinzufügen', key = f'Button subArea{subAreas} {name}'):
+                    if st.button('Subfläche hinzufügen', key = f'Button subArea {name}'):
                         st.session_state[f'subAreas{name}'] += 1
                         print(st.session_state[f'subAreas{name}'])
 
@@ -312,7 +313,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     with open(state,'w') as jsonkey:
                         json.dump(json_data, jsonkey)     
                         jsonkey.close()
-                            
+                    print(subAreas, ' subAreas')
                     for num in range(0, subAreas):
                         # Write corresponding data for subareas into json file 
                         json_data['wall' + str(number+1)]['subarea' + str(num+1)] = {}
@@ -345,17 +346,18 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                             json.dump(json_data, jsonkey)    
                             jsonkey.close() 
 
-                    if  f'Button subArea{subAreas} {name}' in st.session_state:
-                        if st.session_state[ f'Button subArea{subAreas} {name}'] == True:
-                            subAreas = st.session_state[f'subAreas{name}'] + 1
-                        else:
-                            subAreas = st.session_state[f'subAreas{name}']
-                        print(subAreas, 'test')
+                    # if  f'Button subArea{subAreas} {name}' in st.session_state:
+                    #     if st.session_state[ f'Button subArea{subAreas} {name}'] == True:
+                    #         subAreas = st.session_state[f'subAreas{name}'] + 1
+                    #     else:
+                    #         subAreas = st.session_state[f'subAreas{name}']
+                    #     print(subAreas, 'test')
 
                     # Removal button for subareas           
                     if st.button('Subfläche entfernen', key=f'remove Subfläche von {name}') and len(sub_materials[name]) > 0:
                         if st.session_state[f'subAreas{name}'] > 0:
                             st.session_state[f'subAreas{name}'] -= 1
+                            print( st.session_state[f'subAreas{name}'], ' remove')
                             sub_materials[name].pop()
                             sub_surfaces[name].pop()
                             json_data['wall' + str(number+1)].pop('subarea' + str(subAreas))
@@ -396,8 +398,7 @@ fileObj.close()
 st.divider()
 st.subheader('Ergebnisse')
 # st.divider()
-tab1, tab2 = st.tabs(['Nachhallzeit', 'Nachhallzeitenvergleich'])
-
+tab1, tab2 = st.tabs(['Nachhallzeitenvergleich', 'Nachhallzeit'])
 with tab1:
     fig_reverberationTime_ratio = raum.plot_reverberationTime_ratio()
     st.plotly_chart(fig_reverberationTime_ratio)
