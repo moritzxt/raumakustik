@@ -61,10 +61,6 @@ class room:
         :return: critical distance in meters
         :rtype: float
         """
-        # '''
-        # Function to calculate the critical distance, where the energy densities of the direct and reflected soundfield are equal. 
-        # Calculation is made with an approximate formula based on statistical acoustics in a diffuse soundfield.
-        # '''
         
         criticalDistance = np.sqrt(self.equivalentAbsorptionSurface() / 50)
 
