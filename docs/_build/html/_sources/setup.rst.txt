@@ -5,7 +5,7 @@ Use git to clone this repository into your computer.
 
 .. code-block:: console
 
-    git clone https://git.tu-berlin.de/pyac23/raumakustik
+    git clone https://github.com/moritzxt/raumakustik
 
 Setup of the virtual environment:
 

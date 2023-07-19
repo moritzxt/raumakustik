@@ -3,8 +3,8 @@
    :align: right
 
 
-Raumakustik App
-===============
+Nachhallzeitenanalyse
+=====================
 
 This streamlit application delivers an estimation of the reverberation time in octave bands and an evaluation of the speech intelligibility for a room given by user inputs.
 

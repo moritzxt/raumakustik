@@ -4,7 +4,7 @@ from utils import read_db, add_row
 
 def valuesAreValid(values):
     '''
-    Checks, if the absorption coefficients are given as required and are reasonable, when user adds material
+    Checks, if the absorption coefficients are given as required and are reasonable, when user adds material.
 
     :param values: Absorption coefficients that are given by the user
     :type values: List of floats

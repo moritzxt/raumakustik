@@ -17,14 +17,8 @@ def subwall_variables(json_data, index, subindex):
     :param subindex: Index of the subwall for which the subwall variables shall be retreived
     :type subindex: int
 
-    :rturn area: Area of the subwall
-    :rtype area: float
-
-    :rturn category: Category of the subwall
-    :rtype category: str
-
-    :rturn material: Material of the subwall
-    :rtype material: str
+    :return: area of the subwall, category of subwall, material of subwall
+    :rtype area: float, str, str
     '''
     area = json_data[f'wall{index + 1}'][f'subarea{subindex + 1}']['area']
     category = json_data[f'wall{index + 1}'][f'subarea{subindex + 1}']['category']
