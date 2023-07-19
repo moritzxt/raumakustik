@@ -1,9 +1,8 @@
 
 import pickle
 import streamlit as st
-#import streamlit_tags as sttags
 from room_calc import room
-from utils import read_db, basic_dict_list, usecase, sub_alpha_dict, flatten_dict
+from utils import read_db, basic_dict_list, usecase, sub_alpha_dict, flatten_dict, remove_last_session
 import os
 import glob
 import json
@@ -12,13 +11,12 @@ from session_utils import *
 from pdf_protocol import pdfprotocol
 from datetime import datetime
 import zipfile
-import copy
 
 # Retreive date for file export
 today = datetime.today().strftime('%Y%m%d')
 
 # Setup of page data:
-st.set_page_config(page_title= 'Tool für Raumakustik', layout='wide',
+st.set_page_config(page_title= 'Nachhallzeitenanalyse', layout='wide',
                     initial_sidebar_state='collapsed')
 
 
@@ -27,10 +25,10 @@ st.set_page_config(page_title= 'Tool für Raumakustik', layout='wide',
 tabs_list = []
 main_surfaces = {} 
 main_materials = [] 
-material_dict = read_db('Datenbank_DIN18041.csv')
+material_dict = read_db('database/Datenbank_DIN18041.csv')
 material_dict_flattened = flatten_dict(material_dict)
 
-person_dict = read_db('equivalentAbsorptionSurface_people_data.csv')
+person_dict = read_db('database/equivalentAbsorptionSurface_people_data.csv')
 sub_surfaces = {}
 sub_materials = {}
 numberOfPeople = []
@@ -68,15 +66,15 @@ if 'usecase' not in st.session_state:
     st.session_state['usecase'] = 'Musik'
 
 with st.container():
-    st.title('Web-app für Nachhallzeitenanalyse')
+    st.header('Nachhallzeitenanalyse')
     st.divider()
     old_session = None
     old_session = st.file_uploader('Session-Datei hochladen', help = 'Lade eine ".json" Datei von einer bestehenden Session hoch.', )
     if old_session != None:
         if st.button('Session aktualisieren'):
             upload_file(old_session)
-
-    st.header('Eingabeparameter')
+    st.divider()
+    st.subheader('Eingabeparameter')
     
     col1, col2, col3, col4 = st.columns(4)
 
@@ -194,11 +192,11 @@ for tab, name in zip(tabs, st.session_state.main_walls):
             # Button to add more person types
             if st.button('Personengruppe hinzufügen', key ='button_add_persons'):
                 st.session_state['add_persons'] += 1
-
             # If person type has been removed on last runthrough, display one less
             if 'remove_button_persons' in st.session_state:
-                if st.session_state.remove_button_persons == True:
-                    numPeople = st.session_state.add_persons-1
+                if st.session_state.remove_button_persons == True and st.session_state.add_persons > 0:
+                    numPeople = st.session_state.add_persons - 1
+                    print(st.session_state['add_persons'])
                 else:
                     numPeople = st.session_state['add_persons']
             # Put number of person types into json
@@ -233,6 +231,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
             # Removal button for person types
             if st.button('Personengruppe entfernen', key='remove_button_persons'):
                 if st.session_state['add_persons'] > 1 and len(peopleDescription) > 0:
+                    print(st.session_state['add_persons'])
                     st.session_state['add_persons'] -= 1
                     peopleDescription.pop()
                     numberOfPeople.pop()
@@ -242,7 +241,8 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     with open(state,'w') as jsonkey:
                         json.dump(json_data, jsonkey)  
                         jsonkey.close()
-     
+
+      
 
         else:
                 # Extract number of base area (differently if persons is ticked or not)
@@ -259,9 +259,10 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     json.dump(json_data, jsonkey)
                     jsonkey.close()
 
-
                 if f'subAreas{name}' not in st.session_state:
-                    st.session_state[f'subAreas{name}'] = init_data['number_subareas'][number]
+                    st.session_state[f'subAreas{name}'] = init_data['number_subareas'][number]        
+                subAreas = init_data['number_subareas'][number]
+
                 con_1 = st.container()
                 con_2 = st.container()
 
@@ -294,13 +295,16 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     col_1, col_2, col_3 = st.columns(3)
 
                     # Get initial data for number of subareas
-                    subAreas = init_data['number_subareas'][number]
+            
+
                     # Button for adding subareas
-                    if st.button('Subfläche hinzufügen', key = f'Button subArea{subAreas} {name}'):
+                    if st.button('Subfläche hinzufügen', key = f'Button subArea {name}'):
                         st.session_state[f'subAreas{name}'] += 1
+                        print(st.session_state[f'subAreas{name}'])
+
                     # Check if "remove subfläche"-button has been hit last runthrough, in that case, display one less subarea
                     if f'remove Subfläche von {name}' in st.session_state:
-                        if st.session_state[f'remove Subfläche von {name}'] == True:
+                        if st.session_state[f'remove Subfläche von {name}'] == True and  st.session_state[f'remove Subfläche von {name}'] > 1:
                             subAreas = st.session_state[f'subAreas{name}'] -1
                         else:
                             subAreas = st.session_state[f'subAreas{name}']
@@ -309,7 +313,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     with open(state,'w') as jsonkey:
                         json.dump(json_data, jsonkey)     
                         jsonkey.close()
-                            
+                    print(subAreas, ' subAreas')
                     for num in range(0, subAreas):
                         # Write corresponding data for subareas into json file 
                         json_data['wall' + str(number+1)]['subarea' + str(num+1)] = {}
@@ -342,19 +346,29 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                             json.dump(json_data, jsonkey)    
                             jsonkey.close() 
 
+                    # if  f'Button subArea{subAreas} {name}' in st.session_state:
+                    #     if st.session_state[ f'Button subArea{subAreas} {name}'] == True:
+                    #         subAreas = st.session_state[f'subAreas{name}'] + 1
+                    #     else:
+                    #         subAreas = st.session_state[f'subAreas{name}']
+                    #     print(subAreas, 'test')
+
                     # Removal button for subareas           
-                    if st.button('Subfläche entfernen', key=f'remove Subfläche von {name}') and len(sub_materials[name]) > 0:
+                    if st.button('Subfläche entfernen', key=f'remove Subfläche von {name}'): # and len(sub_materials[name]) > 0:
                         if st.session_state[f'subAreas{name}'] > 0:
                             st.session_state[f'subAreas{name}'] -= 1
+                            print( st.session_state[f'subAreas{name}'], ' remove')
                             sub_materials[name].pop()
                             sub_surfaces[name].pop()
-                            json_data['wall' + str(number+1)].pop('subarea' + str(subAreas+1))
+                            json_data['wall' + str(number+1)].pop('subarea' + str(subAreas))
+                            
                     # Sync number of subareas with json file
-                    json_data['wall' + str(number+1)]['number_subareas'] = st.session_state[f'subAreas{name}']
-                    with open(state,'w') as jsonkey:
-                        json.dump(json_data, jsonkey)  
-                        jsonkey.close()
-    
+                            json_data['wall' + str(number+1)]['number_subareas'] = st.session_state[f'subAreas{name}']
+                            with open(state,'w') as jsonkey:
+                                json.dump(json_data, jsonkey)  
+                                jsonkey.close()
+                            st.experimental_rerun()
+            
 
     # Initializing the absorption coefficient dictionary
     alpha = basic_dict_list()
@@ -379,29 +393,26 @@ for ind, octaveBand in enumerate(sub_alpha):
 raum = room(volume=vol, surface=main_surfaces, sub_surface=sub_surfaces, alpha=alpha, 
             sub_alpha=sub_alpha, use=use, peopleDescription=peopleDescription, numberOfPeople=numberOfPeople)
 # Plots erstellen
-fileObj = open('raum.obj', 'wb')
+fileObj = open('src/raum.obj', 'wb')
 pickle.dump(raum, fileObj)
 fileObj.close()
 
 st.divider()
 st.subheader('Ergebnisse')
 # st.divider()
-tab1, tab2 = st.tabs(['Nachhallzeit', 'Nachhallzeitenvergleich'])
-
+tab1, tab2 = st.tabs(['Nachhallzeitenvergleich', 'Nachhallzeit'])
 with tab1:
-    
-    fig_reverberationTime = raum.plot_reverberationTime()
-    st.plotly_chart(fig_reverberationTime)
-
-with tab2:
     fig_reverberationTime_ratio = raum.plot_reverberationTime_ratio()
     st.plotly_chart(fig_reverberationTime_ratio)
 
-    st.write(raum.reverberationTime_ratio()[1])
+with tab2:
+    fig_reverberationTime = raum.plot_reverberationTime()
+    st.plotly_chart(fig_reverberationTime)
+
 
 # Exporting the results as PDF with pdfprotocol class and download the pdf
 st.divider()
-st.subheader('Exportieren der Ergebnisse als PDF')
+st.subheader('Exportieren der Ergebnisse')
 
 # Creating the pdf
 # Reading the variables out of the json file 
@@ -415,40 +426,19 @@ if st.button('Erstellen der PDF und der Session-Datei'):
     st.caption('Dateien werden erstellt...')
     pdf1.protocol()
 
-    with open("pdf_test.pdf", "rb") as pdf_file:
-        PDFbyte = pdf_file.read()
-        pdf_file.close()
-
-    with open(state, 'rb') as json_dict:
-        session_json = json_dict.read()
-        json_dict.close()
-
-    # Save PDF byte content to a file
-    with open("pdf_test.pdf", "wb") as pdf_file:
-        pdf_file.write(PDFbyte)
-
-    # Save session file
-    with open(state, 'wb') as json_file:
-        json_file.write(session_json)
-
     # Create a zip file
-    with zipfile.ZipFile("files.zip", "w") as zip_file:
+    with zipfile.ZipFile("src/files.zip", "w") as zip_file:
         # Add the PDF to the zip file
-        zip_file.write("pdf_protocol.pdf", f"Protokoll_Nachhallzeitanalyse_{today}.pdf")
+        zip_file.write("src/pdf_protocol.pdf", f"Protokoll_Nachhallzeitenanalyse_{today}.pdf")
         # Add the session file to the zip file
         zip_file.write(state, f"Session_Datei_{today}.json")
 
     # Read the contents of the zip file
-    with open("files.zip", "rb") as zip_file:
+    with open("src/files.zip", "rb") as zip_file:
         zip_content = zip_file.read()
 
     # Provide the zip file as a download button
     st.download_button('Download', zip_content, f'Ergebnisse_Nachhallzeitenanalyse_{today}.zip')
 
-if st.button('Neue Session starten'):
-    json_file_list = glob.glob('./session/*.json')
-    json_data = {}
-    st.cache_data.clear()
-    for file in json_file_list:
-        os.remove(file)
-    init_data = init_starting_values(json_data,material_dict,person_dict)
+# removing not necessary sessionfiles
+remove_last_session()

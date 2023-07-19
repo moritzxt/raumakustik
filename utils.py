@@ -1,6 +1,8 @@
 import streamlit as st
 import csv
 import base64
+import os
+import glob
 
 def basic_dict():
     """
@@ -89,7 +91,7 @@ def add_row(list):
     :param list: List of data representing the new material
     :type list: list
     """
-    with open('Datenbank_DIN18041.csv', mode='a', newline='\n', encoding='utf-8') as file:
+    with open('database/Datenbank_DIN18041.csv', mode='a', newline='\n', encoding='utf-8') as file:
         writer_object = csv.writer(file, delimiter=';')
         writer_object.writerow(list)
         file.close()
@@ -132,3 +134,14 @@ def displayPDF(filepath):
 # Sport: 30000 m^2, as it is the biggest room volume applicable with DIN 18041 (see page 5)
 usecase = {'Musik': [30, 1000], 'Sprache/Vortrag': [50, 5000], 'Sprache/Vortrag inklusiv': [30, 5000],
            'Unterricht/Kommunikation': [30, 1000],'Unterricht/Kommunikation inklusiv': [30, 500], 'Sport': [200, 30000]} 
+
+def remove_last_session():
+    '''
+    Function removes last sessionfiles, that are no longer in use
+
+    '''
+
+    session_files = glob.glob('session/*.json')
+    session_files.sort(key=os.path.getmtime, reverse=True)
+    for file in session_files[2:]:
+        os.remove(file)

@@ -32,40 +32,9 @@ def subwall_variables(json_data, index, subindex):
 
     return area, category, material
 
-def slider_for_surface(room_feinauslegung,wall,sub_wall_ind,sub_material, key = 1):
-    '''
-    Returns the area, which the slider is set to 
-
-    :param room_feinauslegung: Object of class room 
-    :type room_feinauslegung: class: room 
-
-    :param wall: Name of the main wall as set in web-app
-    :type wall: str
-
-    :param sub_wall: Name of subwall as set in web-app
-    :type sub_wall: str
-
-    :param sub_wall_ind: Index of subwall for the slider 
-    :type sub_wall_ind: int
-
-    :param sub_material: Material of the subwall, which area shall be changed with the slider
-    :type sub_material: str
-
-    :param key: Widgte key, 1 by default
-    :type key: int 
-
-    :return room_feinauslegung.sub_surface[wall][sub_wall_ind]: Area of subwall, given by the slider
-    :rtype room_feinauslegung.sub_surface[wall][sub_wall_ind]: int
-    '''
-    max_area = float(room_feinauslegung.surface[wall] - sum(room_feinauslegung.sub_surface[wall]))
-    room_feinauslegung.sub_surface[wall][sub_wall_ind] = st.slider(
-        label='Fläche der Subwandfläche', min_value=0., max_value=max_area, key=f'SubAreaSlider{sub_wall_ind}{key}', step=1)
-    st.write(sub_material)
-
-    return room_feinauslegung.sub_surface[wall][sub_wall_ind]
 
 # Initializing the room_feinauslegung object from main page of web-app
-fileObj = open('raum.obj', 'rb')
+fileObj = open('src/raum.obj', 'rb')
 room_feinauslegung = pickle.load(fileObj)
 fileObj.close()
 
@@ -79,75 +48,98 @@ session = add_script_run_ctx().streamlit_script_run_ctx.session_id
 write_session_key(session)
 
 # Load data from current session
-with open(state) as jsonkey:
-    json_data = json.load(jsonkey)
-    jsonkey.close()
+try:
+    with open(state) as jsonkey:
+        json_data = json.load(jsonkey)
+        jsonkey.close()
+        
+    # Get list without 'Personen'
+    main_walls = [element for element in st.session_state['main_walls'] if element != 'Personen']
+    sub_walls = {}
+    for name in main_walls:
+        n_sub_walls = st.session_state[f'subAreas{name}']
 
-# Get list without 'Personen'
-main_walls = [element for element in st.session_state['main_walls'] if element != 'Personen']
-sub_walls = []
-for name in main_walls:
-    sub_walls.append(st.session_state[f'subAreas{name}'])
+        sub_walls[name] = [f'Subfläche {element + 1}' for element in range(0, n_sub_walls)]
 
-# Setup of page data
-st.set_page_config(page_title='Feinauslegung', layout='wide')
-with st.container():
-    st.title('Feinauslegung der Nachhallzeit')
-    st.text('Variieren des Flächeninhalts einer Subfläche')
-    st.divider()
+    # get walls that have subwalls
+    walls_with_subwalls = []
+    for key in sub_walls:
+        if (len(sub_walls[key]) > 0):
+            walls_with_subwalls.append(key)
+    # if no wall with subwalls do something
+    if (len(walls_with_subwalls) < 1):
+        st.error("Feinauslegung nicht möglich, da keine Subflächen definiert sind.")
+    else:
+        # Setup of page data
+        st.set_page_config(page_title='Feinauslegung', layout='wide')
+        with st.container():
+            st.header('Feinauslegung der Nachhallzeit')
+            st.text('Variieren des Flächeninhalts einer Subfläche')
+            st.divider()
+        
+        # Setup of page appearence 
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            # Selecting mainwall
+            wall = st.selectbox('Wähle die zu bearbeitende Grundfläche aus',
+                                options=walls_with_subwalls)
+            # Index for main wall for lists
+            wall_ind =  main_walls.index(wall)
+        if (len(walls_with_subwalls) > 0):
+            with col2:
+                tabs = st.tabs(sub_walls[wall])
+                for tab, name in zip(tabs, sub_walls[wall]):
+                    with tab:
 
-# Setup of page appearence 
-col1, col2, col3 = st.columns(3)
-with col1:
-    # Selecting mainwall
-    wall = st.selectbox('Wähle die zu bearbeitende Grundfläche aus',
-                        options=main_walls)
-    # Index for main wall for lists
-    wall_ind =  main_walls.index(wall)
+                        sub_wall_ind = sub_walls[wall].index(name)
+                        max_area = float(room_feinauslegung.surface[wall] - sum(room_feinauslegung.sub_surface[wall]))
+                        max_area = max_area + room_feinauslegung.sub_surface[wall][sub_wall_ind]
+                        new_area = st.slider(label='Fläche der Subwandfläche', min_value=0., max_value=max_area, key={name}, step=.1, format = '%.1f')
+                        room_feinauslegung.sub_surface[wall][sub_wall_ind] = new_area
 
-with col2:
-    sub_surface_count = len(room_feinauslegung.sub_surface[wall])
-    # Selecting subwall
-    sub_wall = st.selectbox(
-        'Wähle die Subfläche aus', options=sub_walls)
-    sub_wall_ind = sub_walls.index(sub_wall)
-    # Getting material of corresponding subwall
-    sub_material = subwall_variables(json_data, wall_ind, sub_wall_ind)[2]
-
-with col1:
-    area = slider_for_surface(room_feinauslegung,wall,sub_wall_ind, sub_material, key=sub_wall_ind)
-
-tab1, tab2 = st.tabs(['Nachhallzeit', 'Nachhallzeitenvergleich'])
+                
+                
+                
 
 
-with tab1:
-    # Plotting revernerationtime
-    fig1 = room_feinauslegung.plot_reverberationTime()
-    st.plotly_chart(fig1)
+        else:
+            print("keine subfläche vorhanden")
+        
+        tab1, tab2 = st.tabs(['Nachhallzeit', 'Nachhallzeitenvergleich'])
+        
+        
+        with tab1:
+            # Plotting revernerationtime
+            fig1 = room_feinauslegung.plot_reverberationTime()
+            st.plotly_chart(fig1)
+        
+        with tab2:
+            #plotting revernerationtime ratio
+        
+            fig2 = room_feinauslegung.plot_reverberationTime_ratio()
+            st.plotly_chart(fig2)
+        
+        # Session Path for adding values to current session
+        
+        state = add_script_run_ctx().streamlit_script_run_ctx.session_id +'.json'
+        state = './session/' + state  
+        load_session_file(state)
+        
+        # Write current session id in session_key.json
+        session = add_script_run_ctx().streamlit_script_run_ctx.session_id
+        write_session_key(session)
+        
+        # Load data from current session
+        with open(state) as jsonkey:
+            json_data = json.load(jsonkey)
+            jsonkey.close()
+        
+        if st.button('Übernehmen', help = 'Übernehme die Änderung und fahre auf der Hauptseite fort'):
+            # Overwrite button to save data in current sessoion_state so it can be used in the main page
+            json_data['wall' + str(wall_ind+1)]['subarea' + str(sub_wall_ind+1)]['area'] = area
+            write_session_data_to_json(json_data, state)
+            load_session(state)
+except:
+    st.error('Feinauslegung nicht möglich. Bitte zuerst Nachhallzeitenanalyse durchführen.')
 
-with tab2:
-    #plotting revernerationtime ratio
 
-    fig2 = room_feinauslegung.plot_reverberationTime_ratio()
-    st.plotly_chart(fig2)
-
-# Session Path for adding values to current session
-
-state = add_script_run_ctx().streamlit_script_run_ctx.session_id +'.json'
-state = './session/' + state  
-load_session_file(state)
-
-# Write current session id in session_key.json
-session = add_script_run_ctx().streamlit_script_run_ctx.session_id
-write_session_key(session)
-
-# Load data from current session
-with open(state) as jsonkey:
-    json_data = json.load(jsonkey)
-    jsonkey.close()
-
-if st.button('Übernehmen', help = 'Übernehme die Änderung und fahre auf der Hauptseite fort'):
-    # Overwrite button to save data in current sessoion_state so it can be used in the main page
-    json_data['wall' + str(wall_ind+1)]['subarea' + str(sub_wall_ind+1)]['area'] = area
-    write_session_data_to_json(json_data, state)
-    load_session(state)
