@@ -3,7 +3,8 @@ import numpy as np
 import plotly.graph_objects as go
 from utils import basic_dict, basic_dict_list, read_db
 
-class room: 
+class room:
+
     '''
     Class inheriting all characteristics of the room as well as calculation and plotting functionality.
     '''
@@ -20,6 +21,7 @@ class room:
         
         :param sub_surface: Dictionary with the names of the main surfaces as keys and lists of their subsurface areas in square meters as values
         :type sub_surface: dict of str: list of int
+
         
         :param alpha: Dictionary with octave bands as keys and lists of absorption coefficients of main surfaces as values
         :type alpha: dict of str: list of float
@@ -32,6 +34,7 @@ class room:
         
         :param numberOfPeople: List of int for different kind of people in the room
         :type numberOfPeople: list of int
+
         
         :param use: Usecase for the room based on DIN18041
         :type use: str
@@ -55,13 +58,9 @@ class room:
         Returns the critical distance, at which energy densities of the direct and reflected soundfield are equal. 
         Makes use of an approximate formula based on statistical acoustics in a diffuse soundfield. 
 
-        :return criticalDistance: Critical distance in meters
-        :rtype criticalDistance: float
+        :return: critical distance in meters
+        :rtype: float
         """
-        # '''
-        # Function to calculate the critical distance, where the energy densities of the direct and reflected soundfield are equal. 
-        # Calculation is made with an approximate formula based on statistical acoustics in a diffuse soundfield.
-        # '''
         
         criticalDistance = np.sqrt(self.equivalentAbsorptionSurface() / 50)
 
@@ -71,8 +70,8 @@ class room:
         '''
         Returns equivalent absorption surface for the walls by calculating the equivalent absorption surface for every wall and summing them. People and air are not taken into account.
         
-        :return equivalentAbsorptionSurface_walls: equivalent absoprtion surface in square meters
-        :rtype equivalentAbsorptionSurface_walls: float
+        :return: equivalent absoprtion surface in square meters
+        :rtype: float
         '''
 
         equivalentAbsorptionSurface_walls = basic_dict()
@@ -104,9 +103,9 @@ class room:
         '''
         Returns equivalent absorption surface for the people in the room based on the number of people and their specification regarding age and position (e.g. standing, sitting).
         Data retrieved from Table A.1 in DIN 18041.
-        
-        :return equivalentAbsorptionSurface_people: equivalent absorption surface of the people in the room in square meters
-        :rtype equivalentAbsorptionSurface_people: float 
+
+        :return: equivalent absorption surface of the people in the room in square meters
+        :rtype: float 
         '''
         equivalentAbsorptionSurface_people = basic_dict()
 
@@ -124,8 +123,8 @@ class room:
         '''
         Returns equivalent absorption surface resulting from the dampening in air.
         
-        :return equivalentAbsorptionSurface_air: equivalent absorption surface of the air in square meters
-        :rtype equivalentAbsorptionSurface_air: float
+        :return: equivalent absorption surface of the air in square meters
+        :rtype: float
         '''
         equivalentAbsorptionSurface_air = basic_dict()
 
@@ -140,8 +139,8 @@ class room:
         '''
         Returns sum of all equivalent absorption surfaces (walls, people, air).
         
-        :return equivalentAbsorptionSurface: Sum of equivalent absorption surfaces in square meters
-        :rtype equivalentAbsorptionSurface: float
+        :return: sum of equivalent absorption surfaces in square meters
+        :rtype: float
         '''
         equivalentAbsorptionSurface = basic_dict_list()
 
@@ -155,8 +154,8 @@ class room:
         '''
         Returns the reverberation time calculated by the formula of Sabine.
         
-        :return reverberationTimeSeconds: reverberation time in s
-        :rtype reverberationTimeSeconds: float
+        :return: reverberation time in s
+        :rtype: float
         '''
 
         reverberationTimeSeconds = basic_dict()
@@ -169,13 +168,12 @@ class room:
     
     def reverberationTime_ratio(self):
         '''
-        Returns the ratio of calculated reverberation time to wanted reverberation time. Wanted reverberation time is based on the rooms use case and its volume.
+        Returns the ratio of calculated reverberation time to wanted reverberation time. 
+        Wanted reverberation time is based on the rooms use case and its volume.
         
-        :return reverberationTime_ratio: Ratio calculated to wanted reverberation time
-        :rtype reverberationTime_ratio: float
-
-        :return self.ErrorMessage: Error message, when reverberation time is not inside the given boundaries
-        :rtype self.ErrorMessage: List 
+        :return: Ratio calculated to wanted reverberation time, Error message (when reverberation time is not inside the given boundaries)
+        :rtype: float, list
+        
         '''
 
         reverberationTime_ratio = basic_dict()
@@ -220,6 +218,7 @@ class room:
         
         :return: plot of reverberation time
         :rtype: plotly figure
+        
         '''
         freq = np.array([125,250,500,1000,2000,4000])
         reverberationTimeSeconds = self.reverberationTime() 
@@ -249,7 +248,8 @@ class room:
     
     def plot_reverberationTime_ratio(self):
         '''
-        Creates a plot presenting the calculated reverberation time in comparison to the wanted reverberation time, also showing the allowed deviations in octave bands using plotly.
+        Creates a plot presenting the calculated reverberation time in comparison to the wanted reverberation time.
+        Also showing the allowed deviations in octave bands using plotly.
         
         :return: plot comparing calculated and wanted reverberation time
         :rtype: plotly figure
