@@ -196,7 +196,6 @@ for tab, name in zip(tabs, st.session_state.main_walls):
             if 'remove_button_persons' in st.session_state:
                 if st.session_state.remove_button_persons == True and st.session_state.add_persons > 0:
                     numPeople = st.session_state.add_persons - 1
-                    print(st.session_state['add_persons'])
                 else:
                     numPeople = st.session_state['add_persons']
             # Put number of person types into json
@@ -231,7 +230,6 @@ for tab, name in zip(tabs, st.session_state.main_walls):
             # Removal button for person types
             if st.button('Personengruppe entfernen', key='remove_button_persons'):
                 if st.session_state['add_persons'] > 1 and len(peopleDescription) > 0:
-                    print(st.session_state['add_persons'])
                     st.session_state['add_persons'] -= 1
                     peopleDescription.pop()
                     numberOfPeople.pop()
@@ -300,7 +298,6 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     # Button for adding subareas
                     if st.button('Subfläche hinzufügen', key = f'Button subArea {name}'):
                         st.session_state[f'subAreas{name}'] += 1
-                        print(st.session_state[f'subAreas{name}'])
 
                     # Check if "remove subfläche"-button has been hit last runthrough, in that case, display one less subarea
                     if f'remove Subfläche von {name}' in st.session_state:
@@ -313,7 +310,6 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                     with open(state,'w') as jsonkey:
                         json.dump(json_data, jsonkey)     
                         jsonkey.close()
-                    print(subAreas, ' subAreas')
                     for num in range(0, subAreas):
                         # Write corresponding data for subareas into json file 
                         json_data['wall' + str(number+1)]['subarea' + str(num+1)] = {}
@@ -346,18 +342,12 @@ for tab, name in zip(tabs, st.session_state.main_walls):
                             json.dump(json_data, jsonkey)    
                             jsonkey.close() 
 
-                    # if  f'Button subArea{subAreas} {name}' in st.session_state:
-                    #     if st.session_state[ f'Button subArea{subAreas} {name}'] == True:
-                    #         subAreas = st.session_state[f'subAreas{name}'] + 1
-                    #     else:
-                    #         subAreas = st.session_state[f'subAreas{name}']
-                    #     print(subAreas, 'test')
+
 
                     # Removal button for subareas           
                     if st.button('Subfläche entfernen', key=f'remove Subfläche von {name}'): # and len(sub_materials[name]) > 0:
                         if st.session_state[f'subAreas{name}'] > 0:
                             st.session_state[f'subAreas{name}'] -= 1
-                            print( st.session_state[f'subAreas{name}'], ' remove')
                             sub_materials[name].pop()
                             sub_surfaces[name].pop()
                             json_data['wall' + str(number+1)].pop('subarea' + str(subAreas))
