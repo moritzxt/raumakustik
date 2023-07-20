@@ -68,7 +68,7 @@ try:
         st.set_page_config(page_title='Feinauslegung', layout='wide')
         with st.container():
             st.header('Feinauslegung der Nachhallzeit')
-            st.text('Variieren des Flächeninhalts einer Subfläche')
+            st.write('Variieren des Flächeninhalts einer Subfläche')
             st.divider()
         
         # Setup of page appearence 

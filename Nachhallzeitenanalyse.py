@@ -290,6 +290,7 @@ for tab, name in zip(tabs, st.session_state.main_walls):
 
                 with con_2:
                     st.divider()
+                    st.caption('Als Subfäche werden Elemente auf der Grundfläche bezeichet (Genaue Erklärung in Abschnitt 4 des user guides)')
                     col_1, col_2, col_3 = st.columns(3)
 
                     # Get initial data for number of subareas
