@@ -67,6 +67,7 @@ if 'usecase' not in st.session_state:
 
 with st.container():
     st.header('Nachhallzeitenanalyse')
+    st.markdown("Erklärungen zu Berechnungen, Eingabeparametern und Ergebnisinterpretation können im <a href='User_guide' target='_self'>user guide</a> gefunden werden.", unsafe_allow_html=True)
     st.divider()
     old_session = None
     old_session = st.file_uploader('Session-Datei hochladen', help = 'Lade eine ".json" Datei von einer bestehenden Session hoch.', )
