@@ -201,7 +201,7 @@ def init_starting_values(json_data,material_dict,person_dict):
         subarea_category_init.append([])
         subarea_material_init.append([])
         for j in range(100):
-            subarea_area_init[i].append(1)
+            subarea_area_init[i].append(0)
             subarea_category_init[i].append(0)
             subarea_material_init[i].append(0)
 
