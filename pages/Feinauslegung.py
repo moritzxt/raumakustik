@@ -84,7 +84,7 @@ try:
                     new_area = st.slider(label='Fläche der Subwandfläche', min_value=0., max_value=max_area, key={name}, step=.1, format = '%.1f')
                     room_feinauslegung.sub_surface[wall][subwall_ind] = new_area
                     material =  subwall_variables(json_data, wall_ind, subwall_ind)[2]
-                    st.write(f'Material der Subwandfläche: {material}')
+                    st.write(f'Material: {material}')
 
         
         
@@ -92,7 +92,7 @@ try:
 
 
     except:
-        st.error("Keine Subfläche vorhanden")
+        st.error("Die Ausgewählte Grundfläche besitzt keine Subfläche")
 
     tab1, tab2 = st.tabs(['Nachhallzeitenvergleich', 'Nachhallzeit'])
 
