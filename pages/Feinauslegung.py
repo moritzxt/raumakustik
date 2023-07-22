@@ -67,11 +67,13 @@ try:
     # Setup of page appearence 
     col1, col2, col3 = st.columns(3)
     with col1:
+        with st.form(key = f'wand'):
         # Selecting mainwall
-        wall = st.selectbox('Wähle die zu bearbeitende Grundfläche aus',
-                            options=main_walls)
-        # Index for main wall for lists
-        wall_ind =  main_walls.index(wall)
+            wall = st.selectbox('Wähle die zu bearbeitende Grundfläche aus',
+                                options=main_walls)
+            # Index for main wall for lists
+            wall_ind =  main_walls.index(wall)
+            st.form_submit_button('Übernehmen')
     try:
         with col2:
             tabs = st.tabs(sub_walls[wall])
