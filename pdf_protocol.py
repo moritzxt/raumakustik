@@ -199,8 +199,8 @@ class pdfprotocol(FPDF):
         path_reverbereationTime = c_path + '/images/plot_reverberationTime.png'
         path_reverbereationTimeRatio = c_path + '/images/plot_reverberationTimeRatio.png'
 
-        pio.write_image(self.plot_reverberationTime, path_reverbereationTime, format = 'png', engine='orca')
-        pio.write_image(self.plot_reverberationTimeRatio, path_reverbereationTimeRatio, format = 'png', engine='orca')
+        pio.write_image(self.plot_reverberationTime, path_reverbereationTime, format = 'png',)
+        pio.write_image(self.plot_reverberationTimeRatio, path_reverbereationTimeRatio, format = 'png',)
 
         # Show plots
         self.pdf.add_page()
