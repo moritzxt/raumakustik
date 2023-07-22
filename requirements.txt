@@ -1,7 +1,6 @@
 fpdf2==2.7.4
 kaleido==0.2.1
 numpy==1.25.1
-orca==1.8
 psutil==5.9.5
 requests==2.29.0
 pandas==2.0.3
