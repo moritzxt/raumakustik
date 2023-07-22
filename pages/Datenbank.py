@@ -22,8 +22,14 @@ def valuesAreValid(values):
     return True
 
 # Read database and initialize dataframe
-material_dict = read_db('database/Datenbank_DIN18041.csv')
-dataframe =  pd.read_csv('database/Datenbank_DIN18041.csv',sep = ';')
+try:
+    material_dict = read_db('database/Datenbank_DIN18041.csv')
+    dataframe =  pd.read_csv('database/Datenbank_DIN18041.csv',sep = ';')
+# alternative datapath for docs
+except:
+    material_dict = read_db('../database/Datenbank_DIN18041.csv')
+    dataframe =  pd.read_csv('../database/Datenbank_DIN18041.csv',sep = ';')
+
 
 # Page setup
 st.set_page_config(page_title= 'Datenbank', layout='wide')

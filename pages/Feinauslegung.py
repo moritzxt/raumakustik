@@ -28,7 +28,10 @@ def subwall_variables(json_data, index, subindex):
 
 
 # Initializing the room_feinauslegung object from main page of web-app
-fileObj = open('src/raum.obj', 'rb')
+try:
+    fileObj = open('src/raum.obj', 'rb')
+except:
+    fileObj = open('../src/raum.obj', 'rb')
 room_feinauslegung = pickle.load(fileObj)
 fileObj.close()
 
