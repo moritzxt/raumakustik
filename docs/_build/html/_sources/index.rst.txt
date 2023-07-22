@@ -1,4 +1,4 @@
-.. image:: _images/vergleichMitSoll.jpg
+.. image:: _images/VergleichMitSoll.jpg
    :width: 400
    :align: right
 
@@ -30,14 +30,14 @@ Content
    usage
 
 .. toctree::
-   :maxdepth: 4
-   :caption: Module
+   :maxdepth: 10
+   :caption: Modules
 
    room_calc
    utils
    session_utils
    pdf_protocol
-   Datenbank
+   pages
    
 
 .. toctree::

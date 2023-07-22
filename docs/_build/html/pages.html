@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Datenbank &mdash; RaumakustikApp 0.1 documentation</title>
+  <title>pages &mdash; RaumakustikApp 0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -46,13 +46,13 @@
 <li class="toctree-l1"><a class="reference internal" href="setup.html">Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Module</span></p>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="room_calc.html">room_calc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="session_utils.html">session_utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pdf_protocol.html">pdf_protocol</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Datenbank</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">pages</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">User Guide (German)</span></p>
 <ul>
@@ -73,9 +73,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a></li>
-      <li class="breadcrumb-item active">Datenbank</li>
+      <li class="breadcrumb-item active">pages</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/Datenbank.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/pages.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -83,9 +83,47 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="datenbank">
-<h1>Datenbank<a class="headerlink" href="#datenbank" title="Permalink to this headline"></a></h1>
-</section>
+  <section id="module-pages.Datenbank">
+<span id="pages"></span><h1>pages<a class="headerlink" href="#module-pages.Datenbank" title="Permalink to this headline"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="pages.Datenbank.valuesAreValid">
+<span class="sig-prename descclassname"><span class="pre">pages.Datenbank.</span></span><span class="sig-name descname"><span class="pre">valuesAreValid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pages.Datenbank.valuesAreValid" title="Permalink to this definition"></a></dt>
+<dd><p>Checks, if the absorption coefficients are given as required and are reasonable, when user adds material.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>values</strong> (<em>List of floats</em>) – Absorption coefficients that are given by the user</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True, if the values meet the requirements, else otherwise</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-pages.Feinauslegung"></span><dl class="py function">
+<dt class="sig sig-object py" id="pages.Feinauslegung.subwall_variables">
+<span class="sig-prename descclassname"><span class="pre">pages.Feinauslegung.</span></span><span class="sig-name descname"><span class="pre">subwall_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subindex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pages.Feinauslegung.subwall_variables" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the variables for a specific subwall given by the index</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>json_data</strong> (<em>dict</em>) – Session file</p></li>
+<li><p><strong>index</strong> (<em>int</em>) – Index of the main wall on which the subwall lies</p></li>
+<li><p><strong>subindex</strong> (<em>int</em>) – Index of the subwall for which the subwall variables shall be retreived</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>area of the subwall, category of subwall, material of subwall</p>
+</dd>
+<dt class="field-odd">Rtype area</dt>
+<dd class="field-odd"><p>float, str, str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-pages.User_guide"></span></section>
 
 
            </div>

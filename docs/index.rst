@@ -1,4 +1,4 @@
-.. image:: _images/vergleichMitSoll.jpg
+.. image:: _images/VergleichMitSoll.jpg
    :width: 400
    :align: right
 
@@ -11,7 +11,7 @@ This streamlit application delivers an estimation of the reverberation time in o
 Users can enter the volume of the room and areas of surfaces and subsurfaces. Materials for these surfaces can be choosen from a database. Custom materials can be added to that database. 
 Additionally a number of persons can be added to the rooms equivalent absorption surface. Speech intelligibilty can be evaluated for different use cases like 'music' or 'education/communication' as described in DIN 18041. 
 
-The calculations are based on statistical acoustics and calculation are based on the standards DIN EN 12354-6 and DIN 18041.
+The calculations are based on statistical acoustics and on the standards DIN EN 12354-6 and DIN 18041.
 
 Content
 ========
@@ -30,14 +30,14 @@ Content
    usage
 
 .. toctree::
-   :maxdepth: 4
-   :caption: Module
+   :maxdepth: 10
+   :caption: Modules
 
    room_calc
    utils
    session_utils
    pdf_protocol
-   Datenbank
+   pages
    
 
 .. toctree::

@@ -25,7 +25,7 @@ Add walls and choose if you want to add persons:
    :width: 350
 
 
-Choose material of the wall:
+Choose material and area of the wall:
 
 .. image:: _images/ChooseMaterial.jpg
    	:width: 900
@@ -40,7 +40,7 @@ Each wall has its own tab. You can add and remove subsurfaces by clicking on the
 Display of results and Save&Load
 --------------------------------
 
-Display of reverberation time
+Display of reverberation time:
 
 .. image:: _images/Nachhallzeit.jpg
    :width: 900
@@ -58,8 +58,44 @@ Options for plot display:
    :width: 900
 
 
-Save and load room:
+Load room configuration:
 
-.. image:: _images/SaveLoad.jpg
+.. image:: _images/Load.jpg
    :width: 900
+
+Save room configuration and export pdf protocol:
+
+.. image:: _images/SaveExport.jpg
+   :width: 350
+
+
+Database of materials
+---------------------
+
+Check absoprtion coefficients of materials:
+
+.. image:: _images/Datenbank.jpg
+   :width: 900
+
+
+Add new material to database:
+
+.. image:: _images/AddData.jpg
+   :width: 900
+
+
+Feinauslegung
+---------------------
+
+You can adjust the size of all subwalls according to your requirements without changing your configuration:
+
+.. image:: _images/Feinauslegung.jpg
+   :width: 900
+
+The results get displayed immediately. Once you are satisfied with the result you can accept the changes to your configuration:
+
+.. image:: _images/CheckAcceptChanges.jpg
+   :width: 900
+
+
     
