@@ -9,7 +9,7 @@ The calculations are based on statistical acoustics and implement the standards 
 [[_TOC_]]
 
 ## Documentation & User Guide
-A Documentation generated with [Sphinx](https://www.sphinx-doc.org/) can be found [here](https://moritzxt.github.io/raumakustik/index.html). 
+A [Documentation](https://mcht67.github.io/raumakustik2ndUpload/index.html) generated with [Sphinx](https://www.sphinx-doc.org/) can be found on GitHub pages. 
 For details on usage and implementation of the norms view the [User Guide](pages/user_guide.pdf).
 
 ## Setup
@@ -34,5 +34,5 @@ Open a console and navigate to the raumakustik directory:
 streamlit run Nachhallzeitenanalyse.py
 ```
 
-For more information see the [Documentation](https://moritzxt.github.io/raumakustik/index.html)
+For more information see the [Documentation](https://mcht67.github.io/raumakustik2ndUpload/index.html)
 and the [User Guide](pages/user_guide.pdf).
