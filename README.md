@@ -9,7 +9,7 @@ The calculations are based on statistical acoustics and implement the standards 
 [[_TOC_]]
 
 ## WebApp
-We hosted the streamlit webapp via the streamlit community cloud https://raumakustik.streamlit.app/
+https://raumakustik.streamlit.app/
 
 ## Documentation & User Guide
 A [Documentation](https://mcht67.github.io/raumakustik2ndUpload/index.html) generated with [Sphinx](https://www.sphinx-doc.org/) can be found on GitHub pages. 
